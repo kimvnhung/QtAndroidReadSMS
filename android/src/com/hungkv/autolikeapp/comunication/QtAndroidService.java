@@ -14,13 +14,13 @@ public class QtAndroidService extends QtService
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "Creating Service");
+        Log.d(TAG, "Creating Service");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "Destroying Service");
+        Log.d(TAG, "Destroying Service");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class QtAndroidService extends QtService
         Intent sendToUiIntent = new Intent();
         sendToUiIntent.setAction(ActivityUtils.BROADCAST_NAME_ACTION);
         sendToUiIntent.putExtra("name", name);
-        Log.i(TAG, "Service sending broadcast");
+        Log.d(TAG, "Service sending broadcast");
         sendBroadcast(sendToUiIntent);
 
         return ret;

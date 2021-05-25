@@ -40,3 +40,7 @@ android{
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 }
+
+DISTFILES += \
+    android/src/com/hungkv/autolikeapp/database/DatabaseHandler.java \
+    android/src/com/hungkv/autolikeapp/database/Transaction.java
