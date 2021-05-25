@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.hungkv.autolikeapp.database.Transaction;
 
 
@@ -42,20 +46,27 @@ public class SmsReceiver extends BroadcastReceiver {
 
                     String  msg = messages[i].getMessageBody();
                     String phone = messages[i].getOriginatingAddress();
-                    Log.d(TAG, "Message : "+msg+"\nPhone : "+phone);
-                    for (int j=0 ; j < arrangedList.size(); j++){
-                        if(arrangedList.get(j).getPhone().equals(phone)){
-                            arrangedList.get(j).addMessage(messages[i]);
-                            break;
-                        }
+                    //Log.d(TAG, "Message : "+msg+"\nPhone : "+phone);
+                    if(arrangedList.size() == 0){
+                        arrangedList.add(new SmsTemplate(phone));
+                        arrangedList.get(arrangedList.size()-1).addMessage(messages[i]);
+                    }else{
+                        for (int j=0 ; j < arrangedList.size(); j++){
+                            if(arrangedList.get(j).getPhone().equals(phone)){
+                                arrangedList.get(j).addMessage(messages[i]);
+                                break;
+                            }
 
-                        if (j == arrangedList.size()-1){
-                            arrangedList.add(new SmsTemplate(phone));
-                            arrangedList.get(arrangedList.size()-1).addMessage(messages[i]);
-                            break;
+                            if (j == arrangedList.size()-1){
+                                arrangedList.add(new SmsTemplate(phone));
+                                arrangedList.get(arrangedList.size()-1).addMessage(messages[i]);
+                                break;
+                            }
                         }
                     }
                 }
+
+                Log.i(TAG,"arrangedList.size : "+arrangedList.size());
 
                 for (int i=0 ; i<arrangedList.size(); i++){
                     SmsTemplate temp = arrangedList.get(i);
@@ -63,17 +74,32 @@ public class SmsReceiver extends BroadcastReceiver {
                         ArrayList<SmsMessage> list = temp.getMessages();
                         for (int j=0; j*3 + 2 <list.size();j++){
                             String msg = list.get(j).getMessageBody()+list.get(j+1).getMessageBody()+list.get(j+2).getMessageBody();
+                            //Log.i(TAG,"Message at j = "+j+" : "+msg);
+                            msg = msg.replace("\n","");
                             if (msg.contains(CODE_PREFIX)){
                                 int index = msg.indexOf(CODE_PREFIX);
                                 String code = msg.substring(index);
                                 int value = 0;
                                 try {
-                                    String[] splitString = msg.split("\\+\\d+.+VND");
                                     //value = Integer.parseInt();
+                                    Pattern pattern = Pattern.compile("\\+\\d+.+VND");
+                                    Matcher matcher = pattern.matcher(msg);
+                                    if (matcher.find())
+                                    {
+                                        Log.i(TAG, "Matcher : "+matcher.group());
+
+                                        for (int k = 0; k< matcher.groupCount();k++){
+                                            Log.i(TAG,"Matcher : "+matcher.group(k));
+                                        }
+                                    }else {
+                                        Log.i(TAG, "No matching regex");
+                                    }
                                 }catch (NumberFormatException e){
                                     Log.e(TAG, "Error : "+e.getMessage());
+                                }catch (Exception e){
+                                    Log.e(TAG, "Error : "+e.getMessage());
                                 }
-                                Transaction transaction = new Transaction(temp.getPhone(),code,)
+                                Transaction transaction = new Transaction(temp.getPhone(),code,123,"");
                             }
                         }
                     }
