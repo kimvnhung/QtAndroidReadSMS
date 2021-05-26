@@ -47,6 +47,9 @@ public class SmsReceiver extends BroadcastReceiver {
                     String  msg = messages[i].getMessageBody();
                     String phone = messages[i].getOriginatingAddress();
                     //Log.d(TAG, "Message : "+msg+"\nPhone : "+phone);
+                    if(msg.charAt(msg.length()-1) == '\n'){
+                        msg = msg.substring(0,msg.length()-1)+" ";
+                    }
                     if(arrangedList.size() == 0){
                         arrangedList.add(new SmsTemplate(phone));
                         arrangedList.get(arrangedList.size()-1).addMessage(messages[i]);
@@ -80,17 +83,17 @@ public class SmsReceiver extends BroadcastReceiver {
                                 int index = msg.indexOf(CODE_PREFIX);
                                 String code = msg.substring(index);
                                 int value = 0;
+
                                 try {
                                     //value = Integer.parseInt();
-                                    Pattern pattern = Pattern.compile("\\+\\d+.+VND");
+                                    Pattern pattern = Pattern.compile("\\+\\d{1,3}((,\\d{3}){0,4})\\sVND");
                                     Matcher matcher = pattern.matcher(msg);
                                     if (matcher.find())
                                     {
                                         Log.i(TAG, "Matcher : "+matcher.group());
-
-                                        for (int k = 0; k< matcher.groupCount();k++){
-                                            Log.i(TAG,"Matcher : "+matcher.group(k));
-                                        }
+                                        String valueSt = matcher.group().substring(1,matcher.group().length()-4);
+                                        value = Integer.parseInt(valueSt.replace(",",""));
+                                        Log.i(TAG, "value : "+value);
                                     }else {
                                         Log.i(TAG, "No matching regex");
                                     }
@@ -99,7 +102,16 @@ public class SmsReceiver extends BroadcastReceiver {
                                 }catch (Exception e){
                                     Log.e(TAG, "Error : "+e.getMessage());
                                 }
-                                Transaction transaction = new Transaction(temp.getPhone(),code,123,"");
+                                String time = "";
+                                Pattern timePatern = Pattern.compile("(luc)(\\s(\\d+\\W\\d+\\W\\d+))+");
+                                Matcher matcherTime = timePatern.matcher(msg);
+                                if(matcherTime.find()){
+                                    time = matcherTime.group().substring(4);
+                                    Log.i(TAG, "Time : "+time);
+                                }else {
+                                    Log.e(TAG,"No matching regex time");
+                                }
+                                Transaction transaction = new Transaction(temp.getPhone(),code,value,time);
                             }
                         }
                     }
