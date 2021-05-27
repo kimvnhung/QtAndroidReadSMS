@@ -34,6 +34,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, name, factory, DATABASE_VERSION);
         this.DATABASE_NAME= name;
         this.mContext = context;
+        Log.i(TAG,this.mContext.getDatabasePath(this.getDatabaseName()).getAbsolutePath());
+        Log.i(TAG,this.mContext.getDatabasePath(this.getDatabaseName()).getPath());
+
     }
 
     @Override
@@ -48,6 +51,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 COLUMN_STATUS + " INTEGER "+
                 "); ";
         sqLiteDatabase.execSQL(query);
+        Log.i(TAG,"Create table success");
+
     }
 
     @Override

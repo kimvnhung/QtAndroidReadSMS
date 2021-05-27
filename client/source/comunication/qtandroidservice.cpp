@@ -5,6 +5,7 @@
 #include <QtDebug>
 
 QtAndroidService *QtAndroidService::m_instance = nullptr;
+const QString QtAndroidService::LOG_KEY = "log";
 
 static void receivedFromAndroidService(JNIEnv *env, jobject /*thiz*/, jstring value)
 {
@@ -18,11 +19,19 @@ QtAndroidService::QtAndroidService(QObject *parent) : QObject(parent)
 
     registerNatives();
     registerBroadcastReceiver();
+
+    connect(this, &QtAndroidService::messageFromService, this, &QtAndroidService::receiveMessage);
+}
+
+void QtAndroidService::receiveMessage(const QString &message)
+{
+    if(message == "REFRESH_DATA"){
+
+    }
 }
 
 void QtAndroidService::sendToService(const QString &name)
 {
-    qDebug()<<"Name "<<name;
     QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
                                 "com/hungkv/autolikeapp/comunication/QtAndroidService");
     serviceIntent.putExtra("name", name.toUtf8());

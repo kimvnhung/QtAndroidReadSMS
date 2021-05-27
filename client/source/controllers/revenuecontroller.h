@@ -18,6 +18,8 @@ public:
     QQmlListProperty<Transaction> transactionList();
 signals:
     void transactionListChanged();
+public slots:
+    void updateList();
 private:
     QList<Transaction*> m_transactionList;
 

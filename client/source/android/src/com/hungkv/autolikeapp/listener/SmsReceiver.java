@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.hungkv.autolikeapp.database.Transaction;
+import com.hungkv.autolikeapp.comunication.ActivityUtils;
 
 
 public class SmsReceiver extends BroadcastReceiver {
@@ -113,10 +114,18 @@ public class SmsReceiver extends BroadcastReceiver {
                                     Log.e(TAG,"No matching regex time");
                                 }
                                 Transaction transaction = new Transaction(temp.getPhone(),code,value,time);
+                                if (listener != null){
+                                    listener.onSmsComing(transaction);
+                                }else {
+                                    Log.i(TAG, "Sms receive: listener is null");
+                                }
                             }
                         }
                     }
                 }
+
+                //emit to qt update list
+                ActivityUtils.sendToQt("REFRESH_DATA");
 
             }
         }

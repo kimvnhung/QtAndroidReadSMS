@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
-
+    engine.addImportPath("qrc:/");
     //init qtAndroidService
     QtAndroidService *qtAndroidService = new QtAndroidService(&app);
     Q_UNUSED(qtAndroidService)
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     MasterController *masterController = new MasterController(&app);
     engine.rootContext()->setContextProperty(QLatin1String("masterController"), masterController);
 
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/views/main.qml"));
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreated,

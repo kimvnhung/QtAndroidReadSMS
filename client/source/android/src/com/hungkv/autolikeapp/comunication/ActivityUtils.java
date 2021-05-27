@@ -12,7 +12,7 @@ import com.hungkv.autolikeapp.listener.SmsReceiver;
 
 public class ActivityUtils implements SmsReceiver.SmsListener {
 
-    private static native void sendToQt(String message);
+    public static native void sendToQt(String message);
 
     private static final String TAG = "ActivityUtils";
     public static final String BROADCAST_NAME_ACTION = "com.hungkv.autolikeapp.comunication.qtandroidservice.broadcast.name";
@@ -35,16 +35,17 @@ public class ActivityUtils implements SmsReceiver.SmsListener {
             Log.i(TAG, "In OnReceive broadcast receiver");
             if (BROADCAST_NAME_ACTION.equals(intent.getAction())) {
                 String name = intent.getStringExtra("name");
-                Log.i(TAG, "Service received name: " + name);
-                String message = name;
-                sendToQt(message);
-                Log.i(TAG, "Service sent back message: " + message);
+                Log.i(TAG, "Log: " + name);
             }
         }
     };
 
-    @Override
+@Override
     public void onSmsComing(Transaction transaction) {
         Log.i(TAG, "onSmsComming : "+transaction.getCode());
+        handler.insertTransaction(transaction);
+        for (String st: handler.getListTableInDatabase()) {
+            Log.i(TAG,"Tables from java: "+st);
+        }
     }
 }

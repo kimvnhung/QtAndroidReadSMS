@@ -13,7 +13,12 @@ public:
     QtAndroidService(QObject *parent = nullptr);
 
     static QtAndroidService *instance() { return m_instance; }
-    Q_INVOKABLE void sendToService(const QString &name);
+
+    static const QString LOG_KEY;
+
+public slots:
+    void sendToService(const QString &name);
+    void receiveMessage(const QString &message);
 
 signals:
     void messageFromService(const QString &message);

@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 public class QtAndroidService extends QtService
 {
     private static final String TAG = "QtAndroidService";
+    public static final String LOG_KEY = "log";
 
     @Override
     public void onCreate() {

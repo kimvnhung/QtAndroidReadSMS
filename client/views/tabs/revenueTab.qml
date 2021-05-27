@@ -12,5 +12,12 @@ Item {
 //            _item : modelData
 //        }
 //    }
-
+    Connections{
+        target: masterController.ui_qtAndroidService
+        function onMessageFromService(message) {
+            if(message === "REFRESH_DATA"){
+                masterController.ui_revenueController.updateList()
+            }
+        }
+    }
 }

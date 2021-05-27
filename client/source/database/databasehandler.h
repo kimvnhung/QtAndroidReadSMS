@@ -5,6 +5,9 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QSqlError>
+#include <QSqlResult>
+#include <QVariant>
 #include <QList>
 
 #include "model/transaction.h"
@@ -27,7 +30,7 @@ public:
     static const QString COLUMN_UPDATE_TIME ;
     static const QString COLUMN_STATUS ;
 signals:
-
+    void log(const QString &content);
 private:
     static DatabaseHandler* m_instance;
     explicit DatabaseHandler(QObject *parent = nullptr);

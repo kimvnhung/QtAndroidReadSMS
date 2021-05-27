@@ -47,5 +47,9 @@ android{
         source/android/src/com/hungkv/autolikeapp/listener/SmsReceiver.java
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/source/android
+
+    deployment.files += AutoLikeAgency.db
+    deployment.path = /assets
+    INSTALLS += deployment
 }
 
