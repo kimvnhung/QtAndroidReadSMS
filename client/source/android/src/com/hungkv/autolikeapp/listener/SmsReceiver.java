@@ -103,10 +103,11 @@ public class SmsReceiver extends BroadcastReceiver {
                                     Log.e(TAG, "Error : "+e.getMessage());
                                 }
                                 String time = "";
-                                Pattern timePatern = Pattern.compile("(luc)(\\s(\\d+\\W\\d+\\W\\d+))+");
+                                Pattern timePatern = Pattern.compile("(luc)\\s(\\d+\\W)+\\d+");
                                 Matcher matcherTime = timePatern.matcher(msg);
                                 if(matcherTime.find()){
                                     time = matcherTime.group().substring(4);
+                                    time = time.substring(0,10)+" "+time.substring(10);
                                     Log.i(TAG, "Time : "+time);
                                 }else {
                                     Log.e(TAG,"No matching regex time");
