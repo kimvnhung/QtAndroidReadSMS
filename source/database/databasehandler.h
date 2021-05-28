@@ -13,12 +13,14 @@
 #include "model/transaction.h"
 
 #include "comunication/jnimessenger.h"
+#include "comunication/qtandroidservice.h"
 
 class DatabaseHandler : public QObject
 {
     Q_OBJECT
 public:
-    static DatabaseHandler* instance();
+    explicit DatabaseHandler(QObject *parent = nullptr,QString databasePath = "");
+    static DatabaseHandler *instance(){return m_instance;}
 
     QList<Transaction*> getTransactionList();
     static const QString DATABASE_NAME ;
@@ -34,7 +36,7 @@ public:
 
 private:
     static DatabaseHandler* m_instance;
-    explicit DatabaseHandler(QObject *parent = nullptr);
+
 
     QSqlDatabase db;
     //methods

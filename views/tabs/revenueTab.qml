@@ -6,6 +6,8 @@ import components 1.0
 Item {
     width: 375
     height: 732
+
+
 //    Repeater{
 //        id : dataTable
 //        model: masterController.ui_revenueController.ui_transactionList
@@ -16,15 +18,15 @@ Item {
     Button{
         id :btn
         text: "Send"
-        onClicked: masterController.ui_jniMessenger.printFromJava("abcXYZ")
+        onClicked: masterController.ui_qtAndroidService.sendToService("abcXYZ")
     }
 
-    Connections{
-        target: masterController.ui_jniMessenger
-        function onMessageFromJava(message) {
-            if(message === "REFRESH_DATA"){
-                masterController.ui_revenueController.updateList()
-            }
-        }
-    }
+//    Connections{
+//        target: masterController.ui_qtAndroidService
+//        function onMessageFromService(message) {
+//            if(message === "UPDATE_DATA"){
+//                masterController.ui_revenueController.updateList()
+//            }
+//        }
+//    }
 }

@@ -79,6 +79,11 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
+        <service android:name=".comunication.QtAndroidService">
+            <!-- Background running -->
+            <meta-data android:name="android.app.background_running" android:value="true"/>
+            <!-- Background running -->
+        </service>
     </application>
 
 </manifest>

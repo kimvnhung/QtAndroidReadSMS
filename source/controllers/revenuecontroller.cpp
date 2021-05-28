@@ -17,3 +17,4 @@ void RevenueController::updateList()
     this->m_transactionList = DatabaseHandler::instance()->getTransactionList();
     emit transactionListChanged();
 }
+

@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<MasterController>("SRC", 1, 0, "MasterController");
 
     qmlRegisterType<RevenueController>("SRC", 1, 0,"RevenueController");
-    qmlRegisterType<JniMessenger>("SRC", 1, 0,"JniMessenger");
+    //qmlRegisterType<JniMessenger>("SRC", 1, 0,"JniMessenger");
+    qmlRegisterType<QtAndroidService>("SRC", 1, 0,"QtAndroidService");
 
     qmlRegisterType<Transaction>("SRC", 1, 0,"Transaction");
 

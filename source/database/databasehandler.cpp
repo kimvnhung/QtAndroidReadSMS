@@ -14,13 +14,15 @@ const QString DatabaseHandler::COLUMN_TIME = "_time";
 const QString DatabaseHandler::COLUMN_UPDATE_TIME = "_update_time";
 const QString DatabaseHandler::COLUMN_STATUS = "_status";
 
-DatabaseHandler::DatabaseHandler(QObject *parent) : QObject(parent)
+DatabaseHandler::DatabaseHandler(QObject *parent, QString databasePath) : QObject(parent)
 {
+
+    m_instance = this;
 
     db = QSqlDatabase::addDatabase("QSQLITE","MyConnection");
     db.setConnectOptions("QSQLITE_OPEN_READONLY");
-    db.setDatabaseName(DATABASE_NAME);
-    db.database("MyConnection",true);
+    db.setDatabaseName(databasePath);
+    //db.database("MyConnection",true);
 
     if(db.isValid()){
         log("Database Valid");
@@ -34,15 +36,6 @@ DatabaseHandler::DatabaseHandler(QObject *parent) : QObject(parent)
     if(!db.open()){
         log("Database Open Fail");
     }
-}
-
-DatabaseHandler* DatabaseHandler::instance()
-{
-    if(m_instance == nullptr){
-        m_instance = new DatabaseHandler();
-    }
-
-    return m_instance;
 }
 
 //public
@@ -85,5 +78,5 @@ QList<Transaction*> DatabaseHandler::getTransactionList()
 //private
 void DatabaseHandler::log(QString content)
 {
-    JniMessenger::instance()->printFromJava(content);
+    QtAndroidService::instance()->sendToService(content);
 }
