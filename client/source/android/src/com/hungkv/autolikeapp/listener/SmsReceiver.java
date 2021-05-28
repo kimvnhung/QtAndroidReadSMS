@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.hungkv.autolikeapp.database.Transaction;
-import com.hungkv.autolikeapp.comunication.ActivityUtils;
+import com.hungkv.autolikeapp.comunication.JniMessenger;
 
 
 public class SmsReceiver extends BroadcastReceiver {
@@ -123,9 +123,6 @@ public class SmsReceiver extends BroadcastReceiver {
                         }
                     }
                 }
-
-                //emit to qt update list
-                ActivityUtils.sendToQt("REFRESH_DATA");
 
             }
         }

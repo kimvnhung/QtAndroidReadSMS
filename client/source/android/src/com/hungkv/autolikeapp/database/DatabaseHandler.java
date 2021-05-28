@@ -181,4 +181,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return false;
     }
 
+    //tra ve danh sach tat ca transaction
+    public ArrayList<Transaction> getAllTransaction(){
+        SQLiteDatabase db = getWritableDatabase();
+        ArrayList<Transaction> result= new ArrayList<>();
+        try {
+            String query = "SELECT * FROM "+TABLE_NAME_AGENCY+" WHERE 1";
+            Cursor c = db.rawQuery(query,null);
+            c.moveToFirst();
+
+            while (!c.isAfterLast()){
+                Transaction transaction = new Transaction(
+                        c.getInt(c.getColumnIndex(COLUMN_ID)),
+                        c.getString(c.getColumnIndex(COLUMN_PHONE)),
+                        c.getString(c.getColumnIndex(COLUMN_TRANSACTION_CODE)),
+                        c.getInt(c.getColumnIndex(COLUMN_VALUE)),
+                        c.getString(c.getColumnIndex(COLUMN_TIME)),
+                        c.getString(c.getColumnIndex(COLUMN_UPDATE_TIME)),
+                        c.getInt(c.getColumnIndex(COLUMN_STATUS)) == 1
+                );
+
+                result.add(transaction);
+                c.moveToNext();
+            }
+        }catch (Exception e){
+            e.getMessage();
+            Toast.makeText(mContext,"Error: getAllTransactiion",Toast.LENGTH_LONG).show();
+        }
+        return result;
+    }
+
 }

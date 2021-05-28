@@ -1,6 +1,5 @@
 
-
-#include "comunication/qtandroidservice.h"
+#include "comunication/jnimessenger.h"
 
 #include <QAndroidService>
 #include <QGuiApplication>
@@ -36,8 +35,8 @@ int main(int argc, char *argv[])
     //Register
     qmlRegisterType<MasterController>("SRC", 1, 0, "MasterController");
 
-    qmlRegisterType<QtAndroidService>("SRC", 1, 0, "QtAndroidService");
     qmlRegisterType<RevenueController>("SRC", 1, 0,"RevenueController");
+    qmlRegisterType<JniMessenger>("SRC", 1, 0,"JniMessenger");
 
     qmlRegisterType<Transaction>("SRC", 1, 0,"Transaction");
 
@@ -47,8 +46,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.addImportPath("qrc:/");
     //init qtAndroidService
-    QtAndroidService *qtAndroidService = new QtAndroidService(&app);
-    Q_UNUSED(qtAndroidService)
+//    QtAndroidService *qtAndroidService = new QtAndroidService(&app);
+//    Q_UNUSED(qtAndroidService)
 
     MasterController *masterController = new MasterController(&app);
     engine.rootContext()->setContextProperty(QLatin1String("masterController"), masterController);

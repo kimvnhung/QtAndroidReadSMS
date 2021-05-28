@@ -96,4 +96,9 @@ public class Transaction {
         rt += para;
         return rt;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction : "+id+","+phone+","+code+","+value+","+time+","+updateTime+","+(status?"Updated":"Note");
+    }
 }

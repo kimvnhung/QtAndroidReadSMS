@@ -12,6 +12,8 @@
 
 #include "model/transaction.h"
 
+#include "comunication/jnimessenger.h"
+
 class DatabaseHandler : public QObject
 {
     Q_OBJECT
@@ -29,13 +31,14 @@ public:
     static const QString COLUMN_TIME ;
     static const QString COLUMN_UPDATE_TIME ;
     static const QString COLUMN_STATUS ;
-signals:
-    void log(const QString &content);
+
 private:
     static DatabaseHandler* m_instance;
     explicit DatabaseHandler(QObject *parent = nullptr);
 
     QSqlDatabase db;
+    //methods
+    void log(QString content);
 
 };
 

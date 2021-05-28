@@ -12,16 +12,16 @@ QML_IMPORT_PATH = $$PWD
 INCLUDEPATH += source/
 
 SOURCES += \
+        source/comunication/jnimessenger.cpp \
         source/comunication/utility.cpp \
         source/controllers/mastercontroller.cpp \
         source/controllers/revenuecontroller.cpp \
         source/database/databasehandler.cpp \
         main.cpp \
-        source/comunication/qtandroidservice.cpp \
         source/model/transaction.cpp
 
 HEADERS += \
-        source/comunication/qtandroidservice.h \
+        source/comunication/jnimessenger.h \
         source/comunication/references.h \
         source/comunication/utility.h \
         source/controllers/mastercontroller.h \
@@ -41,8 +41,6 @@ android{
     DISTFILES += \
         source/android/src/com/hungkv/autolikeapp/database/DatabaseHandler.java \
         source/android/src/com/hungkv/autolikeapp/database/Transaction.java \
-        source/android/src/com/hungkv/autolikeapp/comunication/ActivityUtils.java \
-        source/android/src/com/hungkv/autolikeapp/comunication/QtAndroidService.java \
         source/android/AndroidManifest.xml \
         source/android/src/com/hungkv/autolikeapp/listener/SmsReceiver.java
 
@@ -52,4 +50,7 @@ android{
     deployment.path = /assets
     INSTALLS += deployment
 }
+
+DISTFILES += \
+    source/android/src/com/hungkv/autolikeapp/comunication/JniMessenger.java
 

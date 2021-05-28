@@ -1,7 +1,5 @@
 #include "databasehandler.h"
 
-#include "comunication/qtandroidservice.h"
-
 #include <QFile>
 
 DatabaseHandler* DatabaseHandler::m_instance = nullptr;
@@ -18,22 +16,23 @@ const QString DatabaseHandler::COLUMN_STATUS = "_status";
 
 DatabaseHandler::DatabaseHandler(QObject *parent) : QObject(parent)
 {
-    connect(this, &DatabaseHandler::log, QtAndroidService::instance(), &QtAndroidService::sendToService);
 
     db = QSqlDatabase::addDatabase("QSQLITE","MyConnection");
+    db.setConnectOptions("QSQLITE_OPEN_READONLY");
     db.setDatabaseName(DATABASE_NAME);
+    db.database("MyConnection",true);
 
     if(db.isValid()){
-        emit log("Database Valid");
+        log("Database Valid");
     }
-    emit log("Test log");
+    log("Test log");
     QFile dfile(":/"+DATABASE_NAME);
     if (dfile.exists())
     {
-         emit log("Database Existed");
+         log("Database Existed");
     }
     if(!db.open()){
-        emit log("Database Open Fail");
+        log("Database Open Fail");
     }
 }
 
@@ -52,15 +51,18 @@ QList<Transaction*> DatabaseHandler::getTransactionList()
     QList<Transaction*> rt = QList<Transaction*>();
     if(db.isOpen()){
         //debug
-        QSqlQuery query2 = db.exec("SELECT name FROM sqlite_master WHERE type='table'");
+        QSqlQuery query2(db);
+        query2.prepare("SELECT name FROM sqlite_master WHERE type='table'");
+        if(query2.exec()){
+            log("Query2 exec true");
+        }
         while (query2.next()) {
-            emit log("Table : "+query2.value(0).toString());
+            log("Table : "+query2.value(0).toString());
         }
         //
 
 
         QSqlQuery query = db.exec(QString("select * from "+TABLE_NAME_AGENCY));
-        QSqlRecord record = query.record();
         while (query.next()) {
             int id = query.value(COLUMN_ID).toInt();
             QString phone  = query.value(COLUMN_PHONE).toString();
@@ -72,10 +74,16 @@ QList<Transaction*> DatabaseHandler::getTransactionList()
             Transaction* item = new Transaction(this,id,phone,code,value,time,updateTime,status);
             rt.append(item);
         }
-        emit log("rtsize : "+QString::number(rt.size()));
+        log("rtsize : "+QString::number(rt.size()));
     }else {
-        emit log("Database open fail2");
+        log("Database open fail2");
     }
 
     return rt;
+}
+
+//private
+void DatabaseHandler::log(QString content)
+{
+    JniMessenger::instance()->printFromJava(content);
 }

@@ -2,14 +2,19 @@
 
 MasterController::MasterController(QObject *parent) : QObject(parent)
 {
+    JniMessenger *initialer = new JniMessenger(parent);
+    Q_UNUSED(initialer)
+
     this->m_revenueController = new RevenueController(this);
+
 }
 
 
 //publics
-QtAndroidService* MasterController::qtAndroidService()
+
+JniMessenger* MasterController::jniMessenger()
 {
-    return QtAndroidService::instance();
+    return JniMessenger::instance();
 }
 
 RevenueController* MasterController::revenueController()
