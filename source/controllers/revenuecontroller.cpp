@@ -2,7 +2,7 @@
 
 RevenueController::RevenueController(QObject *parent) : QObject(parent)
 {
-    this->m_transactionList = DatabaseHandler::instance()->getTransactionList();
+    this->m_transactionList = QList<Transaction*>();
 }
 
 QQmlListProperty<Transaction> RevenueController::transactionList()
@@ -14,7 +14,10 @@ QQmlListProperty<Transaction> RevenueController::transactionList()
 //slots
 void RevenueController::updateList()
 {
-    this->m_transactionList = DatabaseHandler::instance()->getTransactionList();
-    emit transactionListChanged();
+    this->m_transactionList.clear();
+    if(DatabaseHandler::instance() != nullptr){
+        this->m_transactionList.append(DatabaseHandler::instance()->getTransactionList());
+        emit transactionListChanged();
+    }
 }
 

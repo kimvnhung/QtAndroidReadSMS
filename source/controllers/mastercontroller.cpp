@@ -5,6 +5,8 @@ MasterController::MasterController(QObject *parent) : QObject(parent)
 //    JniMessenger *initialer = new JniMessenger(parent);
 //    Q_UNUSED(initialer)
 
+    this->m_revenueController = new RevenueController(this);
+
     QtAndroidService *initialier = new QtAndroidService(parent);
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
     initialier->sendToService(INITIALIZE_SERVICE);
@@ -30,21 +32,28 @@ RevenueController* MasterController::revenueController()
 }
 
 
+
+
 //slots
+void MasterController::onReceiveMessageFromService(const QString &message)
+{
+    if(message.startsWith(DATABASE_PREFIX)){
+        onDatabaseAvailable(message.mid(DATABASE_PREFIX.length()));
+    }
+
+    if(message == UPDATE_DATA){
+        this->m_revenueController->updateList();
+    }
+
+}
+
+//private
 void MasterController::onDatabaseAvailable(QString path)
 {
     //Declare database
     DatabaseHandler *handler = new DatabaseHandler(this,path);
     Q_UNUSED(handler)
 
-    this->m_revenueController = new RevenueController(this);
     this->m_revenueController->updateList();
-}
-
-void MasterController::onReceiveMessageFromService(const QString &message)
-{
-    if(message.startsWith(DATABASE_PREFIX)){
-        onDatabaseAvailable(message.mid(DATABASE_PREFIX.length()));
-    }
 
 }

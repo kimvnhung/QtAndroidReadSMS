@@ -12,3 +12,30 @@ void Utility::showToast(const QString &message, ToastDuration duration){
         toast.callMethod<void>("show");
     });
 }
+
+QString Utility::getFullDigits(int number, int digitNumber)
+{
+    int numDigit = numberDigit(number);
+    if(numDigit >= digitNumber){
+        return QString::number(number);
+    }
+
+    QString rt = QString::number(number);
+    for(int i=0;i<(digitNumber-numDigit);i++){
+        if(i==number){
+            continue;
+        }
+        rt = "0"+rt;
+    }
+    return rt;
+}
+
+int Utility::numberDigit(int number)
+{
+    int count = 0;
+    while (number > 0) {
+        count++;
+        number /= 10;
+    }
+    return count;
+}

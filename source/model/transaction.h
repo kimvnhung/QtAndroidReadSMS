@@ -3,13 +3,15 @@
 
 #include <QObject>
 
+#include "comunication/utility.h"
+
 class Transaction : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int ui_id READ getId WRITE setId NOTIFY idChanged)
     Q_PROPERTY(QString ui_phone READ getPhone WRITE setPhone NOTIFY phoneChanged)
     Q_PROPERTY(QString ui_code READ getCode WRITE setCode NOTIFY codeChanged)
-    Q_PROPERTY(int ui_value READ getValue WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(QString ui_value READ getDisplayValue NOTIFY valueChanged)
     Q_PROPERTY(QString ui_time READ getTime WRITE setTime NOTIFY timeChanged)
     Q_PROPERTY(QString ui_updateTime READ getUpdateTime WRITE setUpdateTime NOTIFY updateTimeChanged)
     Q_PROPERTY(bool ui_status READ getStatus WRITE setStatus NOTIFY statusChanged)
@@ -33,6 +35,7 @@ public:
     QString getPhone(){return this->m_phone;}
     QString getCode(){return this->m_code;}
     int getValue(){return this->m_value;}
+    QString getDisplayValue();
     QString getTime(){return this->m_time;}
     QString getUpdateTime(){return this->m_updateTime;}
     bool getStatus(){return this->m_status;}
@@ -54,6 +57,8 @@ private:
     QString m_time;
     QString m_updateTime;
     bool m_status;
+
+    void log(QString msg);
 };
 
 #endif // TRANSACTION_H

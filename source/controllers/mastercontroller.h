@@ -24,12 +24,13 @@ public:
     RevenueController* revenueController();
 signals:
     void revenueControllerChanged();
+    void databaseChanged();
 public slots:
-    void onDatabaseAvailable(QString path);
+
     void onReceiveMessageFromService(const QString &message);
 private:
     RevenueController* m_revenueController = nullptr;
-
+    void onDatabaseAvailable(QString path);
 };
 
 #endif // MAINCONTROLLER_H

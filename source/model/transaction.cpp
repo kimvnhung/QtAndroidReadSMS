@@ -1,5 +1,7 @@
 #include "transaction.h"
 
+#include "comunication/qtandroidservice.h"
+
 Transaction::Transaction(QObject *parent, QString phone,
                          QString code, int value, QString time):
     QObject(parent)
@@ -62,3 +64,27 @@ void Transaction::setStatus(bool isUpdated)
     this->m_status = isUpdated;
     emit statusChanged();
 }
+
+QString Transaction::getDisplayValue()
+{
+    QString rt = "";
+    int para = m_value;
+    while (para/1000 > 0){
+        log("para : "+QString::number(para));
+        rt = (para < m_value?(Utility::getFullDigits(para%1000,3)+","):Utility::getFullDigits(para%1000,3))+rt;
+        log("rt :"+rt);
+        para /= 1000;
+    }
+    if(para != 0){
+        rt = QString::number(para)+ "," + rt;
+    }
+    log(rt);
+    return rt;
+}
+
+//private
+void Transaction::log(QString msg)
+{
+    QtAndroidService::instance()->sendToService(msg);
+}
+
