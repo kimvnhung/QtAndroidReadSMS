@@ -5,9 +5,6 @@ MasterController::MasterController(QGuiApplication *parent) :
 {
 //    JniMessenger *initialer = new JniMessenger(parent);
 //    Q_UNUSED(initialer)
-
-    QtAndroidService *initialier = new QtAndroidService(parent);
-    connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
     connect(parent,&QGuiApplication::applicationStateChanged,[=](Qt::ApplicationState state){
         switch (state) {
         case Qt::ApplicationHidden:
@@ -15,7 +12,6 @@ MasterController::MasterController(QGuiApplication *parent) :
             break;
         case Qt::ApplicationActive:
             QtAndroidService::instance()->sendToService("Application Active");
-            initialier->startBackgroundService();
 
             this->m_revenueController->updateList();
             break;
@@ -31,8 +27,9 @@ MasterController::MasterController(QGuiApplication *parent) :
 
     this->m_revenueController = new RevenueController(this);
 
-
-
+    QtAndroidService *initialier = new QtAndroidService(parent);
+    connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
+    initialier->startBackgroundService();
 
 
 }
