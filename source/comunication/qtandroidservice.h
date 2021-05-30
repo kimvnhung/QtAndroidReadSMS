@@ -5,6 +5,8 @@
 #include <QtAndroid>
 #include <QAndroidIntent>
 
+#include "constants.h"
+
 class QtAndroidService : public QObject
 {
     Q_OBJECT
@@ -14,6 +16,7 @@ public:
 
     static QtAndroidService *instance() { return m_instance; }
     Q_INVOKABLE void sendToService(const QString &name);
+    Q_INVOKABLE void startBackgroundService();
 
 signals:
     void messageFromService(const QString &message);

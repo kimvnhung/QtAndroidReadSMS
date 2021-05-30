@@ -1,14 +1,17 @@
-import QtQuick 2.12
+import QtQuick 2.14
 import SRC 1.0
 
 Item {
     property Transaction _item
-    width: 375
-    height: 60
+
     Rectangle{
-        anchors.fill: parent
         border.color: "blue"
         border.width: 1
+        anchors{
+            fill: parent
+            bottomMargin: 5
+        }
+
         Column{
             Row{
                 height: 30

@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
-<manifest package="com.hungkv.autolikeapp" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="4" android:installLocation="auto">
+<manifest package="com.hungkv.autolikeapp"
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:versionName="1.0" android:versionCode="5" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -15,7 +18,8 @@
 
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Auto Like" android:extractNativeLibs="true">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
-        android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="Auto Like" android:screenOrientation="unspecified" android:launchMode="singleTop">
+        android:name="org.qtproject.qt5.android.bindings.QtActivity"
+        android:label="Auto Like" android:screenOrientation="unspecified" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -83,6 +87,7 @@
             <!-- Background running -->
             <meta-data android:name="android.app.background_running" android:value="true"/>
             <!-- Background running -->
+            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
         </service>
     </application>
 

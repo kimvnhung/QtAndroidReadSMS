@@ -1,15 +1,38 @@
 #include "mastercontroller.h"
 
-MasterController::MasterController(QObject *parent) : QObject(parent)
+MasterController::MasterController(QGuiApplication *parent) :
+    QObject(parent)
 {
 //    JniMessenger *initialer = new JniMessenger(parent);
 //    Q_UNUSED(initialer)
 
-    this->m_revenueController = new RevenueController(this);
-
     QtAndroidService *initialier = new QtAndroidService(parent);
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
-    initialier->sendToService(INITIALIZE_SERVICE);
+    connect(parent,&QGuiApplication::applicationStateChanged,[=](Qt::ApplicationState state){
+        switch (state) {
+        case Qt::ApplicationHidden:
+            QtAndroidService::instance()->sendToService("Application Hidden");
+            break;
+        case Qt::ApplicationActive:
+            QtAndroidService::instance()->sendToService("Application Active");
+            initialier->startBackgroundService();
+
+            this->m_revenueController->updateList();
+            break;
+        case Qt::ApplicationInactive:
+            QtAndroidService::instance()->sendToService("Application Inactive");
+            break;
+        case Qt::ApplicationSuspended:
+            QtAndroidService::instance()->sendToService("Application Suspended");
+            break;
+        }
+    });
+
+
+    this->m_revenueController = new RevenueController(this);
+
+
+
 
 
 }
@@ -37,11 +60,11 @@ RevenueController* MasterController::revenueController()
 //slots
 void MasterController::onReceiveMessageFromService(const QString &message)
 {
-    if(message.startsWith(DATABASE_PREFIX)){
-        onDatabaseAvailable(message.mid(DATABASE_PREFIX.length()));
+    if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
+        onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
     }
 
-    if(message == UPDATE_DATA){
+    if(message == Constants::Info::UPDATE_DATA_INFO){
         this->m_revenueController->updateList();
     }
 

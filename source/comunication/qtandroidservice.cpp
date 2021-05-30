@@ -36,3 +36,20 @@ void QtAndroidService::sendToService(const QString &name)
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
 }
+
+void QtAndroidService::startBackgroundService()
+{
+    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
+                                        "com/hungkv/autolikeapp/comunication/QtAndroidService");
+
+    QAndroidJniObject startBackgroundAction = QAndroidJniObject::fromString(Constants::Action::START_BACKGROUND_SERVICE_ACTION);
+
+    serviceIntent.handle().callObjectMethod(
+                "setAction",
+                "(Ljava/lang/String;)Landroid/content/Intent",
+                startBackgroundAction.object<jstring>());
+    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+                "startService",
+                "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+                serviceIntent.handle().object());
+}

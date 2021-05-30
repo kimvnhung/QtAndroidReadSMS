@@ -12,6 +12,7 @@ QML_IMPORT_PATH = $$PWD
 INCLUDEPATH += source/
 
 SOURCES += \
+        source/comunication/constants.cpp \
         source/comunication/jnimessenger.cpp \
         source/comunication/qtandroidservice.cpp \
         source/comunication/utility.cpp \
@@ -22,9 +23,9 @@ SOURCES += \
         source/model/transaction.cpp
 
 HEADERS += \
+        source/comunication/constants.h \
         source/comunication/jnimessenger.h \
         source/comunication/qtandroidservice.h \
-        source/comunication/references.h \
         source/comunication/utility.h \
         source/controllers/mastercontroller.h \
         source/controllers/revenuecontroller.h \
@@ -41,6 +42,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 android{
     DISTFILES += \
+        source/android/res/drawable/ic_launcher.png \
+        source/android/src/com/hungkv/autolikeapp/Constants.java \
+        source/android/src/com/hungkv/autolikeapp/comunication/JniMessenger.java \
+        source/android/src/com/hungkv/autolikeapp/comunication/QtAndroidService.java \
         source/android/src/com/hungkv/autolikeapp/database/DatabaseHandler.java \
         source/android/src/com/hungkv/autolikeapp/database/Transaction.java \
         source/android/AndroidManifest.xml \
@@ -53,7 +58,4 @@ android{
     INSTALLS += deployment
 }
 
-DISTFILES += \
-    source/android/src/com/hungkv/autolikeapp/comunication/JniMessenger.java \
-    source/android/src/com/hungkv/autolikeapp/comunication/QtAndroidService.java
 

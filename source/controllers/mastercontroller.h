@@ -2,12 +2,14 @@
 #define MAINCONTROLLER_H
 
 #include <QObject>
+#include <QGuiApplication>
 
 #include "comunication/qtandroidservice.h"
 #include "comunication/jnimessenger.h"
 #include "revenuecontroller.h"
 
-#include "comunication/references.h"
+
+#include "comunication/constants.h"
 
 
 class MasterController : public QObject
@@ -17,7 +19,7 @@ class MasterController : public QObject
     Q_PROPERTY(JniMessenger* ui_jniMessenger READ jniMessenger CONSTANT)
     Q_PROPERTY(RevenueController* ui_revenueController READ revenueController NOTIFY revenueControllerChanged)
 public:
-    explicit MasterController(QObject *parent = nullptr);
+    explicit MasterController(QGuiApplication *parent = nullptr);
 
     QtAndroidService* qtAndroidService();
     JniMessenger* jniMessenger();

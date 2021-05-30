@@ -1,6 +1,6 @@
 #include "utility.h"
 
-void Utility::showToast(const QString &message, ToastDuration duration){
+void Utility::showToast(const QString &message, int duration){
     // all the magic must happen on Android UI thread
     QtAndroid::runOnAndroidThread([message, duration] {
         QAndroidJniObject javaString = QAndroidJniObject::fromString(message);
@@ -22,7 +22,8 @@ QString Utility::getFullDigits(int number, int digitNumber)
 
     QString rt = QString::number(number);
     for(int i=0;i<(digitNumber-numDigit);i++){
-        if(i==number){
+        if(number == 0
+                && i==0){
             continue;
         }
         rt = "0"+rt;

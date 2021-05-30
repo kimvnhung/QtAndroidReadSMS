@@ -2,7 +2,7 @@
 #include "comunication/jnimessenger.h"
 
 #include <QAndroidService>
-#include <QGuiApplication>
+
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
@@ -11,7 +11,8 @@
 
 #if defined (Q_OS_ANDROID)
 #include <QtAndroid>
-const QVector<QString> permissions({"android.permission.RECEIVE_SMS"});
+const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
+                                   "android.permission.FOREGROUND_SERVICE"});
 #endif
 
 
@@ -49,6 +50,8 @@ int main(int argc, char *argv[])
     //init qtAndroidService
 //    QtAndroidService *qtAndroidService = new QtAndroidService(&app);
 //    Q_UNUSED(qtAndroidService)
+
+
 
     MasterController *masterController = new MasterController(&app);
     engine.rootContext()->setContextProperty(QLatin1String("masterController"), masterController);
