@@ -78,5 +78,5 @@ QList<Transaction*> DatabaseHandler::getTransactionList()
 //private
 void DatabaseHandler::log(QString content)
 {
-    QtAndroidService::instance()->sendToService(content);
+    QtAndroidService::instance()->log(content);
 }

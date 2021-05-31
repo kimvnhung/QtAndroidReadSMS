@@ -85,6 +85,6 @@ QString Transaction::getDisplayValue()
 //private
 void Transaction::log(QString msg)
 {
-    QtAndroidService::instance()->sendToService(msg);
+    QtAndroidService::instance()->log(msg);
 }
 

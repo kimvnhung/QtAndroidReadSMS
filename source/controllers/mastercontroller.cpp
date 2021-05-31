@@ -8,19 +8,20 @@ MasterController::MasterController(QGuiApplication *parent) :
     connect(parent,&QGuiApplication::applicationStateChanged,[=](Qt::ApplicationState state){
         switch (state) {
         case Qt::ApplicationHidden:
-            QtAndroidService::instance()->sendToService("Application Hidden");
+            QtAndroidService::instance()->log("Application Hidden");
             break;
         case Qt::ApplicationActive:
-            QtAndroidService::instance()->sendToService("Application Active");
+            QtAndroidService::instance()->log("Application Active");
 
             this->m_revenueController->updateList();
             break;
         case Qt::ApplicationInactive:
-            QtAndroidService::instance()->sendToService("Application Inactive");
+            QtAndroidService::instance()->log("Application Inactive");
+
             break;
         case Qt::ApplicationSuspended:
-            QtAndroidService::instance()->sendToService("Application Suspended");
-            break;
+            QtAndroidService::instance()->log("Application Suspended");
+
         }
     });
 
@@ -29,7 +30,7 @@ MasterController::MasterController(QGuiApplication *parent) :
 
     QtAndroidService *initialier = new QtAndroidService(parent);
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
-    initialier->startBackgroundService();
+    initialier->startForegroundService();
 
 
 }

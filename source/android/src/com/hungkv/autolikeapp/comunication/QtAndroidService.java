@@ -6,11 +6,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.hungkv.autolikeapp.Constants;
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -66,8 +65,10 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
                 NonSeenTransaction = 0;
                 return rt;
             case Constants.ACTION.START_FOREGROUND_ACTION:
-                showNotification();
                 Log.i(TAG,Constants.JAVA_LOG+"Start Foreground Service");
+                Toast.makeText(this,"Start Foreground",Toast.LENGTH_LONG).show();
+                showNotification();
+
                 break;
             case Constants.ACTION.STOP_FOREGROUND_ACTION:
                 Log.i(TAG,Constants.JAVA_LOG+"Stop Foreground Service");
@@ -112,7 +113,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             NotificationChannel channel = new NotificationChannel(Constants.NOTIFICATION.NOTIFICATION_CHANNEL_ID,
                     Constants.NOTIFICATION.NOTIFICATION_CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_NONE);
+                    NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(Constants.NOTIFICATION.NOTIFICATION_DESCRIPTION);
             notificationManager.createNotificationChannel(channel);
             status = new Notification.Builder(this,Constants.NOTIFICATION.NOTIFICATION_CHANNEL_ID)

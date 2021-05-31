@@ -26,28 +26,58 @@ QtAndroidService::QtAndroidService(QObject *parent) : QObject(parent)
     env->DeleteLocalRef(objectClass);
 }
 
-void QtAndroidService::sendToService(const QString &name)
+void QtAndroidService::startBackgroundService()
 {
-    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
-                                        "com/hungkv/autolikeapp/comunication/QtAndroidService");
-    serviceIntent.putExtra("name", name.toUtf8());
+    QAndroidIntent serviceIntent(Constants::Action::START_BACKGROUND_SERVICE_ACTION);
+
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    serviceIntent.handle().callObjectMethod(
+                "setClass",
+                "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
+                QtAndroid::androidActivity().object(),
+                objectClass);
+
     QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
 }
 
-void QtAndroidService::startBackgroundService()
+void QtAndroidService::startForegroundService()
 {
-    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
-                                        "com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidIntent serviceIntent(Constants::Action::START_FOREGROUND_ACTION);
 
-    QAndroidJniObject startBackgroundAction = QAndroidJniObject::fromString(Constants::Action::START_BACKGROUND_SERVICE_ACTION);
-
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     serviceIntent.handle().callObjectMethod(
-                "setAction",
-                "(Ljava/lang/String;)Landroid/content/Intent",
-                startBackgroundAction.object<jstring>());
+                "setClass",
+                "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
+                QtAndroid::androidActivity().object(),
+                objectClass);
+
+    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+                "startService",
+                "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+                serviceIntent.handle().object());
+}
+
+void QtAndroidService::log(const QString &message)
+{
+    QAndroidIntent serviceIntent(Constants::Action::LOG_ACTION);
+
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    serviceIntent.handle().callObjectMethod(
+                "setClass",
+                "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
+                QtAndroid::androidActivity().object(),
+                objectClass);
+    serviceIntent.putExtra("message", message.toUtf8());
+
     QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
