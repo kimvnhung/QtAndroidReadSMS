@@ -30,7 +30,7 @@ MasterController::MasterController(QGuiApplication *parent) :
 
     QtAndroidService *initialier = new QtAndroidService(parent);
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
-    initialier->startForegroundService();
+    initialier->startBackgroundService();
 
 
 }
@@ -66,6 +66,9 @@ void MasterController::onReceiveMessageFromService(const QString &message)
         this->m_revenueController->updateList();
     }
 
+    if(message.contains("on")){
+        log(message);
+    }
 }
 
 //private
@@ -77,4 +80,9 @@ void MasterController::onDatabaseAvailable(QString path)
 
     this->m_revenueController->updateList();
 
+}
+
+void MasterController::log(QString message)
+{
+    QtAndroidService::instance()->log(message);
 }

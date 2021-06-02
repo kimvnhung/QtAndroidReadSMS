@@ -20,7 +20,7 @@ import com.hungkv.autolikeapp.listener.SmsReceiver;
 
 public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 {
-    private static native void sendToQt(String message);
+    public static native void sendToQt(String message);
     private static final String TAG = "QtAndroidService";
 
     private DatabaseHandler handler;
@@ -59,7 +59,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
         switch (action){
             case Constants.ACTION.START_BACKGROUND_SERVICE_ACTION:
                 Log.i(TAG, "Start Background Service");
-                stopForeground(true);
+                //stopForeground(true);
                 Log.i(TAG,"Stop Foreground Serivice");
 
                 NonSeenTransaction = 0;

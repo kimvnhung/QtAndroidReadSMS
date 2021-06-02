@@ -33,6 +33,7 @@ public slots:
 private:
     RevenueController* m_revenueController = nullptr;
     void onDatabaseAvailable(QString path);
+    void log(QString message);
 };
 
 #endif // MAINCONTROLLER_H

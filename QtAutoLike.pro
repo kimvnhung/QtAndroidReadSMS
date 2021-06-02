@@ -58,4 +58,7 @@ android{
     INSTALLS += deployment
 }
 
+DISTFILES += \
+    source/android/src/com/hungkv/autolikeapp/MainActivity.java
+
 
