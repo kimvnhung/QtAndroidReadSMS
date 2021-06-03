@@ -5,7 +5,7 @@ import QtQuick.Window 2.2
 Item {
     readonly property real scrHeight: Screen.desktopAvailableHeight
     readonly property real scrWidth: Screen.desktopAvailableWidth
-    readonly property real designHeight: 778
+    readonly property real designHeight: 745
     readonly property real designWidth: 375
     readonly property real ratioH: scrHeight/designHeight
     readonly property real ratioW: scrWidth/designWidth
@@ -21,7 +21,7 @@ Item {
 
     //horizontal dimen
     readonly property real windowHeight : 812*ratioH
-    readonly property real tabContentHeight: 732*ratioH
+    readonly property real tabContentHeight: 700*ratioH
 
 
 
