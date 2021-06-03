@@ -4,8 +4,6 @@ import SRC 1.0
 import components 1.0
 
 Item {
-    width: 375
-    height: 732
     Rectangle{
         anchors{
             top: parent.top

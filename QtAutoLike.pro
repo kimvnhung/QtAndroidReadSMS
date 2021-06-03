@@ -20,6 +20,7 @@ SOURCES += \
         source/controllers/revenuecontroller.cpp \
         source/database/databasehandler.cpp \
         main.cpp \
+        source/model/tabaction.cpp \
         source/model/transaction.cpp
 
 HEADERS += \
@@ -30,10 +31,12 @@ HEADERS += \
         source/controllers/mastercontroller.h \
         source/controllers/revenuecontroller.h \
         source/database/databasehandler.h \
+        source/model/tabaction.h \
         source/model/transaction.h
 
 RESOURCES += views.qrc \
-    components.qrc
+    components.qrc \
+    values.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -43,6 +46,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 android{
     DISTFILES += \
         source/android/res/drawable/ic_launcher.png \
+        source/android/src/com/hungkv/autolikeapp/MainActivity.java \
         source/android/src/com/hungkv/autolikeapp/Constants.java \
         source/android/src/com/hungkv/autolikeapp/comunication/JniMessenger.java \
         source/android/src/com/hungkv/autolikeapp/comunication/QtAndroidService.java \
@@ -58,7 +62,6 @@ android{
     INSTALLS += deployment
 }
 
-DISTFILES += \
-    source/android/src/com/hungkv/autolikeapp/MainActivity.java
+
 
 

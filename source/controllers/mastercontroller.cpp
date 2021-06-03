@@ -32,6 +32,12 @@ MasterController::MasterController(QGuiApplication *parent) :
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
     initialier->startBackgroundService();
 
+    //declare action
+    mRevenueTab = new TabAction(this,"qrc:/images/revenue_tab_ic.png","qrc:/images/revenue_untab_ic.png","Revenue",true);
+    mReportsTab = new TabAction(this,"qrc:/images/reports_tab_ic.png","qrc:/images/reports_untab_ic.png","Reports");
+    mHistoryTab = new TabAction(this,"qrc:/images/history_tab_ic.png","qrc:/images/history_untab_ic.png","Trans. history");
+    mOffersTab = new TabAction(this,"qrc:/images/offers_tab_ic.png","qrc:/images/offers_untab_ic.png","Special offers");
+    mSettingTab = new TabAction(this,"qrc:/images/setting_tab_ic.png","qrc:/images/setting_untab_ic.png","Settings");
 
 }
 
@@ -52,7 +58,30 @@ RevenueController* MasterController::revenueController()
     return this->m_revenueController;
 }
 
+TabAction* MasterController::revenueTab()
+{
+    return this->mRevenueTab;
+}
 
+TabAction* MasterController::reportsTab()
+{
+    return this->mReportsTab;
+}
+
+TabAction* MasterController::historyTab()
+{
+    return this->mHistoryTab;
+}
+
+TabAction* MasterController::offersTab()
+{
+    return this->mOffersTab;
+}
+
+TabAction* MasterController::settingTab()
+{
+    return this->mSettingTab;
+}
 
 
 //slots
@@ -71,6 +100,11 @@ void MasterController::onReceiveMessageFromService(const QString &message)
     }
 }
 
+void MasterController::log(QString message)
+{
+    QtAndroidService::instance()->log(message);
+}
+
 //private
 void MasterController::onDatabaseAvailable(QString path)
 {
@@ -82,7 +116,4 @@ void MasterController::onDatabaseAvailable(QString path)
 
 }
 
-void MasterController::log(QString message)
-{
-    QtAndroidService::instance()->log(message);
-}
+

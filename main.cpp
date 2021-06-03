@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<QtAndroidService>("SRC", 1, 0,"QtAndroidService");
 
     qmlRegisterType<Transaction>("SRC", 1, 0,"Transaction");
+    qmlRegisterType<TabAction>("SRC", 1, 0,"TabAction");
 
 
 

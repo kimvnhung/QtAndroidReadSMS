@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/values">
+        <file alias="qmldir">values/qmldir</file>
+        <file alias="Draw.qml">values/Draw.qml</file>
+        <file alias="fontawesome.ttf">values/fontawesome-webfont.ttf</file>
+        <file alias="String.qml">values/String.qml</file>
+        <file alias="Color.qml">values/Color.qml</file>
+        <file alias="Dimen.qml">values/Dimen.qml</file>
+        <file alias="Roboto-Bold.ttf">values/Roboto-Bold.ttf</file>
+        <file alias="Roboto-BoldItalic.ttf">values/Roboto-BoldItalic.ttf</file>
+        <file alias="Roboto-Italic.ttf">values/Roboto-Italic.ttf</file>
+        <file alias="Roboto-Regular.ttf">values/Roboto-Regular.ttf</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="revenue_tab_ic.png">images/revenue_tab_ic.png</file>
+        <file alias="revenue_untab_ic.png">images/revenue_untab_ic.png</file>
+        <file alias="history_tab_ic.png">images/history_tab_ic.png</file>
+        <file alias="history_untab_ic.png">images/history_untab_ic.png</file>
+        <file alias="offers_tab_ic.png">images/offers_tab_ic.png</file>
+        <file alias="offers_untab_ic.png">images/offers_untab_ic.png</file>
+        <file alias="reports_tab_ic.png">images/reports_tab_ic.png</file>
+        <file alias="reports_untab_ic.png">images/reports_untab_ic.png</file>
+        <file alias="setting_tab_ic.png">images/setting_tab_ic.png</file>
+        <file alias="setting_untab_ic.png">images/setting_untab_ic.png</file>
+    </qresource>
+</RCC>

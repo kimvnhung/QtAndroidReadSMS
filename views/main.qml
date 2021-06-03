@@ -3,14 +3,21 @@ import QtQuick.Layouts 1.14
 import QtQuick.Window 2.14
 
 import QtQuick.Controls 2.14
+import components 1.0
+import values 1.0
 
 Window {
     // @disable-check M16
-    width: 375
+    width: Dimen.windowWidth
     // @disable-check M16
-    height: 812
+    height: Dimen.windowHeight
     // @disable-check M16
     visible: true
+
+    Component.onCompleted: {
+        masterController.log("ScreenHei :"+Dimen.scrHeight)
+        masterController.log("ScreenWid :"+Dimen.scrWidth)
+    }
 
     Rectangle{
         anchors.fill: parent
@@ -20,20 +27,33 @@ Window {
             id: tabContent
             anchors.top: parent.top
             width: parent.width
-            height: 732
+            height: Dimen.tabContentHeight
             initialItem: "qrc:/views/tabs/revenueTab.qml"
             clip: true
         }
-        Label{
+        Row {
             anchors{
                 top: tabContent.bottom
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
             }
-            text: "Tab Control Bar"
-            font.pixelSize: 20
-            color: "blue"
+            TabButton {
+                _action : masterController.ui_revenueTab
+            }
+            TabButton {
+                _action : masterController.ui_reportsTab
+            }
+            TabButton {
+                _action : masterController.ui_historyTab
+            }
+            TabButton {
+                _action : masterController.ui_offersTab
+            }
+            TabButton {
+                _action : masterController.ui_settingTab
+            }
+
         }
     }
 

@@ -1,2 +1,3 @@
 module components
 TransactionItem 1.0 TransactionItem.qml
+TabButton 1.0 TabButton.qml
