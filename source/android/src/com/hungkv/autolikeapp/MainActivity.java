@@ -34,6 +34,12 @@ public class MainActivity extends QtActivity
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG,"onStop");
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         Log.i(TAG,"onStop");

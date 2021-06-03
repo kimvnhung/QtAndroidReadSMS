@@ -85,6 +85,7 @@ android:versionName="1.0" android:versionCode="5" android:installLocation="auto"
             </intent-filter>
         </receiver>
         <service
+            android:enabled="true" android:exported="true"
             android:name=".comunication.QtAndroidService">
             <!-- Background running -->
             <meta-data android:name="android.app.background_running" android:value="true"/>

@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.hungkv.autolikeapp.Constants;
-import org.qtproject.qt5.android.bindings.QtActivity;
+import com.hungkv.autolikeapp.MainActivity;
 import com.hungkv.autolikeapp.R;
 import com.hungkv.autolikeapp.database.DatabaseHandler;
 import com.hungkv.autolikeapp.database.Transaction;
@@ -31,10 +31,12 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Creating Service");
-        handler = new DatabaseHandler(this,DatabaseHandler.DATABASE_NAME,null,1);
-        Log.i(TAG, "Initialize database handler");
-        SmsReceiver.bindingListener(this);
 
+        SmsReceiver.bindingListener(this);
+        if(handler == null){
+            handler = new DatabaseHandler(this,DatabaseHandler.DATABASE_NAME,null,1);
+        }
+        Log.i(TAG, "Initialize database handler");
         String path = this.getDatabasePath(handler.getDatabaseName()).getAbsolutePath();
         if(path.length() > 0){
             sendToQt(Constants.INFO.DATABASE_DECLARE_INFO+path);
@@ -46,6 +48,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "Destroying Service");
+
     }
 
     @Override
@@ -59,7 +62,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
         switch (action){
             case Constants.ACTION.START_BACKGROUND_SERVICE_ACTION:
                 Log.i(TAG, "Start Background Service");
-                //stopForeground(true);
+                stopForeground(true);
                 Log.i(TAG,"Stop Foreground Serivice");
 
                 NonSeenTransaction = 0;
@@ -97,7 +100,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 //        RemoteViews expandView = new RemoteViews(getPackageName(), R.layout.status_bar_expanded);
 
         //Reopen app intent
-        Intent notificationIntent = new Intent(this, QtActivity.class);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.setAction(Constants.ACTION.OPEN_QT_ACTIVITY_ACTION);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
