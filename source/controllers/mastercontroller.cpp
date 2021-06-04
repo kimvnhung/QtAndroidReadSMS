@@ -32,6 +32,9 @@ MasterController::MasterController(QGuiApplication *parent) :
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
     initialier->startBackgroundService();
 
+
+    mAccount = new Account(this, "Username","pass","HungKV");
+
     //declare action
     mRevenueTab = new TabAction(this,"qrc:/images/revenue_tab_ic.png","qrc:/images/revenue_untab_ic.png","Revenue",true);
     mReportsTab = new TabAction(this,"qrc:/images/reports_tab_ic.png","qrc:/images/reports_untab_ic.png","Reports");
@@ -56,6 +59,11 @@ JniMessenger* MasterController::jniMessenger()
 RevenueController* MasterController::revenueController()
 {
     return this->m_revenueController;
+}
+
+Account* MasterController::account()
+{
+    return this->mAccount;
 }
 
 TabAction* MasterController::revenueTab()

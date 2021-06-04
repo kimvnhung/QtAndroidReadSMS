@@ -13,6 +13,7 @@
 
 
 #include "model/tabaction.h"
+#include "model/account.h"
 
 class MasterController : public QObject
 {
@@ -20,11 +21,14 @@ class MasterController : public QObject
     Q_PROPERTY(QtAndroidService* ui_qtAndroidService READ qtAndroidService CONSTANT)
     Q_PROPERTY(JniMessenger* ui_jniMessenger READ jniMessenger CONSTANT)
     Q_PROPERTY(RevenueController* ui_revenueController READ revenueController NOTIFY revenueControllerChanged)
+
     Q_PROPERTY(TabAction* ui_revenueTab READ revenueTab NOTIFY revenueTabChanged)
     Q_PROPERTY(TabAction* ui_reportsTab READ reportsTab NOTIFY reportsTabChanged)
     Q_PROPERTY(TabAction* ui_historyTab READ historyTab NOTIFY historyTabChanged)
     Q_PROPERTY(TabAction* ui_offersTab READ offersTab NOTIFY offersTabChanged)
     Q_PROPERTY(TabAction* ui_settingTab READ settingTab NOTIFY settingTabChanged)
+
+    Q_PROPERTY(Account* ui_account READ account NOTIFY accountChanged)
 public:
     explicit MasterController(QGuiApplication *parent = nullptr);
 
@@ -32,12 +36,15 @@ public:
     JniMessenger* jniMessenger();
     RevenueController* revenueController();
 
+    Account* account();
+
     //tab action
     TabAction* revenueTab();
     TabAction* reportsTab();
     TabAction* historyTab();
     TabAction* offersTab();
     TabAction* settingTab();
+
 
 signals:
     void revenueControllerChanged();
@@ -48,12 +55,15 @@ signals:
     void historyTabChanged();
     void offersTabChanged();
     void settingTabChanged();
+
+    void accountChanged();
 public slots:
     void log(QString message);
     void onReceiveMessageFromService(const QString &message);
 private:
     RevenueController* m_revenueController = nullptr;
 
+    Account* mAccount;
 
     //tab action
     TabAction* mRevenueTab;

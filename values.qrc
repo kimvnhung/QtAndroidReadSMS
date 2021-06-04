@@ -22,5 +22,6 @@
         <file alias="reports_untab_ic.png">images/reports_untab_ic.png</file>
         <file alias="setting_tab_ic.png">images/setting_tab_ic.png</file>
         <file alias="setting_untab_ic.png">images/setting_untab_ic.png</file>
+        <file alias="revenue_panel.png">images/revenue_panel.png</file>
     </qresource>
 </RCC>

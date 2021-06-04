@@ -4,8 +4,8 @@ import values 1.0
 
 Item {
     property TabAction _action
-    width: Dimen.tabButtonSize
-    height: Dimen.tabButtonSize
+    width: Dimen.tabButtonWidth
+    height: Dimen.tabButtonHeight
     Rectangle{
         width: parent.width
         height: parent.height
@@ -18,10 +18,10 @@ Item {
 
         Image {
             id: icon
-            width: Dimen.tabButtonIconSize
-            height: Dimen.tabButtonIconSize
-            x: 11*Dimen.ratioW
-            y: (parent.height - icon.height)/2
+            width: Dimen.tabButtonIconWidth
+            height: Dimen.tabButtonIconHeight
+            x: 29.5*Dimen.ratioH
+            y: 10*Dimen.ratioV
             source: _action !== null?_action.ui_icon:""
             fillMode: Image.PreserveAspectFit
         }
@@ -30,7 +30,7 @@ Item {
             text: _action !== null?_action.ui_text:""
             anchors{
                 top: icon.bottom
-                topMargin: 7*Dimen.ratioH
+                topMargin: 6*Dimen.ratioV
             }
             x: (parent.width - name.width)/2
             font {

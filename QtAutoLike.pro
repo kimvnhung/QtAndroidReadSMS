@@ -20,6 +20,7 @@ SOURCES += \
         source/controllers/revenuecontroller.cpp \
         source/database/databasehandler.cpp \
         main.cpp \
+        source/model/account.cpp \
         source/model/tabaction.cpp \
         source/model/transaction.cpp
 
@@ -31,6 +32,7 @@ HEADERS += \
         source/controllers/mastercontroller.h \
         source/controllers/revenuecontroller.h \
         source/database/databasehandler.h \
+        source/model/account.h \
         source/model/tabaction.h \
         source/model/transaction.h
 

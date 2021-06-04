@@ -21,19 +21,32 @@ Window {
 
     Rectangle{
         anchors.fill: parent
-        border.color: "red"
-        border.width: 1
         StackView{
             id: tabContent
-            anchors.top: parent.top
+            anchors{
+                top: parent.top
+            }
+
             width: parent.width
             height: Dimen.tabContentHeight
             initialItem: "qrc:/views/tabs/revenueTab.qml"
             clip: true
         }
-        Row {
+
+        Rectangle{
+            id : sperator
+            color: Color.lineSperatorColor
+            width: parent.width
+            height: 1
             anchors{
                 top: tabContent.bottom
+            }
+        }
+
+        Row {
+            id : tabLayout
+            anchors{
+                top: sperator.bottom
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
