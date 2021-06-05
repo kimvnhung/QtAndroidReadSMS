@@ -10,6 +10,16 @@ QQmlListProperty<Transaction> RevenueController::transactionList()
     return QQmlListProperty<Transaction>(this,&this->m_transactionList);
 }
 
+QString RevenueController::todayIncome()
+{
+    int sum = 0;
+    for(int i=0;i<this->m_transactionList.size();i++){
+        sum += this->m_transactionList.at(i)->getValue();
+    }
+
+    //return Utility::;
+    return "";
+}
 
 //slots
 void RevenueController::updateList()

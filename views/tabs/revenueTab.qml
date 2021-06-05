@@ -37,6 +37,50 @@ Item {
             }
             color: Color.white
         }
+        Text {
+            id: name
+            text: masterController.ui_account.ui_name+"'s AGENCY"
+            font{
+                family: Draw.robotoBold
+                capitalization: Font.AllUppercase
+                pixelSize: Dimen.accountNameFontSize
+            }
+            color: Color.white
+            anchors{
+                top: parent.top
+                topMargin: 45*Dimen.ratioV
+                left: parent.left
+                leftMargin: 16*Dimen.ratioH
+            }
+        }
+        Image {
+            id: avatar
+            width: Dimen.avatarSize
+            height: Dimen.avatarSize
+            source: "qrc:/images/avatar.png"
+            anchors{
+                top: parent.top
+                topMargin: 24*Dimen.ratioV
+                right: parent.right
+                rightMargin: 16*Dimen.ratioH
+            }
+        }
+        Text {
+            id: incomeTitle
+            text: "Today's income"
+            color: Color.white
+            font{
+                family: Draw.robotoRegular
+                pixelSize: Dimen.accountNameFontSize
+            }
+            anchors{
+                top: parent.top
+                topMargin: 93*Dimen.ratioV
+                left: parent.left
+                leftMargin: 124*Dimen.ratioH
+            }
+        }
+
         ListView{
             id : dataTable
             width: parent.width
@@ -46,7 +90,7 @@ Item {
                 bottomMargin: 10
                 bottom: parent.bottom
                 topMargin: 10
-                top: parent.top
+                top: panel.bottom
                 left: parent.left
                 leftMargin: 5
                 right: parent.right

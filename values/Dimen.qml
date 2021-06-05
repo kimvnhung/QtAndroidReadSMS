@@ -17,6 +17,8 @@ Item {
     //square dimen
     readonly property real tabFontSize: 10*ratioSq
     readonly property real helloFontSize: 14*ratioSq
+    readonly property real accountNameFontSize: 16*ratioSq
+    readonly property real avatarSize: 40*ratioSq
 
     //vertical dimen
     readonly property real windowHeight : 812*ratioV
@@ -30,7 +32,6 @@ Item {
     readonly property real windowWidth: 375*ratioH
     readonly property real tabButtonWidth: 75*ratioH
     readonly property real tabButtonIconWidth: 15.2*ratioH
-
 
 
 }
