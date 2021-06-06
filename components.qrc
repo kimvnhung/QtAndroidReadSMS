@@ -3,5 +3,7 @@
         <file alias="qmldir">components/qmldir</file>
         <file alias="TransactionItem.qml">components/TransactionItem.qml</file>
         <file alias="TabButton.qml">components/TabButton.qml</file>
+        <file alias="TransactionTable.qml">components/TransactionTable.qml</file>
+        <file alias="LineSperator.qml">components/LineSperator.qml</file>
     </qresource>
 </RCC>

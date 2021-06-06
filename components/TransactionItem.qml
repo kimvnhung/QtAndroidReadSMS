@@ -6,54 +6,87 @@ Item {
     property Transaction _item
 
     Rectangle{
-        border.color: Color.dark
-        border.width: 1
         anchors{
             fill: parent
             bottomMargin: 5
         }
+        width: parent.width
+        height: parent.height
 
-        Column{
-            Row{
-                height: 30
-                spacing: 5
-                Text{
-                    id : phoneTxt
-                    text: _item.ui_phone
-                    font.pixelSize: 15
-                    wrapMode: Text.WordWrap
+        Row{
+            width: parent.width
+            height: parent.height
+            Text{
+                id : phoneTxt
+                text: _item.ui_phone
+                height: parent.height
+                width: Dimen.phoneHeaderWidth
+                font{
+                    family: Draw.robotoRegular
+                    pixelSize: Dimen.transactionItemFontSize
                 }
-                Text{
-                    id : codeTxt
-                    text: _item.ui_code
-                    font.pixelSize: 15
-                    wrapMode: Text.WordWrap
-                }
-                Text{
-                    id : valueTxt
-                    text: _item.ui_value
-                    font.pixelSize: 15
-                    wrapMode: Text.WordWrap
-                }
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
             }
-            Row{
-                height: 30
-                spacing: 5
-                Text{
-                    id : timeTxt
-                    text: _item.ui_time
-                    font.pixelSize: 15
-                    wrapMode: Text.WordWrap
+            Text{
+                id : codeTxt
+                text: _item.ui_code
+                height: parent.height
+                width: Dimen.topCodeHeaderWidth
+                font{
+                    family: Draw.robotoRegular
+                    pixelSize: Dimen.transactionItemFontSize
                 }
-                Text{
-                    id : statusTxt
-                    text: _item.ui_status?"updated":"not"
-                    color: _item.ui_status?"green":"red"
-                    font.pixelSize: 15
-                    wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+            }
+            Text{
+                id : valueTxt
+                text: _item.ui_value
+                height: parent.height
+                width: Dimen.valueHeaderWidth
+                font{
+                    family: Draw.robotoRegular
+                    pixelSize: Dimen.transactionItemFontSize
                 }
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+            }
+            Text{
+                id : updateTimeTxt
+                text: _item.ui_time
+                height: parent.height
+                width: Dimen.updateHeaderWidth
+                font{
+                    family: Draw.robotoRegular
+                    pixelSize: Dimen.transactionItemFontSize
+                }
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+            }
+            Text{
+                id : statusTxt
+                text: _item.ui_status?"updated":"not"
+                color: _item.ui_status?"green":"red"
+                height: parent.height
+                width: Dimen.sttHeaderWidth
+                font{
+                    family: Draw.robotoRegular
+                    pixelSize: Dimen.transactionItemFontSize
+                }
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
             }
         }
-
+        LineSperator{
+            anchors{
+                bottom: parent.bottom
+            }
+        }
     }
 }

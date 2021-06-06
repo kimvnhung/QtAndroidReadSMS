@@ -67,19 +67,7 @@ void Transaction::setStatus(bool isUpdated)
 
 QString Transaction::getDisplayValue()
 {
-    QString rt = "";
-    int para = m_value;
-    while (para/1000 > 0){
-        log("para : "+QString::number(para));
-        rt = (para < m_value?(Utility::getFullDigits(para%1000,3)+","):Utility::getFullDigits(para%1000,3))+rt;
-        log("rt :"+rt);
-        para /= 1000;
-    }
-    if(para != 0){
-        rt = QString::number(para)+ "," + rt;
-    }
-    log(rt);
-    return rt;
+    return Utility::getDisplayValue(m_value);
 }
 
 //private

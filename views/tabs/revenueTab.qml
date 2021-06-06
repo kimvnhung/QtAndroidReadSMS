@@ -80,29 +80,34 @@ Item {
                 leftMargin: 124*Dimen.ratioH
             }
         }
-
-        ListView{
-            id : dataTable
-            width: parent.width
-            clip: true
-            flickDeceleration: Flickable.HorizontalAndVerticalFlick
+        Text {
+            id: incomeValue
+            text: masterController.ui_revenueController.ui_todayIncome
             anchors{
-                bottomMargin: 10
-                bottom: parent.bottom
-                topMargin: 10
-                top: panel.bottom
+                top: incomeTitle.bottom
+                topMargin: 8*Dimen.ratioV
                 left: parent.left
-                leftMargin: 5
+                leftMargin: (parent.width-incomeValue.width)/2
+            }
+            wrapMode: Text.WordWrap
+            font{
+                family: Draw.robotoBold
+                pixelSize: Dimen.incomeValueFontSize
+            }
+            color: Color.white
+        }
+        //table
+        TransactionTable{
+            width: parent.width
+            height: Dimen.revenueTableHeight
+            anchors{
+                top: panel.bottom
+                topMargin: 5*Dimen.ratioV
+                left: parent.left
                 right: parent.right
-                rightMargin: 5
             }
 
-            model: masterController.ui_revenueController.ui_transactionList
-            delegate : TransactionItem{
-                width: 300
-                height: 60
-                _item : modelData
-            }
+            _itemList : masterController.ui_revenueController.ui_transactionList
         }
     }
 }

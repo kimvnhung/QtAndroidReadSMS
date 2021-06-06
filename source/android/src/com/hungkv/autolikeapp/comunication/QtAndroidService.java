@@ -209,7 +209,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
         NonSeenTransaction++;
 
         if (NonSeenTransaction >= 5){
-            notify();
+            //notify();
         }
     }
 }

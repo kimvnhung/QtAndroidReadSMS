@@ -13,4 +13,7 @@ Item {
     readonly property color tabDefaultTextColor: "#A7A7A7"
     readonly property color lineSperatorColor: "#F0F0F0"
 
+    //revenue
+    readonly property color revenueHeaderTextColor: "#2F5392"
+
 }

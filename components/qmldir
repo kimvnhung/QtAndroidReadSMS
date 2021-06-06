@@ -1,3 +1,5 @@
 module components
 TransactionItem 1.0 TransactionItem.qml
 TabButton 1.0 TabButton.qml
+TransactionTable 1.0 TransactionTable.qml
+LineSperator 1.0 LineSperator.qml

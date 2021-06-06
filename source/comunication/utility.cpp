@@ -40,3 +40,17 @@ int Utility::numberDigit(int number)
     }
     return count;
 }
+
+QString Utility::getDisplayValue(int number)
+{
+    QString rt = "";
+    int para = number;
+    while (para/1000 > 0){
+        rt = (para < number?(Utility::getFullDigits(para%1000,3)+","):Utility::getFullDigits(para%1000,3))+rt;
+        para /= 1000;
+    }
+    if(para != 0){
+        rt = QString::number(para)+ "," + rt;
+    }
+    return rt;
+}

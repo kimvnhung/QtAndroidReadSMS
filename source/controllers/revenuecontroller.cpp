@@ -17,8 +17,7 @@ QString RevenueController::todayIncome()
         sum += this->m_transactionList.at(i)->getValue();
     }
 
-    //return Utility::;
-    return "";
+    return Utility::getDisplayValue(sum);
 }
 
 //slots
@@ -28,6 +27,7 @@ void RevenueController::updateList()
     if(DatabaseHandler::instance() != nullptr){
         this->m_transactionList.append(DatabaseHandler::instance()->getTransactionList());
         emit transactionListChanged();
+        emit todayIncomeChanged();
     }
 }
 
