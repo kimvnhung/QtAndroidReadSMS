@@ -9,6 +9,8 @@ public class Constants {
         public static String START_FOREGROUND_ACTION = "com.hungkv.autolikeapp.action.startforeground";
         public static String STOP_FOREGROUND_ACTION = "com.hungkv.autolikeapp.action.stopforeground";
         public static String LOG_ACTION = "com.hungkv.autolikeapp.action.log";
+        public static String ACTIVITY_STOPPED_ACTION = "com.hungkv.autolike.activitystopped";
+        public static String ACTIVITY_STARTED_ACTION = "com.hungkv.autolike.activitystarted";
     }
 
     public interface INFO {
@@ -23,3 +25,4 @@ public class Constants {
         public static String NOTIFICATION_DESCRIPTION = "Notification Description";
     }
 }
+

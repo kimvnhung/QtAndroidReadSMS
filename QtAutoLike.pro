@@ -12,7 +12,6 @@ QML_IMPORT_PATH = $$PWD
 INCLUDEPATH += source/
 
 SOURCES += \
-        source/comunication/constants.cpp \
         source/comunication/jnimessenger.cpp \
         source/comunication/qtandroidservice.cpp \
         source/comunication/utility.cpp \
@@ -63,6 +62,8 @@ android{
     deployment.path = /assets
     INSTALLS += deployment
 }
+
+DISTFILES +=
 
 
 

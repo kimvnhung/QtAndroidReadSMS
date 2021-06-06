@@ -3,29 +3,26 @@
 
 #include <QObject>
 
-class Constants{
-public:
-    class Action{
-    public :
-        static QString OPEN_QT_ACTIVITY_ACTION;
-        static QString START_BACKGROUND_SERVICE_ACTION;
-        static QString START_FOREGROUND_ACTION;
-        static QString STOPFOREGROUND_ACTION;
-        static QString LOG_ACTION;
-    };
+namespace Constants {
+    namespace Action {
+        const QString OPEN_QT_ACTIVITY_ACTION = "com.hungkv.autolikeapp.action.openqtactivity";
+        const QString START_BACKGROUND_SERVICE_ACTION = "com.hungkv.autolikeapp.action.startbackground";
+        const QString START_FOREGROUND_ACTION = "com.hungkv.autolikeapp.action.startforeground";
+        const QString STOPFOREGROUND_ACTION = "com.hungkv.autolikeapp.action.stopforeground";
+        const QString LOG_ACTION = "com.hungkv.autolikeapp.action.log";
+        const QString ACTIVITY_STOPPED_ACTION = "com.hungkv.autolike.activitystopped";
+    }
 
-    class Info{
-    public:
-        static QString DATABASE_DECLARE_INFO;
-        static QString UPDATE_DATA_INFO;
-    };
+    namespace Info {
+        const QString DATABASE_DECLARE_INFO = "com.hungkv.autolikeapp.info.databasedeclaration";
+        const QString UPDATE_DATA_INFO = "com.hungkv.autolikeapp.info.updatedata";
+    }
 
-    class ToastDuration{
-    public:
-        static int LONG;
-        static int SHORT;
-    };
-};
+    namespace ToastDuration {
+        const int LONG = 1;
+        const int SHORT = 0;
+    }
 
+}
 
 #endif // CONSTANTS_H
