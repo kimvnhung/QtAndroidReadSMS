@@ -21,7 +21,7 @@ Window {
 
     Rectangle{
         anchors.fill: parent
-        StackView{
+        SwipeView{
             id: tabContent
             anchors{
                 top: parent.top
@@ -29,8 +29,58 @@ Window {
 
             width: parent.width
             height: Dimen.tabContentHeight
-            initialItem: "qrc:/views/tabs/revenueTab.qml"
             clip: true
+
+            Item {
+                id: firstItem
+                Loader {
+                    // index 0
+                    id: revenuePage
+                    source: "qrc:/views/tabs/revenueTab.qml"
+                    anchors.fill: parent
+                    anchors.top: parent.top
+                }
+            }
+            Item {
+                id: secondItem
+                Loader {
+                    // index 1
+                    id: reportsPage
+                    source: "qrc:/views/tabs/reportsTab.qml"
+                    anchors.fill: parent
+                    anchors.top: parent.top
+                }
+            }
+            Item {
+                id: thirdItem
+                Loader {
+                    // index 2
+                    id: historyPage
+                    source: "qrc:/views/tabs/historyTab.qml"
+                    anchors.fill: parent
+                    anchors.top: parent.top
+                }
+            }
+            Item {
+                id: fourthItem
+                Loader {
+                    // index 3
+                    id: offersPage
+                    source: "qrc:/views/tabs/offersTab.qml"
+                    anchors.fill: parent
+                    anchors.top: parent.top
+                }
+            }
+            Item {
+                id: fifthItem
+                Loader {
+                    // index 4
+                    id: settingPage
+                    source: "qrc:/views/tabs/settingTab.qml"
+                    anchors.fill: parent
+                    anchors.top: parent.top
+                }
+            }
         }
 
         Rectangle{
@@ -67,6 +117,27 @@ Window {
                 _action : masterController.ui_settingTab
             }
 
+        }
+
+        Connections{
+            target: masterController
+            function onTabChanged(index) {
+                switch(index){
+                case 0:
+
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                default:
+                    break;
+                }
+            }
         }
     }
 

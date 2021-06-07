@@ -2,5 +2,9 @@
     <qresource prefix="/views">
         <file alias="main.qml">views/main.qml</file>
         <file alias="tabs/revenueTab.qml">views/tabs/revenueTab.qml</file>
+        <file alias="tabs/reportsTab.qml">views/tabs/reportsTab.qml</file>
+        <file alias="tabs/historyTab.qml">views/tabs/historyTab.qml</file>
+        <file alias="tabs/offersTab.qml">views/tabs/offersTab.qml</file>
+        <file alias="tabs/settingTab.qml">views/tabs/settingTab.qml</file>
     </qresource>
 </RCC>

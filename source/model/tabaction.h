@@ -20,6 +20,7 @@ public:
     QString icon();
     QString text();
     bool selected();
+    void setSelected(bool isSelected);
 
 public slots:
     void click();

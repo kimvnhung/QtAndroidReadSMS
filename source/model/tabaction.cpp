@@ -29,6 +29,13 @@ bool TabAction::selected()
     return this->isSeleted;
 }
 
+void TabAction::setSelected(bool isSelected)
+{
+    this->isSeleted = isSelected;
+    emit iconChanged();
+    emit selectedChanged();
+}
+
 //slots
 void TabAction::click()
 {

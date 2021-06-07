@@ -57,9 +57,11 @@ signals:
     void settingTabChanged();
 
     void accountChanged();
+    void tabChanged(int index);
 public slots:
     void log(QString message);
     void onReceiveMessageFromService(const QString &message);
+    void onTabSelected();
 private:
     RevenueController* m_revenueController = nullptr;
 

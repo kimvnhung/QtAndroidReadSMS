@@ -42,6 +42,12 @@ MasterController::MasterController(QGuiApplication *parent) :
     mOffersTab = new TabAction(this,"qrc:/images/offers_tab_ic.png","qrc:/images/offers_untab_ic.png","Special offers");
     mSettingTab = new TabAction(this,"qrc:/images/setting_tab_ic.png","qrc:/images/setting_untab_ic.png","Settings");
 
+    connect(mRevenueTab, &TabAction::clicked, this, &MasterController::onTabSelected);
+    connect(mReportsTab, &TabAction::clicked, this, &MasterController::onTabSelected);
+    connect(mHistoryTab, &TabAction::clicked, this, &MasterController::onTabSelected);
+    connect(mOffersTab, &TabAction::clicked, this, &MasterController::onTabSelected);
+    connect(mSettingTab, &TabAction::clicked, this, &MasterController::onTabSelected);
+
 }
 
 
@@ -106,6 +112,29 @@ void MasterController::onReceiveMessageFromService(const QString &message)
     if(message.contains("on")){
         log(message);
     }
+}
+
+void MasterController::onTabSelected()
+{
+    mRevenueTab->setSelected(false);
+    mReportsTab->setSelected(false);
+    mHistoryTab->setSelected(false);
+    mOffersTab->setSelected(false);
+    mSettingTab->setSelected(false);
+
+    if(sender() == mReportsTab){
+        emit tabChanged(1);
+    }else if(sender() == mHistoryTab){
+        emit tabChanged(2);
+    }else if(sender() == mOffersTab){
+        emit tabChanged(3);
+    }else if(sender() == mSettingTab){
+        emit tabChanged(4);
+    }else{
+        emit tabChanged(0);
+    }
+
+    ((TabAction*)sender())->setSelected(true);
 }
 
 void MasterController::log(QString message)
