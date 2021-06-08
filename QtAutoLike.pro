@@ -1,4 +1,4 @@
-QT += qml quick androidextras sql
+QT += qml quick androidextras sql svg xml
 
 CONFIG += c++11
 

@@ -24,5 +24,8 @@
         <file alias="setting_untab_ic.png">images/setting_untab_ic.png</file>
         <file alias="revenue_panel.png">images/revenue_panel.png</file>
         <file alias="avatar.png">images/avatar.png</file>
+        <file alias="pending_status_ic.svg">images/pending_status_ic.svg</file>
+        <file alias="accepted_status_ic.svg">images/accepted_status_ic.svg</file>
+        <file alias="reject_status_ic.svg">images/reject_status_ic.svg</file>
     </qresource>
 </RCC>

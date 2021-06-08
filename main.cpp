@@ -11,6 +11,7 @@
 
 #if defined (Q_OS_ANDROID)
 #include <QtAndroid>
+#include <QtSvg>
 const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
                                    "android.permission.FOREGROUND_SERVICE",
                                    "android.permission.INTERNET",

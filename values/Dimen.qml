@@ -22,6 +22,7 @@ Item {
     readonly property real incomeValueFontSize: 32*ratioSq
     readonly property real revenueTableHeaderFontSize: 12*ratioSq
     readonly property real transactionItemFontSize: 12*ratioSq
+    readonly property real transactionStatusIconSize: 16*ratioSq
 
     /**
     *   vertical dimen

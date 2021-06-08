@@ -63,7 +63,7 @@ QList<Transaction*> DatabaseHandler::getTransactionList()
             int value = query.value(COLUMN_VALUE).toInt();
             QString time = query.value(COLUMN_TIME).toString();
             QString updateTime = query.value(COLUMN_UPDATE_TIME).toString();
-            bool status = query.value(COLUMN_STATUS).toInt() == 1;
+            int status = query.value(COLUMN_STATUS).toInt();
             Transaction* item = new Transaction(this,id,phone,code,value,time,updateTime,status);
             rt.append(item);
         }

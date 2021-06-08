@@ -57,7 +57,7 @@ Item {
             }
             Text{
                 id : updateTimeTxt
-                text: _item.ui_time
+                text: _item.ui_updateTime.length == 0?"---":_item.ui_updateTime
                 height: parent.height
                 width: Dimen.updateHeaderWidth
                 font{
@@ -68,19 +68,18 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
             }
-            Text{
-                id : statusTxt
-                text: _item.ui_status?"updated":"not"
-                color: _item.ui_status?"green":"red"
+            Rectangle{
+                id : statusBg
                 height: parent.height
                 width: Dimen.sttHeaderWidth
-                font{
-                    family: Draw.robotoRegular
-                    pixelSize: Dimen.transactionItemFontSize
+                Image {
+                    id: statusImg
+                    width: Dimen.transactionStatusIconSize
+                    height: Dimen.transactionStatusIconSize
+                    x : (parent.width-statusImg.width)/2
+                    y : (parent.height-statusImg.height)/2
+                    source: _item.ui_status==0?"qrc:/images/pending_status_ic.svg":(_item.ui_status==1?"qrc:/images/accepted_status_ic.svg":"qrc:/images/reject_status_ic.svg")
                 }
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                wrapMode: Text.WordWrap
             }
         }
         LineSperator{

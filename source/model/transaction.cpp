@@ -13,7 +13,7 @@ Transaction::Transaction(QObject *parent, QString phone,
 }
 
 Transaction::Transaction(QObject *parent, int id, QString phone,
-                         QString code, int value, QString time, QString updateTime, bool status):
+                         QString code, int value, QString time, QString updateTime, int status):
     Transaction(parent,phone,code,value,time)
 {
     this->m_id = id;
@@ -59,9 +59,9 @@ void Transaction::setUpdateTime(QString updateTime)
 }
 
 
-void Transaction::setStatus(bool isUpdated)
+void Transaction::setStatus(int status)
 {
-    this->m_status = isUpdated;
+    this->m_status = status;
     emit statusChanged();
 }
 

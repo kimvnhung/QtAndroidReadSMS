@@ -14,12 +14,12 @@ class Transaction : public QObject
     Q_PROPERTY(QString ui_value READ getDisplayValue NOTIFY valueChanged)
     Q_PROPERTY(QString ui_time READ getTime WRITE setTime NOTIFY timeChanged)
     Q_PROPERTY(QString ui_updateTime READ getUpdateTime WRITE setUpdateTime NOTIFY updateTimeChanged)
-    Q_PROPERTY(bool ui_status READ getStatus WRITE setStatus NOTIFY statusChanged)
+    Q_PROPERTY(int ui_status READ getStatus WRITE setStatus NOTIFY statusChanged)
 public:
     explicit Transaction(QObject *parent = nullptr, QString phone = "",
                          QString code = "", int value = 0, QString time = "");
     Transaction(QObject *parent, int id, QString phone,
-                QString code, int value, QString time, QString updateTime, bool status);
+                QString code, int value, QString time, QString updateTime, int status);
     ~Transaction();
 
 
@@ -29,7 +29,7 @@ public:
     void setValue(int value);
     void setTime(QString time);
     void setUpdateTime(QString updateTime);
-    void setStatus(bool isUpdated);
+    void setStatus(int isUpdated);
 
     int getId(){return this->m_id;}
     QString getPhone(){return this->m_phone;}
@@ -38,7 +38,7 @@ public:
     QString getDisplayValue();
     QString getTime(){return this->m_time;}
     QString getUpdateTime(){return this->m_updateTime;}
-    bool getStatus(){return this->m_status;}
+    int getStatus(){return this->m_status;}
 
 
 signals:
@@ -56,7 +56,7 @@ private:
     int m_value;
     QString m_time;
     QString m_updateTime;
-    bool m_status;
+    int m_status;
 
     void log(QString msg);
 };
