@@ -137,6 +137,36 @@ void MasterController::onTabSelected()
     ((TabAction*)sender())->setSelected(true);
 }
 
+void MasterController::swippedTo(int tabIndex)
+{
+    mRevenueTab->setSelected(false);
+    mReportsTab->setSelected(false);
+    mHistoryTab->setSelected(false);
+    mOffersTab->setSelected(false);
+    mSettingTab->setSelected(false);
+
+    switch (tabIndex) {
+    case 0:
+        mRevenueTab->setSelected(true);
+        break;
+    case 1:
+        mReportsTab->setSelected(true);
+        break;
+    case 2:
+        mHistoryTab->setSelected(true);
+        break;
+    case 3:
+        mOffersTab->setSelected(true);
+        break;
+    case 4:
+        mSettingTab->setSelected(true);
+        break;
+    default:
+        mRevenueTab->setSelected(true);
+        break;
+    }
+}
+
 void MasterController::log(QString message)
 {
     QtAndroidService::instance()->log(message);

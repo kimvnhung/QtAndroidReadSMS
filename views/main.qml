@@ -81,6 +81,10 @@ Window {
                     anchors.top: parent.top
                 }
             }
+
+            onCurrentIndexChanged: {
+                masterController.swippedTo(currentIndex)
+            }
         }
 
         Rectangle{
@@ -124,17 +128,22 @@ Window {
             function onTabChanged(index) {
                 switch(index){
                 case 0:
-
+                    tabContent.currentIndex = 0;
                     break;
                 case 1:
+                    tabContent.currentIndex = 1;
                     break;
                 case 2:
+                    tabContent.currentIndex = 2;
                     break;
                 case 3:
+                    tabContent.currentIndex = 3;
                     break;
                 case 4:
+                    tabContent.currentIndex = 4
                     break;
                 default:
+                    tabContent.currentIndex = 0;
                     break;
                 }
             }

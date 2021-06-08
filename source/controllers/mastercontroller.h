@@ -62,6 +62,7 @@ public slots:
     void log(QString message);
     void onReceiveMessageFromService(const QString &message);
     void onTabSelected();
+    void swippedTo(int tabIndex);
 private:
     RevenueController* m_revenueController = nullptr;
 
