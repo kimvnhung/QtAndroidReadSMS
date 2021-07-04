@@ -39,6 +39,9 @@ Item {
     readonly property real transactionItemHeight: 47*ratioV
 
 
+    //settings
+    readonly property real propertyButtonHeight: 75*ratioV
+
     /**
     *   horizontal dimen
     */
@@ -56,5 +59,6 @@ Item {
     readonly property real sttHeaderWidth: 37*ratioH
     readonly property real revenueTableWidth: phoneHeaderWidth+topCodeHeaderWidth+valueHeaderWidth+updateHeaderWidth+sttHeaderWidth
 
-
+    //settings
+    readonly property real propertyButtonWidth: 375*ratioH
 }

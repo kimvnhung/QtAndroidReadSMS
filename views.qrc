@@ -6,5 +6,6 @@
         <file alias="tabs/historyTab.qml">views/tabs/historyTab.qml</file>
         <file alias="tabs/offersTab.qml">views/tabs/offersTab.qml</file>
         <file alias="tabs/settingTab.qml">views/tabs/settingTab.qml</file>
+        <file alias="tabs/aboutTab.qml">views/tabs/aboutTab.qml</file>
     </qresource>
 </RCC>

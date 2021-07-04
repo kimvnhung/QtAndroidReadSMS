@@ -20,6 +20,7 @@ SOURCES += \
         source/database/databasehandler.cpp \
         main.cpp \
         source/model/account.cpp \
+        source/model/propertybutton.cpp \
         source/model/tabaction.cpp \
         source/model/transaction.cpp
 
@@ -32,6 +33,7 @@ HEADERS += \
         source/controllers/revenuecontroller.h \
         source/database/databasehandler.h \
         source/model/account.h \
+        source/model/propertybutton.h \
         source/model/tabaction.h \
         source/model/transaction.h
 
