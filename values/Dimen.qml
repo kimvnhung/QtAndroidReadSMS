@@ -24,6 +24,10 @@ Item {
     readonly property real transactionItemFontSize: 12*ratioSq
     readonly property real transactionStatusIconSize: 16*ratioSq
 
+    //setting tab
+    readonly property real propertyTextSize: 16*ratioSq
+    readonly property real settingTitleTextSize: 18*ratioSq
+
     /**
     *   vertical dimen
     */
@@ -41,6 +45,8 @@ Item {
 
     //settings
     readonly property real propertyButtonHeight: 75*ratioV
+    readonly property real settingTitleAreaHeight: 59*ratioV
+
 
     /**
     *   horizontal dimen

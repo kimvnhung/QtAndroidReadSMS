@@ -7,13 +7,14 @@
 #include "comunication/qtandroidservice.h"
 #include "comunication/jnimessenger.h"
 #include "revenuecontroller.h"
-
+#include "settingcontroller.h"
 
 #include "comunication/constants.h"
 
 
 #include "model/tabaction.h"
 #include "model/account.h"
+
 
 class MasterController : public QObject
 {

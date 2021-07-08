@@ -17,10 +17,11 @@ SOURCES += \
         source/comunication/utility.cpp \
         source/controllers/mastercontroller.cpp \
         source/controllers/revenuecontroller.cpp \
+        source/controllers/settingcontroller.cpp \
         source/database/databasehandler.cpp \
         main.cpp \
         source/model/account.cpp \
-        source/model/propertybutton.cpp \
+        source/model/propertyAction.cpp \
         source/model/tabaction.cpp \
         source/model/transaction.cpp
 
@@ -31,9 +32,10 @@ HEADERS += \
         source/comunication/utility.h \
         source/controllers/mastercontroller.h \
         source/controllers/revenuecontroller.h \
+        source/controllers/settingcontroller.h \
         source/database/databasehandler.h \
         source/model/account.h \
-        source/model/propertybutton.h \
+        source/model/propertyaction.h \
         source/model/tabaction.h \
         source/model/transaction.h
 

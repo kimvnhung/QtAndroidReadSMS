@@ -25,6 +25,14 @@ MasterController::MasterController(QGuiApplication *parent) :
         }
     });
 
+//    QtAndroid::runOnAndroidThread([=]()
+//    {
+//        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+//        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
+//        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
+//        window.callMethod<void>("setStatusBarColor", "(I)V", 0xffffffff); // Desired statusbar color
+//    });
+
 
     this->m_revenueController = new RevenueController(this);
 

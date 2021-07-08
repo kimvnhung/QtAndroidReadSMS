@@ -8,6 +8,7 @@
 
 #include "controllers/mastercontroller.h"
 #include "controllers/revenuecontroller.h"
+#include "controllers/settingcontroller.h"
 
 #if defined (Q_OS_ANDROID)
 #include <QtAndroid>
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<Transaction>("SRC", 1, 0,"Transaction");
     qmlRegisterType<TabAction>("SRC", 1, 0,"TabAction");
+    qmlRegisterType<PropertyAction>("SRC", 1, 0,"PropertyAction");
 
 
 

@@ -16,4 +16,7 @@ Item {
     //revenue
     readonly property color revenueHeaderTextColor: "#2F5392"
 
+    //setting
+    readonly property color propertyContentTextColor: "#404040"
+    readonly property color hightLightTextColor: "#E33E3E"
 }
