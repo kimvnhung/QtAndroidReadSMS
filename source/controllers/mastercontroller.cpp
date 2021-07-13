@@ -35,6 +35,11 @@ MasterController::MasterController(QGuiApplication *parent) :
 
 
     this->m_revenueController = new RevenueController(this);
+    this->m_settingController = new SettingController(this);
+    connect(m_settingController->getAboutUsProperty(), &PropertyAction::clicked,[=](){
+        //about index = 5
+
+    });
 
     QtAndroidService *initialier = new QtAndroidService(parent);
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
@@ -73,6 +78,11 @@ JniMessenger* MasterController::jniMessenger()
 RevenueController* MasterController::revenueController()
 {
     return this->m_revenueController;
+}
+
+SettingController* MasterController::settingController()
+{
+    return this->m_settingController;
 }
 
 Account* MasterController::account()

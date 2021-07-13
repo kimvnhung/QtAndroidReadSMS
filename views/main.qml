@@ -141,7 +141,7 @@ Window {
                     tabContent.currentIndex = 3;
                     break;
                 case 4:
-                    tabContent.currentIndex = 4
+                    tabContent.currentIndex = 4;
                     break;
                 default:
                     tabContent.currentIndex = 0;

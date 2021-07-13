@@ -6,11 +6,11 @@
 class PropertyAction : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString ui_title READ getTitle NOTIFY titleChanged)
-    Q_PROPERTY(QString ui_content READ getContent NOTIFY contentChanged)
-    Q_PROPERTY(bool ui_isNotitle READ isNotitle NOTIFY isNotitleChanged)
-    Q_PROPERTY(QString ui_icon READ getIcon NOTIFY iconChanged)
-    Q_PROPERTY(bool ui_isHightLight READ isHightLight NOTIFY isHightLightChanged)
+    Q_PROPERTY(QString ui_title READ getTitle NOTIFY propertyChanged)
+    Q_PROPERTY(QString ui_content READ getContent NOTIFY propertyChanged)
+    Q_PROPERTY(bool ui_isNotitle READ isNotitle NOTIFY propertyChanged)
+    Q_PROPERTY(QString ui_icon READ getIcon NOTIFY propertyChanged)
+    Q_PROPERTY(bool ui_isHightLight READ isHightLight NOTIFY propertyChanged)
 public:
     explicit PropertyAction(QObject *parent = nullptr,
                             QString title = "",
@@ -25,11 +25,8 @@ public:
     QString getIcon();
     bool isHightLight();
 signals:
-    void titleChanged();
-    void contentChanged();
-    void isNotitleChanged();
-    void iconChanged();
-    void isHightLightChanged();
+    void propertyChanged();
+    void clicked();
 public slots:
     void click();
 private:

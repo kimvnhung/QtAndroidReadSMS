@@ -27,5 +27,8 @@
         <file alias="pending_status_ic.svg">images/pending_status_ic.svg</file>
         <file alias="accepted_status_ic.svg">images/accepted_status_ic.svg</file>
         <file alias="reject_status_ic.svg">images/reject_status_ic.svg</file>
+        <file alias="right_arrow.svg">images/right_arrow.svg</file>
+        <file alias="log_out.svg">images/log_out.svg</file>
+        <file alias="right_arrow.png">images/right_arrow.png</file>
     </qresource>
 </RCC>

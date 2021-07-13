@@ -10,7 +10,7 @@ Item {
 
         Text {
             id: name
-            text: "Transaction History Tab"
+            text: "About Tab"
             font{
                 family: Draw.robotoBold
                 pixelSize: 16*Dimen.ratioSq

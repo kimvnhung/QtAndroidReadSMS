@@ -22,6 +22,7 @@ class MasterController : public QObject
     Q_PROPERTY(QtAndroidService* ui_qtAndroidService READ qtAndroidService CONSTANT)
     Q_PROPERTY(JniMessenger* ui_jniMessenger READ jniMessenger CONSTANT)
     Q_PROPERTY(RevenueController* ui_revenueController READ revenueController NOTIFY revenueControllerChanged)
+    Q_PROPERTY(SettingController* ui_settingController READ settingController NOTIFY settingControllerChanged)
 
     Q_PROPERTY(TabAction* ui_revenueTab READ revenueTab NOTIFY revenueTabChanged)
     Q_PROPERTY(TabAction* ui_reportsTab READ reportsTab NOTIFY reportsTabChanged)
@@ -36,6 +37,7 @@ public:
     QtAndroidService* qtAndroidService();
     JniMessenger* jniMessenger();
     RevenueController* revenueController();
+    SettingController* settingController();
 
     Account* account();
 
@@ -49,6 +51,7 @@ public:
 
 signals:
     void revenueControllerChanged();
+    void settingControllerChanged();
     void databaseChanged();
 
     void revenueTabChanged();
@@ -66,6 +69,7 @@ public slots:
     void swippedTo(int tabIndex);
 private:
     RevenueController* m_revenueController = nullptr;
+    SettingController* m_settingController = nullptr;
 
     Account* mAccount;
 

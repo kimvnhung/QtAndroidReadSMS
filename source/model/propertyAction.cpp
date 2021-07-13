@@ -10,6 +10,7 @@ PropertyAction::PropertyAction(QObject *parent, QString title, QString content, 
     this->mIsNotitle = title.size()==0;
     this->mIcon = icon;
     this->mIsHightLight = isHightLight;
+    emit propertyChanged();
 }
 
 PropertyAction::~PropertyAction()
@@ -47,4 +48,5 @@ bool PropertyAction::isNotitle()
 void PropertyAction::click()
 {
     qDebug()<<"PropertyClicked";
+    emit clicked();
 }
