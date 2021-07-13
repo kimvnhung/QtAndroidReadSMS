@@ -4,3 +4,5 @@ TabButton 1.0 TabButton.qml
 TransactionTable 1.0 TransactionTable.qml
 LineSperator 1.0 LineSperator.qml
 PropertyButton 1.0 PropertyButton.qml
+TitleCategory 1.0 TitleCategory.qml
+

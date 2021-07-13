@@ -46,6 +46,7 @@ Item {
     //settings
     readonly property real propertyButtonHeight: 75*ratioV
     readonly property real settingTitleAreaHeight: 59*ratioV
+    readonly property real aboutUsTitleAreaHeight: 39*ratioV
 
 
     /**

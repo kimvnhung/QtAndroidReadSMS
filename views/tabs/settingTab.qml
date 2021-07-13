@@ -36,7 +36,7 @@ Item {
                 }
                 color: Color.propertyContentTextColor
             }
-            Rectangle {
+            TitleCategory {
                 id : languageTitle
                 width: parent.width
                 anchors{
@@ -45,18 +45,7 @@ Item {
                 }
 
                 height: Dimen.settingTitleAreaHeight
-                color: Color.revenueHeaderTextColor
-                Text {
-                    id: languageTitleContent
-                    x: 16*Dimen.ratioH
-                    y: (languageTitle.height-languageTitleContent.height)/2
-                    text: "Language & currency"
-                    font{
-                        family: Draw.robotoRegular
-                        pixelSize: Dimen.propertyTextSize
-                    }
-                    color : Color.white
-                }
+                _text : "Language & currency"
             }
             PropertyButton {
                 id: languageProperty
@@ -74,7 +63,7 @@ Item {
 
                 _action : masterController.ui_settingController.ui_currencyProperty
             }
-            Rectangle {
+            TitleCategory {
                 id : informationTitle
                 width: parent.width
                 anchors{
@@ -82,18 +71,7 @@ Item {
                 }
 
                 height: Dimen.settingTitleAreaHeight
-                color: Color.revenueHeaderTextColor
-                Text {
-                    id: informationTitleContent
-                    x: 16*Dimen.ratioH
-                    y: (informationTitle.height-informationTitleContent.height)/2
-                    text: "Information"
-                    font{
-                        family: Draw.robotoRegular
-                        pixelSize: Dimen.propertyTextSize
-                    }
-                    color : Color.white
-                }
+                _text : "Information"
             }
             PropertyButton {
                 id: aboutUsProperty

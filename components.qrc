@@ -6,5 +6,6 @@
         <file alias="TransactionTable.qml">components/TransactionTable.qml</file>
         <file alias="LineSperator.qml">components/LineSperator.qml</file>
         <file alias="PropertyButton.qml">components/PropertyButton.qml</file>
+        <file alias="TitleCategory.qml">components/TitleCategory.qml</file>
     </qresource>
 </RCC>
