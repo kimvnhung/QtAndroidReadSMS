@@ -20,4 +20,9 @@ Item {
     readonly property color propertyContentTextColor: "#404040"
     readonly property color hightLightTextColor: "#E33E3E"
     readonly property color propertyLineSperatorColor: "#EFEFEF"
+
+    //Special offers
+    readonly property color offerPanelBackgroundColor : "#204FBBEB"
+    readonly property color buyMoreTextColor: "#4FBBEB"
+    readonly property color saveUptoTextColor: "#2F5392"
 }

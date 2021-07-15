@@ -14,6 +14,8 @@ Item {
 
     readonly property real demo_size : 233
 
+    readonly property real normalLeftMargin: 16*ratioH
+
     //square dimen
     readonly property real tabFontSize: 10*ratioSq
     readonly property real helloFontSize: 14*ratioSq
@@ -24,9 +26,21 @@ Item {
     readonly property real transactionItemFontSize: 12*ratioSq
     readonly property real transactionStatusIconSize: 16*ratioSq
 
+    readonly property real textSizeLv0: 14*ratioSq
+    readonly property real textSizeLv1: 15*ratioSq
+    readonly property real textSizeLv2: 16*ratioSq
+    readonly property real textSizeLv3: 18*ratioSq
+    readonly property real textSizeLv4: 32*ratioSq
+    readonly property real textSizeLv5: 45*ratioSq
+
     //setting tab
     readonly property real propertyTextSize: 16*ratioSq
     readonly property real settingTitleTextSize: 18*ratioSq
+
+    //offer tab
+    readonly property real offerPanelTextSize : 14*ratioSq
+    readonly property real offerPanelTextSize2 : 15*ratioSq
+    readonly property real offerPanelPercentTextSize : 45*ratioSq
 
     /**
     *   vertical dimen
@@ -48,6 +62,10 @@ Item {
     readonly property real settingTitleAreaHeight: 59*ratioV
     readonly property real aboutUsTitleAreaHeight: 39*ratioV
 
+
+    //special offer
+    readonly property real offerPanelHeight: 115*ratioV
+    readonly property real percentCategoryHeight: 80*ratioV
 
     /**
     *   horizontal dimen

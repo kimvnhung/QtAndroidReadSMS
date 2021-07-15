@@ -30,5 +30,7 @@
         <file alias="right_arrow.svg">images/right_arrow.svg</file>
         <file alias="log_out.svg">images/log_out.svg</file>
         <file alias="right_arrow.png">images/right_arrow.png</file>
+        <file alias="gift_icon.png">images/gift_icon.png</file>
+        <file alias="percent_rectangle.png">images/percent_rectangle.png</file>
     </qresource>
 </RCC>

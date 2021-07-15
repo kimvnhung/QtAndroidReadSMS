@@ -7,5 +7,6 @@
         <file alias="LineSperator.qml">components/LineSperator.qml</file>
         <file alias="PropertyButton.qml">components/PropertyButton.qml</file>
         <file alias="TitleCategory.qml">components/TitleCategory.qml</file>
+        <file alias="PromoteComponent.qml">components/PromoteComponent.qml</file>
     </qresource>
 </RCC>
