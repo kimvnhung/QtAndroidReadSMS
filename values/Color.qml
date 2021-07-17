@@ -7,6 +7,7 @@ Item {
     readonly property color white: "#FFFFFF"
     readonly property color black: "#000000"
 
+    readonly property color blueDark0: "#2F5392"
 
     //main
     readonly property color tabSelectedTextColor: "#2F5392"

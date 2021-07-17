@@ -9,15 +9,36 @@ Item {
         height: parent.height
 
         Text {
-            id: name
-            text: "Transaction History Tab"
+            id: title
+            text: "Transaction history"
             font{
                 family: Draw.robotoBold
-                pixelSize: 16*Dimen.ratioSq
+                pixelSize: Dimen.settingTitleTextSize
             }
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            anchors.fill: parent
+            anchors{
+                top: parent.top
+                topMargin: 51*Dimen.ratioV
+            }
+
+            x : 16*Dimen.ratioH
+            color: Color.propertyContentTextColor
+        }
+        //table
+        TransactionTable{
+            width: parent.width
+            height: Dimen.revenueTableHeight
+            _headerBackground : Color.blueDark0
+            _headerTextColor : Color.white
+            anchors{
+                top: title.bottom
+                topMargin: 20*Dimen.ratioV
+                left: parent.left
+                right: parent.right
+            }
+
+            _itemList : masterController.ui_revenueController.ui_transactionList
         }
     }
 

@@ -52,7 +52,7 @@ Item {
 
     //revenue
     readonly property real revenuePanelHeight: 220*ratioV
-    readonly property real tableHeaderHeight: 30*ratioV
+    readonly property real tableHeaderHeight: 44*ratioV
     readonly property real revenueTableHeight: 490*ratioV
     readonly property real transactionItemHeight: 47*ratioV
 

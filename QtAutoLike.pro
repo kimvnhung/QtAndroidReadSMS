@@ -15,6 +15,7 @@ SOURCES += \
         source/comunication/jnimessenger.cpp \
         source/comunication/qtandroidservice.cpp \
         source/comunication/utility.cpp \
+        source/controllers/historycontroller.cpp \
         source/controllers/mastercontroller.cpp \
         source/controllers/revenuecontroller.cpp \
         source/controllers/settingcontroller.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
         source/comunication/jnimessenger.h \
         source/comunication/qtandroidservice.h \
         source/comunication/utility.h \
+        source/controllers/historycontroller.h \
         source/controllers/mastercontroller.h \
         source/controllers/revenuecontroller.h \
         source/controllers/settingcontroller.h \
