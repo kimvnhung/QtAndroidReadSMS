@@ -40,6 +40,8 @@ MasterController::MasterController(QGuiApplication *parent) :
         //about index = 5
 
     });
+    this->m_reportController = new ReportController(this);
+
 
     QtAndroidService *initialier = new QtAndroidService(parent);
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
@@ -83,6 +85,11 @@ RevenueController* MasterController::revenueController()
 SettingController* MasterController::settingController()
 {
     return this->m_settingController;
+}
+
+ReportController* MasterController::reportController()
+{
+    return this->m_reportController;
 }
 
 Account* MasterController::account()

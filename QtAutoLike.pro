@@ -17,6 +17,7 @@ SOURCES += \
         source/comunication/utility.cpp \
         source/controllers/historycontroller.cpp \
         source/controllers/mastercontroller.cpp \
+        source/controllers/reportcontroller.cpp \
         source/controllers/revenuecontroller.cpp \
         source/controllers/settingcontroller.cpp \
         source/database/databasehandler.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
         source/comunication/utility.h \
         source/controllers/historycontroller.h \
         source/controllers/mastercontroller.h \
+        source/controllers/reportcontroller.h \
         source/controllers/revenuecontroller.h \
         source/controllers/settingcontroller.h \
         source/database/databasehandler.h \

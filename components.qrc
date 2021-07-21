@@ -8,5 +8,6 @@
         <file alias="PropertyButton.qml">components/PropertyButton.qml</file>
         <file alias="TitleCategory.qml">components/TitleCategory.qml</file>
         <file alias="PromoteComponent.qml">components/PromoteComponent.qml</file>
+        <file alias="DatePicker.qml">components/DatePicker.qml</file>
     </qresource>
 </RCC>

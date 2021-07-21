@@ -30,8 +30,9 @@ Item {
     readonly property real textSizeLv1: 15*ratioSq
     readonly property real textSizeLv2: 16*ratioSq
     readonly property real textSizeLv3: 18*ratioSq
-    readonly property real textSizeLv4: 32*ratioSq
-    readonly property real textSizeLv5: 45*ratioSq
+    readonly property real textSizeLv4: 28*ratioSq
+    readonly property real textSizeLv5: 32*ratioSq
+    readonly property real textSizeLv6: 45*ratioSq
 
     //setting tab
     readonly property real propertyTextSize: 16*ratioSq

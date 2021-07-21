@@ -8,6 +8,7 @@
 #include "comunication/jnimessenger.h"
 #include "revenuecontroller.h"
 #include "settingcontroller.h"
+#include "reportcontroller.h"
 
 #include "comunication/constants.h"
 
@@ -23,6 +24,7 @@ class MasterController : public QObject
     Q_PROPERTY(JniMessenger* ui_jniMessenger READ jniMessenger CONSTANT)
     Q_PROPERTY(RevenueController* ui_revenueController READ revenueController NOTIFY revenueControllerChanged)
     Q_PROPERTY(SettingController* ui_settingController READ settingController NOTIFY settingControllerChanged)
+    Q_PROPERTY(ReportController* ui_reportController READ reportController NOTIFY reportControllerChanged)
 
     Q_PROPERTY(TabAction* ui_revenueTab READ revenueTab NOTIFY revenueTabChanged)
     Q_PROPERTY(TabAction* ui_reportsTab READ reportsTab NOTIFY reportsTabChanged)
@@ -38,6 +40,7 @@ public:
     JniMessenger* jniMessenger();
     RevenueController* revenueController();
     SettingController* settingController();
+    ReportController* reportController();
 
     Account* account();
 
@@ -52,6 +55,7 @@ public:
 signals:
     void revenueControllerChanged();
     void settingControllerChanged();
+    void reportControllerChanged();
     void databaseChanged();
 
     void revenueTabChanged();
@@ -70,6 +74,7 @@ public slots:
 private:
     RevenueController* m_revenueController = nullptr;
     SettingController* m_settingController = nullptr;
+    ReportController* m_reportController = nullptr;
 
     Account* mAccount;
 
