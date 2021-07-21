@@ -23,6 +23,7 @@ public:
     static DatabaseHandler *instance(){return m_instance;}
 
     QList<Transaction*> getTransactionList();
+    QList<Transaction*> getTransactionListByDate(QDate date);
     static const QString DATABASE_NAME ;
 
     static const QString TABLE_NAME_AGENCY ;

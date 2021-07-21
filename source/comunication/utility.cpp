@@ -43,6 +43,9 @@ int Utility::numberDigit(int number)
 
 QString Utility::getDisplayValue(int number)
 {
+    if(number==0){
+        return "0";
+    }
     QString rt = "";
     int para = number;
     while (para/1000 > 0){

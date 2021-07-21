@@ -9,7 +9,7 @@ Transaction::Transaction(QObject *parent, QString phone,
     this->m_phone = phone;
     this->m_code = code;
     this->m_value = value;
-    this->m_time = time;
+    this->m_time = QDateTime::fromString(time,"dd'MM'yyyy hh:mm:ss");
 }
 
 Transaction::Transaction(QObject *parent, int id, QString phone,
@@ -17,7 +17,7 @@ Transaction::Transaction(QObject *parent, int id, QString phone,
     Transaction(parent,phone,code,value,time)
 {
     this->m_id = id;
-    this->m_updateTime = updateTime;
+    this->m_updateTime = QDateTime::fromString(updateTime,"dd'MM'yyyy hh:mm:ss");
     this->m_status = status;
 }
 
@@ -49,12 +49,12 @@ void Transaction::setValue(int value)
 
 void Transaction::setTime(QString time)
 {
-    this->m_time = time;
+    this->m_time = QDateTime::fromString(time,"dd'MM'yyyy hh:mm:ss");
     emit timeChanged();
 }
 void Transaction::setUpdateTime(QString updateTime)
 {
-    this->m_updateTime = updateTime;
+    this->m_updateTime = QDateTime::fromString(updateTime,"dd'MM'yyyy hh:mm:ss");;
     emit updateTimeChanged();
 }
 

@@ -25,7 +25,7 @@ void RevenueController::updateList()
 {
     this->m_transactionList.clear();
     if(DatabaseHandler::instance() != nullptr){
-        this->m_transactionList.append(DatabaseHandler::instance()->getTransactionList());
+        this->m_transactionList.append(DatabaseHandler::instance()->getTransactionListByDate(QDate::currentDate()));
         emit transactionListChanged();
         emit todayIncomeChanged();
     }

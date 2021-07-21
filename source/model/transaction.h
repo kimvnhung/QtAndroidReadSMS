@@ -2,7 +2,7 @@
 #define TRANSACTION_H
 
 #include <QObject>
-
+#include <QDateTime>
 #include "comunication/utility.h"
 
 class Transaction : public QObject
@@ -36,8 +36,10 @@ public:
     QString getCode(){return this->m_code;}
     int getValue(){return this->m_value;}
     QString getDisplayValue();
-    QString getTime(){return this->m_time;}
-    QString getUpdateTime(){return this->m_updateTime;}
+    QString getTime(){return this->m_time.toString();}
+    QDateTime get_Time(){return this->m_time;}
+    QString getUpdateTime(){return this->m_updateTime.toString();}
+    QDateTime get_UpdateTime(){return this->m_updateTime;}
     int getStatus(){return this->m_status;}
 
 
@@ -54,8 +56,8 @@ private:
     QString m_phone;
     QString m_code;
     int m_value;
-    QString m_time;
-    QString m_updateTime;
+    QDateTime m_time;
+    QDateTime m_updateTime;
     int m_status;
 
     void log(QString msg);
