@@ -13,8 +13,6 @@ Transaction::Transaction(QObject *parent, QString phone,
     this->m_code = code;
     this->m_value = value;
     this->m_time = QDateTime::fromString(time,format);
-    qDebug()<<m_time;
-    qDebug()<<time;
 }
 
 Transaction::Transaction(QObject *parent, int id, QString phone,

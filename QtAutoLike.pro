@@ -1,4 +1,4 @@
-QT += qml quick androidextras sql svg xml
+QT += qml quick androidextras sql svg xml network
 
 CONFIG += c++11
 
@@ -15,6 +15,7 @@ SOURCES += \
         source/comunication/jnimessenger.cpp \
         source/comunication/qtandroidservice.cpp \
         source/comunication/utility.cpp \
+        source/comunication/webapirequest.cpp \
         source/controllers/historycontroller.cpp \
         source/controllers/mastercontroller.cpp \
         source/controllers/reportcontroller.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
         source/comunication/jnimessenger.h \
         source/comunication/qtandroidservice.h \
         source/comunication/utility.h \
+        source/comunication/webapirequest.h \
         source/controllers/historycontroller.h \
         source/controllers/mastercontroller.h \
         source/controllers/reportcontroller.h \
@@ -65,13 +67,16 @@ android{
         source/android/src/com/hungkv/autolikeapp/listener/SmsReceiver.java
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/source/android
+    include($$PWD/android_openssl/openssl.pri)
 
     deployment.files += AutoLikeAgency.db
     deployment.path = /assets
     INSTALLS += deployment
-}
 
-DISTFILES +=
+    certificates.path = /assets
+    certificates.files += $$PWD/certs/approval-api.pfx
+    INSTALLS += certificates
+}
 
 
 

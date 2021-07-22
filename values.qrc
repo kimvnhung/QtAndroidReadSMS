@@ -37,4 +37,7 @@
         <file alias="report_background.png">images/report_background.png</file>
         <file alias="diagonal_line.png">images/diagonal_line.png</file>
     </qresource>
+    <qresource prefix="/certs">
+        <file alias="approval-api.pfx">certs/approval-api.pfx</file>
+    </qresource>
 </RCC>

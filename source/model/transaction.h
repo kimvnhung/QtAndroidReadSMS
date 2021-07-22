@@ -22,6 +22,13 @@ public:
                 QString code, int value, QString time, QString updateTime, int status);
     ~Transaction();
 
+    enum UpdateStatus{
+        UNKNOWN = -1,
+        PENDING = 0,
+        ACCEPTED = 1,
+        REJECT = 2
+    };
+
     static QString format;
 
     void setId(int id);

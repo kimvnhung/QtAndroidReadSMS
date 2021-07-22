@@ -210,6 +210,7 @@ void MasterController::onDatabaseAvailable(QString path)
     DatabaseHandler *handler = new DatabaseHandler(this,path);
     Q_UNUSED(handler)
 
+    this->historyController()->loadCertificatePath(path.replace("AutoLikeAgency.db","approval-api.pfx"));
 
     updateAll();
 }
