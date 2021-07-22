@@ -25,6 +25,7 @@ public:
     QList<Transaction*> getTransactionList();
     QList<Transaction*> getTransactionListByDate(QDate date);
     void update(Transaction* trans);
+    bool isDatabaseOpenable();
 
     static const QString DATABASE_NAME ;
 

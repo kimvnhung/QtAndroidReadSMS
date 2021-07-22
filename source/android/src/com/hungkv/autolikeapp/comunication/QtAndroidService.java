@@ -227,7 +227,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 
     private void updateToServer()
     {
-        if (isMainActivityAvailable && UpdateQueueCounter >= 2){
+        if (isMainActivityAvailable && UpdateQueueCounter >= 1){
             sendToQt(Constants.ACTION.UPDATE_TO_SERVER);
             UpdateQueueCounter = 0;
         }
@@ -251,3 +251,4 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 
     }
 }
+

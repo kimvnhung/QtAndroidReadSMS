@@ -78,6 +78,11 @@ QList<Transaction*> DatabaseHandler::getTransactionList()
     return rt;
 }
 
+bool DatabaseHandler::isDatabaseOpenable()
+{
+    return db.isOpen();
+}
+
 QList<Transaction*> DatabaseHandler::getTransactionListByDate(QDate date)
 {
     QList<Transaction*> rt = QList<Transaction*>();

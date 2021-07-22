@@ -137,7 +137,13 @@ void MasterController::onReceiveMessageFromService(const QString &message)
     }
 
     if(message == Constants::Info::UPDATE_DATA_INFO){
-        updateAll();
+        qDebug()<<"onUpdateInfo";
+        if(!DatabaseHandler::instance()->isDatabaseOpenable()){
+            //restart service to reopen database
+            QtAndroidService::instance()->startBackgroundService();
+        }else {
+            updateAll();
+        }
     }
 
     if(message == Constants::Action::UPDATE_TO_SERVER){
