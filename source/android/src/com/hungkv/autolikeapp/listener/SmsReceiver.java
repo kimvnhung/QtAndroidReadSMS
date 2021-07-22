@@ -20,7 +20,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String TAG = SmsReceiver.class.getName();
-    private static final String CODE_PREFIX = "ALIKE";
+    private static final String[] CODE_PREFIX = new String[]{"ALIKE","AFARM"};
 
     private static SmsListener listener;
 
@@ -80,44 +80,46 @@ public class SmsReceiver extends BroadcastReceiver {
                             String msg = list.get(j).getMessageBody()+list.get(j+1).getMessageBody()+list.get(j+2).getMessageBody();
                             //Log.i(TAG,"Message at j = "+j+" : "+msg);
                             msg = msg.replace("\n","");
-                            if (msg.contains(CODE_PREFIX)){
-                                int index = msg.indexOf(CODE_PREFIX);
-                                String code = msg.substring(index);
-                                int value = 0;
+                            for (String code_prefix : CODE_PREFIX)
+                            {
+                                if (msg.contains(code_prefix)) {
+                                    int index = msg.indexOf(code_prefix);
+                                    String code = msg.substring(index);
+                                    int value = 0;
 
-                                try {
-                                    //value = Integer.parseInt();
-                                    Pattern pattern = Pattern.compile("\\+\\d{1,3}((,\\d{3}){0,4})\\sVND");
-                                    Matcher matcher = pattern.matcher(msg);
-                                    if (matcher.find())
-                                    {
-                                        Log.i(TAG, "Matcher : "+matcher.group());
-                                        String valueSt = matcher.group().substring(1,matcher.group().length()-4);
-                                        value = Integer.parseInt(valueSt.replace(",",""));
-                                        Log.i(TAG, "value : "+value);
-                                    }else {
-                                        Log.i(TAG, "No matching regex");
+                                    try {
+                                        //value = Integer.parseInt();
+                                        Pattern pattern = Pattern.compile("\\+\\d{1,3}((,\\d{3}){0,4})\\sVND");
+                                        Matcher matcher = pattern.matcher(msg);
+                                        if (matcher.find()) {
+                                            Log.i(TAG, "Matcher : " + matcher.group());
+                                            String valueSt = matcher.group().substring(1, matcher.group().length() - 4);
+                                            value = Integer.parseInt(valueSt.replace(",", ""));
+                                            Log.i(TAG, "value : " + value);
+                                        } else {
+                                            Log.i(TAG, "No matching regex");
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        Log.e(TAG, "Error : " + e.getMessage());
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "Error : " + e.getMessage());
                                     }
-                                }catch (NumberFormatException e){
-                                    Log.e(TAG, "Error : "+e.getMessage());
-                                }catch (Exception e){
-                                    Log.e(TAG, "Error : "+e.getMessage());
-                                }
-                                String time = "";
-                                Pattern timePatern = Pattern.compile("(luc)\\s(\\d+\\W)+\\d+");
-                                Matcher matcherTime = timePatern.matcher(msg);
-                                if(matcherTime.find()){
-                                    time = matcherTime.group().substring(4);
-                                    time = time.substring(0,10)+" "+time.substring(10);
-                                    Log.i(TAG, "Time : "+time);
-                                }else {
-                                    Log.e(TAG,"No matching regex time");
-                                }
-                                Transaction transaction = new Transaction(temp.getPhone(),code,value,time);
-                                if (listener != null){
-                                    listener.onSmsComing(transaction);
-                                }else {
-                                    Log.i(TAG, "Sms receive: listener is null");
+                                    String time = "";
+                                    Pattern timePatern = Pattern.compile("(luc)\\s(\\d+\\W)+\\d+");
+                                    Matcher matcherTime = timePatern.matcher(msg);
+                                    if (matcherTime.find()) {
+                                        time = matcherTime.group().substring(4);
+                                        time = time.substring(0, 10) + " " + time.substring(10);
+                                        Log.i(TAG, "Time : " + time);
+                                    } else {
+                                        Log.e(TAG, "No matching regex time");
+                                    }
+                                    Transaction transaction = new Transaction(temp.getPhone(), code, value, time);
+                                    if (listener != null) {
+                                        listener.onSmsComing(transaction);
+                                    } else {
+                                        Log.i(TAG, "Sms receive: listener is null");
+                                    }
                                 }
                             }
                         }
