@@ -1,5 +1,7 @@
 #include "reportcontroller.h"
 
+#include <QDebug>
+
 ReportController::ReportController(QObject *parent) :
     QObject(parent)
 {
@@ -8,7 +10,6 @@ ReportController::ReportController(QObject *parent) :
     this->mSelectedDate->setDate(cur.year(),cur.month(),cur.day());
     this->mIsCalendarVisible = false;
     this->listTrans = QList<Transaction*>();
-    updateList();
     emit selectedDateChanged();
 
 }
@@ -78,6 +79,7 @@ void ReportController::updateList()
     this->listTrans.clear();
     if(DatabaseHandler::instance() != nullptr){
         this->listTrans.append(DatabaseHandler::instance()->getTransactionListByDate(*this->mSelectedDate));
+        qDebug()<<"List tran size"<<this->listTrans.size();
         emit totalRevenueChanged();
         emit totalTransactionChanged();
     }

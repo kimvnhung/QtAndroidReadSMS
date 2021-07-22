@@ -212,6 +212,7 @@ void MasterController::onDatabaseAvailable(QString path)
 
     this->m_revenueController->updateList();
     this->m_historyController->updateList();
+    this->m_reportController->updateList();
 
 }
 

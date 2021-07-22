@@ -30,11 +30,12 @@ public slots:
     void showCalendar();
     void dateAccepted(QDate newValue);
     void dateCancel();
+    void updateList();
 private:
     QDate *mSelectedDate{nullptr};
     bool mIsCalendarVisible = false;
     QList<Transaction*> listTrans;
-    void updateList();
+
 };
 
 #endif // REPORTCONTROLLER_H
