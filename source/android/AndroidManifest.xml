@@ -7,6 +7,7 @@ android:versionName="1.0" android:versionCode="5" android:installLocation="auto"
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -18,7 +19,9 @@ android:versionName="1.0" android:versionCode="5" android:installLocation="auto"
 
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
-    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Auto Like" android:extractNativeLibs="true">
+    <application
+        android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Auto Like" android:extractNativeLibs="true">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
         android:name="com.hungkv.autolikeapp.MainActivity"
         android:label="Auto Like" android:screenOrientation="unspecified" android:launchMode="singleTop">
@@ -83,6 +86,13 @@ android:versionName="1.0" android:versionCode="5" android:installLocation="auto"
         <receiver android:name=".listener.SmsReceiver" android:enabled="true" android:exported="true">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".comunication.NetworkChangeReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
         <service

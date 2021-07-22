@@ -13,6 +13,7 @@ namespace Constants {
         const QString ACTIVITY_STOPPED_ACTION = "com.hungkv.autolike.activitystopped";
         const QString UPDATE_TRANSACTION_ACTION = "com.hungkv.autolike.updatetransaction";
         const QString UPDATE_TO_SERVER = "com.hungkv.autolike.updatetoserver";
+        const QString NOTIFY_CONNECTION_ACTION = "com.hungkv.autolike.notifyconnection";
     }
 
     namespace Transaction{
@@ -28,6 +29,7 @@ namespace Constants {
     namespace Info {
         const QString DATABASE_DECLARE_INFO = "com.hungkv.autolikeapp.info.databasedeclaration";
         const QString UPDATE_DATA_INFO = "com.hungkv.autolikeapp.info.updatedata";
+        const QString INTERNET_CONNECTED = "com.hungkv.autolikeapp.internetconnected";
     }
 
     namespace ToastDuration {

@@ -13,11 +13,13 @@ public class Constants {
         public static String ACTIVITY_STARTED_ACTION = "com.hungkv.autolike.activitystarted";
         public static String UPDATE_TRANSACTION_ACTION = "com.hungkv.autolike.updatetransaction";
         public static String UPDATE_TO_SERVER = "com.hungkv.autolike.updatetoserver";
+        public static String NOTIFY_CONNECTION_ACTION = "com.hungkv.autolike.notifyconnection";
     }
 
     public interface INFO {
         public static String DATABASE_DECLARE_INFO = "com.hungkv.autolikeapp.info.databasedeclaration";
         public static String UPDATE_DATA_INFO = "com.hungkv.autolikeapp.info.updatedata";
+        public static String INTERNET_CONNECTED = "com.hungkv.autolikeapp.internetconnected";
     }
 
     public interface TRANSACTION{

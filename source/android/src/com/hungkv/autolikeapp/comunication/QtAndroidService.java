@@ -115,6 +115,12 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
                     Log.e(TAG, Constants.JAVA_LOG+" : "+e.getMessage() );
                 }
                 break;
+            case Constants.ACTION.NOTIFY_CONNECTION_ACTION:
+                if (isMainActivityAvailable){
+                    sendToQt(Constants.INFO.INTERNET_CONNECTED);
+                    Log.i(TAG, "Internet Connected");
+                }
+                break;
         }
         return START_STICKY;
     }

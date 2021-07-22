@@ -116,7 +116,7 @@ Item {
                 right: parent.right
             }
             delegate : TransactionItem{
-                width: parent.width
+
                 height: Dimen.transactionItemHeight
                 _item : modelData
             }

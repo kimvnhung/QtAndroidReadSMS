@@ -150,6 +150,10 @@ void MasterController::onReceiveMessageFromService(const QString &message)
         this->historyController()->updateTransactionToServer();
     }
 
+    if(message == Constants::Info::INTERNET_CONNECTED){
+        this->historyController()->updateTransactionToServer();
+    }
+
     if(message.contains("on")){
         log(message);
     }

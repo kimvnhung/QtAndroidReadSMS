@@ -78,6 +78,10 @@ android{
     INSTALLS += certificates
 }
 
+DISTFILES += \
+    source/android/src/com/hungkv/autolikeapp/comunication/NetworkChangeReceiver.java \
+    source/android/src/com/hungkv/autolikeapp/comunication/NetworkUtil.java
+
 
 
 
