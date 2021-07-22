@@ -41,6 +41,7 @@ MasterController::MasterController(QGuiApplication *parent) :
 
     });
     this->m_reportController = new ReportController(this);
+    this->m_historyController = new HistoryController(this);
 
 
     QtAndroidService *initialier = new QtAndroidService(parent);
@@ -90,6 +91,11 @@ SettingController* MasterController::settingController()
 ReportController* MasterController::reportController()
 {
     return this->m_reportController;
+}
+
+HistoryController* MasterController::historyController()
+{
+    return this->m_historyController;
 }
 
 Account* MasterController::account()
@@ -205,6 +211,7 @@ void MasterController::onDatabaseAvailable(QString path)
     Q_UNUSED(handler)
 
     this->m_revenueController->updateList();
+    this->m_historyController->updateList();
 
 }
 

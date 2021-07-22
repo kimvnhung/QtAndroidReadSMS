@@ -22,6 +22,7 @@ public:
                 QString code, int value, QString time, QString updateTime, int status);
     ~Transaction();
 
+    static QString format;
 
     void setId(int id);
     void setPhone(QString phone);

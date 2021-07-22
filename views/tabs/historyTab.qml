@@ -38,7 +38,7 @@ Item {
                 right: parent.right
             }
 
-            _itemList : masterController.ui_revenueController.ui_transactionList
+            _itemList : masterController.ui_historyController.ui_transactionList
         }
     }
 

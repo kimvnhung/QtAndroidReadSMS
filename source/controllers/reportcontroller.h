@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QDate>
+#include <database/databasehandler.h>
+#include <model/transaction.h>
 
 class ReportController : public QObject
 {
@@ -31,6 +33,8 @@ public slots:
 private:
     QDate *mSelectedDate{nullptr};
     bool mIsCalendarVisible = false;
+    QList<Transaction*> listTrans;
+    void updateList();
 };
 
 #endif // REPORTCONTROLLER_H

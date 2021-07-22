@@ -7,7 +7,10 @@ ReportController::ReportController(QObject *parent) :
     this->mSelectedDate = new QDate();
     this->mSelectedDate->setDate(cur.year(),cur.month(),cur.day());
     this->mIsCalendarVisible = false;
+    this->listTrans = QList<Transaction*>();
+    updateList();
     emit selectedDateChanged();
+
 }
 
 ReportController::~ReportController()
@@ -35,12 +38,17 @@ bool ReportController::isCalendarVisible()
 
 QString ReportController::getTotalTransaction()
 {
-    return "153";
+    return QString::number(this->listTrans.size());
 }
 
 QString ReportController::getTotalRevenue()
 {
-    return "2,333,00";
+    int sum = 0;
+    for(int i=0; i<this->listTrans.size();i++){
+        sum += this->listTrans.at(i)->getValue();
+    }
+
+    return Utility::getDisplayValue(sum);
 }
 
 //slots
@@ -62,4 +70,15 @@ void ReportController::showCalendar()
 {
     this->mIsCalendarVisible = true;
     emit isCalendarVisibleChanged();
+}
+
+//privates
+void ReportController::updateList()
+{
+    this->listTrans.clear();
+    if(DatabaseHandler::instance() != nullptr){
+        this->listTrans.append(DatabaseHandler::instance()->getTransactionListByDate(*this->mSelectedDate));
+        emit totalRevenueChanged();
+        emit totalTransactionChanged();
+    }
 }

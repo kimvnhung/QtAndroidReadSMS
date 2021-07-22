@@ -9,6 +9,7 @@
 #include "revenuecontroller.h"
 #include "settingcontroller.h"
 #include "reportcontroller.h"
+#include "historycontroller.h"
 
 #include "comunication/constants.h"
 
@@ -25,6 +26,7 @@ class MasterController : public QObject
     Q_PROPERTY(RevenueController* ui_revenueController READ revenueController NOTIFY revenueControllerChanged)
     Q_PROPERTY(SettingController* ui_settingController READ settingController NOTIFY settingControllerChanged)
     Q_PROPERTY(ReportController* ui_reportController READ reportController NOTIFY reportControllerChanged)
+    Q_PROPERTY(HistoryController* ui_historyController READ historyController NOTIFY historyControllerChanged)
 
     Q_PROPERTY(TabAction* ui_revenueTab READ revenueTab NOTIFY revenueTabChanged)
     Q_PROPERTY(TabAction* ui_reportsTab READ reportsTab NOTIFY reportsTabChanged)
@@ -41,6 +43,7 @@ public:
     RevenueController* revenueController();
     SettingController* settingController();
     ReportController* reportController();
+    HistoryController* historyController();
 
     Account* account();
 
@@ -56,6 +59,7 @@ signals:
     void revenueControllerChanged();
     void settingControllerChanged();
     void reportControllerChanged();
+    void historyControllerChanged();
     void databaseChanged();
 
     void revenueTabChanged();
@@ -75,6 +79,7 @@ private:
     RevenueController* m_revenueController = nullptr;
     SettingController* m_settingController = nullptr;
     ReportController* m_reportController = nullptr;
+    HistoryController* m_historyController = nullptr;
 
     Account* mAccount;
 
