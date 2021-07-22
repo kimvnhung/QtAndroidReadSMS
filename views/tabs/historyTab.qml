@@ -28,7 +28,7 @@ Item {
         //table
         TransactionTable{
             width: parent.width
-            height: Dimen.revenueTableHeight
+            height: Dimen.historyTableHeight
             _headerBackground : Color.blueDark0
             _headerTextColor : Color.white
             anchors{

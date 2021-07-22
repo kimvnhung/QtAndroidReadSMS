@@ -33,7 +33,7 @@ void HistoryController::updateList()
             if(trans->getStatus() == Transaction::PENDING){
                 counter++;
             }
-            if(counter >= 2){
+            if(counter >= 1){
                 updateTransactionToServer();
                 break;
             }

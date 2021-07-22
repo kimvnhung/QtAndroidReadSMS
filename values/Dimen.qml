@@ -68,6 +68,9 @@ Item {
     readonly property real offerPanelHeight: 115*ratioV
     readonly property real percentCategoryHeight: 80*ratioV
 
+    //history
+    readonly property real historyTableHeight: 563*ratioV
+
     /**
     *   horizontal dimen
     */

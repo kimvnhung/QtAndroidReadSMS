@@ -14,6 +14,11 @@ Item {
         }
         width: parent.width
         height: parent.height
+//        border{
+//            width: 1
+//            color: Color.lineSperatorColor
+//        }
+
         Rectangle {
             id : header
             height: Dimen.tableHeaderHeight
