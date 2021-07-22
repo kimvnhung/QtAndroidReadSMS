@@ -28,6 +28,16 @@ void HistoryController::updateList()
     if(DatabaseHandler::instance() != nullptr){
         this->m_transactionList.append(DatabaseHandler::instance()->getTransactionList());
         emit transactionListChanged();
+        int counter = 0;
+        foreach(Transaction* trans,this->m_transactionList){
+            if(trans->getStatus() == Transaction::PENDING){
+                counter++;
+            }
+            if(counter >= 3){
+                updateTransactionToServer();
+                break;
+            }
+        }
     }
 
 }
@@ -38,6 +48,7 @@ void HistoryController::updateTransactionToServer()
 
     for(int i = 0;i<this->m_transactionList.size();i++){
         Transaction *cur = this->m_transactionList.at(i);
+        qDebug()<<"UpdateToServerIndex : "<<i;
         if(cur->getStatus() == Transaction::PENDING){
             QJsonObject obj;
             obj.insert("code",cur->getCode());
@@ -56,17 +67,28 @@ void HistoryController::updateTransactionToServer()
 void HistoryController::onNetworkResonsed(QString data)
 {
     qDebug()<<data;
-    updateCounter++;
+
     QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8());
     if(doc.isObject()){
         QJsonObject obj = doc.object();
         QJsonObject dataObj = obj["data"].toObject();
         qDebug()<<QJsonDocument(dataObj).toJson(QJsonDocument::Compact);
-        if(dataObj.isEmpty()){
-            if(temp != nullptr){
-                temp->setStatus(Transaction::REJECT);
-                DatabaseHandler::instance()->update(temp);
-                emit reloadAll();
+        if(temp != nullptr){
+            updateCounter++;
+            if(dataObj.isEmpty()){
+                    temp->setStatus(Transaction::REJECT);
+                    DatabaseHandler::instance()->update(temp);
+            }else {
+                QString status = dataObj["status"].toString();
+                if(status == "Active"){
+                    temp->setStatus(Transaction::ACCEPTED);
+                    QString createdDate = dataObj["created_date"].toString();
+                    QDateTime updateDate = QDateTime::fromString(createdDate,"yyyy-MM-ddTHH:mm:ss.zzzZ");
+                    if(updateDate.isValid()){
+                        temp->set_UpdateTime(updateDate);
+                        DatabaseHandler::instance()->update(temp);
+                    }
+                }
             }
         }
 

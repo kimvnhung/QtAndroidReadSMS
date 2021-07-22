@@ -30,6 +30,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
     private DatabaseHandler handler;
 
     private int NonSeenTransaction = 0;
+    private int UpdateQueueCounter = 0;
     private boolean isMainActivityAvailable = false;
 
     @Override
@@ -224,6 +225,14 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
         }
     }
 
+    private void updateToServer()
+    {
+        if (isMainActivityAvailable && UpdateQueueCounter >= 2){
+            sendToQt(Constants.ACTION.UPDATE_TO_SERVER);
+            UpdateQueueCounter = 0;
+        }
+    }
+
     @Override
     public void onSmsComing(Transaction transaction) {
         Log.i(TAG, "onSmsComming : "+transaction.getCode());
@@ -231,11 +240,14 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 
         //Counter
         NonSeenTransaction++;
+        UpdateQueueCounter++;
 
         if (NonSeenTransaction >= 5){
             //notify();
         }
 
+        updateToServer();
         updateInfo();
+
     }
 }

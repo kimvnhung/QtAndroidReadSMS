@@ -2,6 +2,8 @@
 
 #include <QFile>
 #include <QDebug>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 DatabaseHandler* DatabaseHandler::m_instance = nullptr;
 
@@ -29,7 +31,7 @@ DatabaseHandler::DatabaseHandler(QObject *parent, QString databasePath) : QObjec
         log("Database Valid");
     }
     log("Test log");
-    QFile dfile(":/"+DATABASE_NAME);
+    QFile dfile("assets:/databases/"+DATABASE_NAME);
     if (dfile.exists())
     {
          log("Database Existed");
@@ -117,7 +119,15 @@ QList<Transaction*> DatabaseHandler::getTransactionListByDate(QDate date)
 void DatabaseHandler::update(Transaction *transaction)
 {
     //call to java for writing data
-    //QtAndroidService::instance()->
+    QJsonObject obj;
+    obj.insert(Constants::Transaction::ID,transaction->getId());
+    obj.insert(Constants::Transaction::PHONE,transaction->getPhone());
+    obj.insert(Constants::Transaction::CODE, transaction->getCode());
+    obj.insert(Constants::Transaction::VALUE, transaction->getValue());
+    obj.insert(Constants::Transaction::TIME, transaction->getTime());
+    obj.insert(Constants::Transaction::UPDATE_TIME, transaction->getUpdateTime());
+    obj.insert(Constants::Transaction::STATUS, transaction->getStatus());
+    QtAndroidService::instance()->updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
 }
 
 //private

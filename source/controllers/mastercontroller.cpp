@@ -42,9 +42,6 @@ MasterController::MasterController(QGuiApplication *parent) :
     });
     this->m_reportController = new ReportController(this);
     this->m_historyController = new HistoryController(this);
-    connect(this->m_historyController, &HistoryController::reloadAll, [this](){
-        this->updateAll();
-    });
 
 
     QtAndroidService *initialier = new QtAndroidService(parent);
@@ -137,11 +134,13 @@ void MasterController::onReceiveMessageFromService(const QString &message)
 {
     if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
         onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
-        this->historyController()->updateTransactionToServer();
     }
 
     if(message == Constants::Info::UPDATE_DATA_INFO){
         updateAll();
+    }
+
+    if(message == Constants::Action::UPDATE_TO_SERVER){
         this->historyController()->updateTransactionToServer();
     }
 

@@ -21,7 +21,6 @@ public:
     QQmlListProperty<Transaction> transactionList();
 signals:
     void transactionListChanged();
-    void reloadAll();
 public slots:
     void updateList();
     void updateTransactionToServer();

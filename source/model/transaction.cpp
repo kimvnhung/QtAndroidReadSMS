@@ -55,6 +55,19 @@ void Transaction::setTime(QString time)
     this->m_time = QDateTime::fromString(time,format);
     emit timeChanged();
 }
+
+void Transaction::set_Time(QDateTime time)
+{
+    this->m_time = time;
+    emit timeChanged();
+}
+
+void Transaction::set_UpdateTime(QDateTime updateTime)
+{
+    this->m_updateTime = updateTime;
+    emit updateTimeChanged();
+}
+
 void Transaction::setUpdateTime(QString updateTime)
 {
     this->m_updateTime = QDateTime::fromString(updateTime,format);;

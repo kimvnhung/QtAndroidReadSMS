@@ -36,7 +36,9 @@ public:
     void setCode(QString code);
     void setValue(int value);
     void setTime(QString time);
+    void set_Time(QDateTime time);
     void setUpdateTime(QString updateTime);
+    void set_UpdateTime(QDateTime updateTime);
     void setStatus(int isUpdated);
 
     int getId(){return this->m_id;}
@@ -44,9 +46,9 @@ public:
     QString getCode(){return this->m_code;}
     int getValue(){return this->m_value;}
     QString getDisplayValue();
-    QString getTime(){return this->m_time.toString();}
+    QString getTime(){return this->m_time.toString(format);}
     QDateTime get_Time(){return this->m_time;}
-    QString getUpdateTime(){return this->m_updateTime.toString();}
+    QString getUpdateTime(){return this->m_updateTime.toString(format);}
     QDateTime get_UpdateTime(){return this->m_updateTime;}
     int getStatus(){return this->m_status;}
 
