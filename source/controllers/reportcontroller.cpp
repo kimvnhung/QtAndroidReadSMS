@@ -11,7 +11,6 @@ ReportController::ReportController(QObject *parent) :
     this->mIsCalendarVisible = false;
     this->listTrans = QList<Transaction*>();
     emit selectedDateChanged();
-
 }
 
 ReportController::~ReportController()
@@ -59,6 +58,7 @@ void ReportController::dateAccepted(QDate newValue)
     this->mIsCalendarVisible = false;
     emit selectedDateChanged();
     emit isCalendarVisibleChanged();
+    updateList();
 }
 
 void ReportController::dateCancel()
