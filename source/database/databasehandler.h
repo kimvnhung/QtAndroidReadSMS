@@ -24,6 +24,8 @@ public:
 
     QList<Transaction*> getTransactionList();
     QList<Transaction*> getTransactionListByDate(QDate date);
+    void update(Transaction* trans);
+
     static const QString DATABASE_NAME ;
 
     static const QString TABLE_NAME_AGENCY ;

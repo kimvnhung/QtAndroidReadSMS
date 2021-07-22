@@ -11,6 +11,17 @@ namespace Constants {
         const QString STOPFOREGROUND_ACTION = "com.hungkv.autolikeapp.action.stopforeground";
         const QString LOG_ACTION = "com.hungkv.autolikeapp.action.log";
         const QString ACTIVITY_STOPPED_ACTION = "com.hungkv.autolike.activitystopped";
+        const QString UPDATE_TRANSACTION_ACTION = "com.hungkv.autolike.updatetransaction";
+    }
+
+    namespace Transaction{
+        const QString ID = "id";
+        const QString PHONE = "phone";
+        const QString CODE = "code";
+        const QString VALUE = "value";
+        const QString TIME = "time";
+        const QString UPDATE_TIME = "update_time";
+        const QString STATUS = "status";
     }
 
     namespace Info {

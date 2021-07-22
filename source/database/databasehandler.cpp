@@ -1,6 +1,7 @@
 #include "databasehandler.h"
 
 #include <QFile>
+#include <QDebug>
 
 DatabaseHandler* DatabaseHandler::m_instance = nullptr;
 
@@ -111,6 +112,12 @@ QList<Transaction*> DatabaseHandler::getTransactionListByDate(QDate date)
     }
 
     return rt;
+}
+
+void DatabaseHandler::update(Transaction *transaction)
+{
+    //call to java for writing data
+    //QtAndroidService::instance()->
 }
 
 //private

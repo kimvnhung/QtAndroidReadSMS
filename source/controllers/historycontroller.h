@@ -19,18 +19,19 @@ public:
     explicit HistoryController(QObject *parent = nullptr);
     ~HistoryController();
     QQmlListProperty<Transaction> transactionList();
-    void loadCertificatePath(QString path);
 signals:
     void transactionListChanged();
+    void reloadAll();
 public slots:
     void updateList();
-
+    void updateTransactionToServer();
 private:
     QList<Transaction*> m_transactionList;
     WebAPIRequest *apiRequester{nullptr};
-    void traverse(const QString &pattern, const QString &dirname, int level);
+    Transaction* temp{nullptr};
+    int updateCounter = 0;
 private slots:
-    void updateTransactionToServer();
+
     void onNetworkResonsed(QString data);
 };
 

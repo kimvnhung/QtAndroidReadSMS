@@ -7,9 +7,9 @@ public class Transaction {
     private int value;
     private String time;
     private String updateTime;
-    private boolean status;
+    private int status;
 
-    public Transaction(int id, String phone, String code, int value, String time, String updateTime, boolean status) {
+    public Transaction(int id, String phone, String code, int value, String time, String updateTime, int status) {
         this.id = id;
         this.phone = phone;
         this.code = code;
@@ -26,7 +26,7 @@ public class Transaction {
         this.value = value;
         this.time = time;
         this.updateTime = "";
-        this.status = false;
+        this.status = 0;
     }
 
     public int getId() {
@@ -77,11 +77,11 @@ public class Transaction {
         this.updateTime = updateTime;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -99,6 +99,14 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction : "+id+","+phone+","+code+","+value+","+time+","+updateTime+","+(status?"Updated":"Note");
+        return "Transaction{" +
+                "id=" + id +
+                ", phone='" + phone + '\'' +
+                ", code='" + code + '\'' +
+                ", value=" + value +
+                ", time='" + time + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import org.json.JSONObject;
 
 
 import com.hungkv.autolikeapp.Constants;
@@ -95,6 +96,23 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
                 break;
             case Constants.ACTION.ACTIVITY_STARTED_ACTION:
                 isMainActivityAvailable = true;
+                break;
+            case Constants.ACTION.UPDATE_TRANSACTION_ACTION:
+                String jsonTrans = new String(intent.getByteArrayExtra("Transaction"));
+                try {
+                    JSONObject trans = new JSONObject(jsonTrans);
+                    Transaction transaction = new Transaction(trans.getInt(Constants.TRANSACTION.ID),
+                            trans.getString(Constants.TRANSACTION.PHONE),
+                            trans.getString(Constants.TRANSACTION.CODE),
+                            trans.getInt(Constants.TRANSACTION.VALUE),
+                            trans.getString(Constants.TRANSACTION.TIME),
+                            trans.getString(Constants.TRANSACTION.UPDATE_TIME),
+                            trans.getInt(Constants.TRANSACTION.STATUS));
+                    handler.updateTransaction(transaction);
+                    updateInfo();
+                } catch (Exception e){
+                    Log.e(TAG, Constants.JAVA_LOG+" : "+e.getMessage() );
+                }
                 break;
         }
         return START_STICKY;
@@ -199,6 +217,12 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
     //End Setting
 
 
+    private void updateInfo(){
+        //update view
+        if(isMainActivityAvailable){
+            sendToQt(Constants.INFO.UPDATE_DATA_INFO);
+        }
+    }
 
     @Override
     public void onSmsComing(Transaction transaction) {
@@ -212,9 +236,6 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
             //notify();
         }
 
-        //update view
-        if(isMainActivityAvailable){
-            sendToQt(Constants.INFO.UPDATE_DATA_INFO);
-        }
+        updateInfo();
     }
 }

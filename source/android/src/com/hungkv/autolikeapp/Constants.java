@@ -11,11 +11,22 @@ public class Constants {
         public static String LOG_ACTION = "com.hungkv.autolikeapp.action.log";
         public static String ACTIVITY_STOPPED_ACTION = "com.hungkv.autolike.activitystopped";
         public static String ACTIVITY_STARTED_ACTION = "com.hungkv.autolike.activitystarted";
+        public static String UPDATE_TRANSACTION_ACTION = "com.hungkv.autolike.updatetransaction";
     }
 
     public interface INFO {
         public static String DATABASE_DECLARE_INFO = "com.hungkv.autolikeapp.info.databasedeclaration";
         public static String UPDATE_DATA_INFO = "com.hungkv.autolikeapp.info.updatedata";
+    }
+
+    public interface TRANSACTION{
+        public static String ID = "id";
+        public static String PHONE = "phone";
+        public static String CODE = "code";
+        public static String VALUE = "value";
+        public static String TIME = "time";
+        public static String UPDATE_TIME = "update_time";
+        public static String STATUS = "status";
     }
 
     public interface NOTIFICATION {

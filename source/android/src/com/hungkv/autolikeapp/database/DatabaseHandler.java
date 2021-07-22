@@ -125,7 +125,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COLUMN_VALUE, transaction.getValue());
         values.put(COLUMN_TIME, transaction.getTime());
         values.put(COLUMN_UPDATE_TIME, transaction.getUpdateTime());
-        values.put(COLUMN_STATUS, transaction.isStatus()?1:0);
+        values.put(COLUMN_STATUS, transaction.getStatus());
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -167,7 +167,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     COLUMN_VALUE+"= "+transaction.getValue()+" ,"+
                     COLUMN_TIME+"= \""+transaction.getTime()+"\" ," +
                     COLUMN_UPDATE_TIME+"=\""+transaction.getUpdateTime()+"\" ," +
-                    COLUMN_STATUS +" = "+(transaction.isStatus()?1:0)+" WHERE "+
+                    COLUMN_STATUS +" = "+transaction.getStatus()+" WHERE "+
                     COLUMN_ID+"= "+transaction.getId();
 
             db.execSQL(updateQuery);
@@ -198,7 +198,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         c.getInt(c.getColumnIndex(COLUMN_VALUE)),
                         c.getString(c.getColumnIndex(COLUMN_TIME)),
                         c.getString(c.getColumnIndex(COLUMN_UPDATE_TIME)),
-                        c.getInt(c.getColumnIndex(COLUMN_STATUS)) == 1
+                        c.getInt(c.getColumnIndex(COLUMN_STATUS))
                 );
 
                 result.add(transaction);

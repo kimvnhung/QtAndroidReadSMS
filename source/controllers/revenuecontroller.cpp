@@ -1,5 +1,7 @@
 #include "revenuecontroller.h"
 
+#include <QDebug>
+
 RevenueController::RevenueController(QObject *parent) : QObject(parent)
 {
     this->m_transactionList = QList<Transaction*>();
@@ -28,6 +30,9 @@ void RevenueController::updateList()
         this->m_transactionList.append(DatabaseHandler::instance()->getTransactionListByDate(QDate::currentDate()));
         emit transactionListChanged();
         emit todayIncomeChanged();
+    }
+    foreach(Transaction *item, m_transactionList ){
+        qDebug()<<"id : "<<item->getId()<<"_"<<item->getStatus();
     }
 }
 

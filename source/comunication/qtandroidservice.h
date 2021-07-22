@@ -18,6 +18,7 @@ public:
     Q_INVOKABLE void startBackgroundService();
     Q_INVOKABLE void startForegroundService();
     Q_INVOKABLE void log(const QString &message);
+    Q_INVOKABLE void updateTransaction(QString jsonTrans);
 
 signals:
     void messageFromService(const QString &message);

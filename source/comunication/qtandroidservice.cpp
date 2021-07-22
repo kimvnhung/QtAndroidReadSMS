@@ -64,6 +64,26 @@ void QtAndroidService::startForegroundService()
                 serviceIntent.handle().object());
 }
 
+void QtAndroidService::updateTransaction(QString jsonTrans)
+{
+    QAndroidIntent serviceIntent(Constants::Action::UPDATE_TRANSACTION_ACTION);
+
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    serviceIntent.handle().callObjectMethod(
+                "setClass",
+                "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
+                QtAndroid::androidActivity().object(),
+                objectClass);
+    serviceIntent.putExtra("Transaction", jsonTrans.toUtf8());
+
+    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+                "startService",
+                "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+                serviceIntent.handle().object());
+}
+
 void QtAndroidService::log(const QString &message)
 {
     QAndroidIntent serviceIntent(Constants::Action::LOG_ACTION);
