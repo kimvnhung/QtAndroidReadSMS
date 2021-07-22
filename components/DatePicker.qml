@@ -25,7 +25,7 @@ Rectangle {
     QtObject {
         id: palette
         property color primary: "#00BCD4"
-        property color primary_dark: "#0097A7"
+        property color primary_dark: Color.blueLight0
         property color primary_light: "#B2EBF2"
         property color accent: "#FF5722"
         property color primary_text: "#212121"
@@ -289,7 +289,7 @@ Rectangle {
 
             Rectangle {
                 id: okBtn
-                height: parent.height
+                height: parent.height-1
                 width: okBtnText.contentWidth + mainForm.cellSize
                 Text {
                     id: okBtnText
@@ -307,8 +307,10 @@ Rectangle {
             }
             Rectangle {
                 id: cancelBtn
-                height: parent.height
+                height: parent.height-1
                 width: cancelBtnText.contentWidth + mainForm.cellSize
+
+
                 Text {
                     id: cancelBtnText
                     anchors.centerIn: parent

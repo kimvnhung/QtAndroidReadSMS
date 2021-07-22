@@ -8,7 +8,7 @@ Item {
     readonly property color black: "#000000"
 
     readonly property color blueDark0: "#2F5392"
-
+    readonly property color blueLight0: "#4FBBEB"
     //main
     readonly property color tabSelectedTextColor: "#2F5392"
     readonly property color tabDefaultTextColor: "#A7A7A7"
