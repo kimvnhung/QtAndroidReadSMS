@@ -211,5 +211,10 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
         if (NonSeenTransaction >= 5){
             //notify();
         }
+
+        //update view
+        if(isMainActivityAvailable){
+            sendToQt(Constants.INFO.UPDATE_DATA_INFO);
+        }
     }
 }

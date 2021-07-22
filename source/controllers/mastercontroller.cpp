@@ -137,7 +137,7 @@ void MasterController::onReceiveMessageFromService(const QString &message)
     }
 
     if(message == Constants::Info::UPDATE_DATA_INFO){
-        this->m_revenueController->updateList();
+        updateAll();
     }
 
     if(message.contains("on")){
@@ -210,10 +210,15 @@ void MasterController::onDatabaseAvailable(QString path)
     DatabaseHandler *handler = new DatabaseHandler(this,path);
     Q_UNUSED(handler)
 
+
+    updateAll();
+}
+
+void MasterController::updateAll()
+{
     this->m_revenueController->updateList();
     this->m_historyController->updateList();
     this->m_reportController->updateList();
-
 }
 
 

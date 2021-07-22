@@ -91,6 +91,7 @@ private:
     TabAction* mSettingTab;
 
     void onDatabaseAvailable(QString path);
+    void updateAll();
 
 };
 
