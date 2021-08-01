@@ -6,16 +6,33 @@
 #include <QJsonObject>
 #include <QSslKey>
 
-WebAPIRequest::WebAPIRequest(QObject *parent, QString certPath) :
+
+const QString WebAPIRequest::AUTOFARMER_CERTIFICATE_PATH = "assets:/approval-api.pfx";
+const QString WebAPIRequest::AUTOLIKE_CERTIFICATE_PATH = "assets:/approval.pfx";
+const QString WebAPIRequest::MT_CERTIFICATE_PATH = "";
+const QString WebAPIRequest::AUTOFARMER_PASS = "approval-api";
+const QString WebAPIRequest::AUTOLIKE_PASS = "approval";
+const QString WebAPIRequest::MT_PASS = "";
+
+
+WebAPIRequest::WebAPIRequest(QObject *parent) :
     QObject(parent)
 {
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &WebAPIRequest::onNetworkResponsed);
-
-    bool imported = loadPfxCertifcate(certPath,"approval-api");
-    if(imported){
-        qDebug()<<"Imported";
+    //load cert
+    if(loadPfxCertificate(AUTOLIKE_CERTIFICATE_PATH,AUTOLIKE_PASS)){
+        qDebug()<<"import autolike";
     }
+
+    if(loadPfxCertificate(AUTOFARMER_CERTIFICATE_PATH,AUTOFARMER_PASS)){
+        qDebug()<<"Imported auto farm";
+    }
+}
+
+WebAPIRequest::~WebAPIRequest()
+{
+    delete manager;
 }
 
 //publics
@@ -25,14 +42,14 @@ void WebAPIRequest::setBody(QString body)
 }
 
 
-bool WebAPIRequest::loadPfxCertifcate(QString certFilename, QString passphrase) {
+bool WebAPIRequest::loadPfxCertificate(QString certFilename, QString passphrase) {
 
     QFile certFile(certFilename);
     certFile.open(QFile::ReadOnly);
     QSslCertificate certificate;
     QSslKey key;
     QList<QSslCertificate> importedCerts;
-
+    qDebug()<<__FUNCTION__<<__LINE__;
     bool imported = QSslCertificate::importPkcs12(&certFile, &key, &certificate, &importedCerts, QByteArray::fromStdString(passphrase.toStdString()));
 
     certFile.close();
@@ -49,20 +66,43 @@ bool WebAPIRequest::loadPfxCertifcate(QString certFilename, QString passphrase) 
         sslConfig.setLocalCertificateChain(localCerts);
         sslConfig.setCaCertificates(certs);
         sslConfig.setPrivateKey(key);
-        QSslConfiguration::setDefaultConfiguration(sslConfig);
+        if(certFilename == AUTOFARMER_CERTIFICATE_PATH){
+            AUTOFARMER_SSL_CONF = sslConfig;
+        }else if(certFilename == AUTOLIKE_CERTIFICATE_PATH){
+            AUTOLIKE_SSL_CONF = sslConfig;
+        }else {
+
+        }
     }
 
     return imported;
 }
 
-void WebAPIRequest::post(){
-    QNetworkRequest request(QUrl("https://approval-api.autofarmer.net/v1/transactions/active")); // without ID
+QNetworkRequest WebAPIRequest::getRequest()
+{
+    QNetworkRequest request;
+    if(body.toUpper().contains("ALIKE")){
+        request.setUrl(QUrl("https://adminapi-autolike.congaubeo.us/api/v1/transactions/active"));
+        request.setRawHeader("Authorization","Basic Y29uZ2F1YmVvQDEyMzpjb25nYXViZW9AMTIz");
+        if(!AUTOLIKE_SSL_CONF.isNull()){
+            request.setSslConfiguration(AUTOLIKE_SSL_CONF);
+        }
+    }else if(body.toUpper().contains("AFARM")){
+        request.setUrl(QUrl("https://approval-api.autofarmer.net/v1/transactions/active"));// without ID
+        request.setRawHeader("Cache-Control","No-cache");
+        if(!AUTOFARMER_SSL_CONF.isNull()){
+            request.setSslConfiguration(AUTOFARMER_SSL_CONF);
+        }
+    }else {
+
+    }
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Mobile-Secret-Key","3953390b-42bb-11eb-9f8b-1111914b71be");
-    request.setRawHeader("Cache-Control","No-cache");
-    request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
+    return request;
+}
 
-
+void WebAPIRequest::post(){
+    QNetworkRequest request = getRequest();
 
     manager->post(request,body.toUtf8());
 }

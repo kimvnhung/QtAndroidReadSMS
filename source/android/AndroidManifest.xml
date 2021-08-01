@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
-<manifest package="com.hungkv.autolikeapp"
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:versionName="1.0" android:versionCode="5" android:installLocation="auto">
+<manifest package="com.hungkv.autolikeapp" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="5" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -19,12 +17,8 @@ android:versionName="1.0" android:versionCode="5" android:installLocation="auto"
 
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
-    <application
-        android:usesCleartextTraffic="true"
-        android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Approval" android:extractNativeLibs="true">
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
-        android:name="com.hungkv.autolikeapp.MainActivity"
-        android:label="Approval" android:screenOrientation="unspecified" android:launchMode="singleTop">
+    <application android:usesCleartextTraffic="true" android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Approval" android:extractNativeLibs="true" android:icon="@drawable/icon">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.hungkv.autolikeapp.MainActivity" android:label="Approval" android:screenOrientation="unspecified" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -88,19 +82,17 @@ android:versionName="1.0" android:versionCode="5" android:installLocation="auto"
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".comunication.NetworkChangeReceiver"
-            android:enabled="true">
+        <receiver android:name=".comunication.NetworkChangeReceiver" android:enabled="true">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
-        <service
-            android:enabled="true" android:exported="true"
-            android:name=".comunication.QtAndroidService">
+        <service android:name=".comunication.QtAndroidService">
             <!-- Background running -->
             <meta-data android:name="android.app.background_running" android:value="true"/>
+            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
         </service>
     </application>
 
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>

@@ -16,8 +16,7 @@
 const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
                                    "android.permission.FOREGROUND_SERVICE",
                                    "android.permission.INTERNET",
-                                   "android.permission.GET_TASKS",
-                                   "android.permission.ACCESS_NETWORK_STATE"});
+                                   "android.permission.GET_TASKS"});
 #endif
 
 

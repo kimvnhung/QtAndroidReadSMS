@@ -10,7 +10,8 @@ class WebAPIRequest : public QObject
 {
     Q_OBJECT
 public:
-    explicit WebAPIRequest(QObject *parent = nullptr,QString certPath = "");
+    explicit WebAPIRequest(QObject *parent = nullptr);
+    ~WebAPIRequest();
 
     void setBody(QString body);
     void post();
@@ -22,8 +23,20 @@ private:
     QNetworkAccessManager *manager{nullptr};
     QString body;
 
+    static const QString AUTOFARMER_CERTIFICATE_PATH;
+    static const QString AUTOLIKE_CERTIFICATE_PATH;
+    static const QString MT_CERTIFICATE_PATH;
+    static const QString AUTOFARMER_PASS;
+    static const QString AUTOLIKE_PASS;
+    static const QString MT_PASS;
+
+    QSslConfiguration AUTOFARMER_SSL_CONF;
+    QSslConfiguration AUTOLIKE_SSL_CONF;
+
     QString xmlToHtml(QString xml);
-    bool loadPfxCertifcate(QString certFilename, QString passphrase);
+    bool loadPfxCertificate(QString certFilename, QString passphrase);
+    QNetworkRequest getRequest();
+
 };
 
 #endif // WEBAPIREQUEST_H

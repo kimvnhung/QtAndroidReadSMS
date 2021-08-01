@@ -6,7 +6,7 @@
 HistoryController::HistoryController(QObject *parent) : QObject(parent)
 {
     this->m_transactionList = QList<Transaction*>();
-    this->apiRequester = new WebAPIRequest(this,"assets:/approval-api.pfx");
+    this->apiRequester = new WebAPIRequest(this);
     connect(apiRequester, &WebAPIRequest::networkResponsed, this, &HistoryController::onNetworkResonsed);
 }
 
@@ -30,6 +30,8 @@ void HistoryController::updateList()
         emit transactionListChanged();
         int counter = 0;
         foreach(Transaction* trans,this->m_transactionList){
+            qDebug()<<__FUNCTION__<<trans->getUpdateTime();
+            qDebug()<<__FUNCTION__<<trans->getStatus();
             if(trans->getStatus() == Transaction::PENDING){
                 counter++;
             }
@@ -66,7 +68,7 @@ void HistoryController::updateTransactionToServer()
 
 void HistoryController::onNetworkResonsed(QString data)
 {
-    qDebug()<<data;
+//    qDebug()<<__FUNCTION__<<data;
 
     QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8());
     if(doc.isObject()){
@@ -82,9 +84,12 @@ void HistoryController::onNetworkResonsed(QString data)
                 QString status = dataObj["status"].toString();
                 if(status == "Active"){
                     temp->setStatus(Transaction::ACCEPTED);
-                    QString createdDate = dataObj["created_date"].toString();
-                    QDateTime updateDate = QDateTime::fromString(createdDate,"yyyy-MM-ddTHH:mm:ss.zzzZ");
+                    qDebug()<<"dataObj : "<<dataObj;
+                    QString updatedDate = dataObj["updated_at"].toString();
+                    qDebug()<<"updated Date"<<updatedDate;
+                    QDateTime updateDate = QDateTime::fromString(updatedDate,"yyyy-MM-ddTHH:mm:ss.zzzZ");
                     if(updateDate.isValid()){
+                        qDebug()<<__FUNCTION__<<__LINE__;
                         temp->set_UpdateTime(updateDate);
                         DatabaseHandler::instance()->update(temp);
                     }

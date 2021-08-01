@@ -32,6 +32,7 @@ void RevenueController::updateList()
         emit todayIncomeChanged();
     }
     foreach(Transaction *item, m_transactionList ){
+        qDebug()<<item->getUpdateTime();
         qDebug()<<"id : "<<item->getId()<<"_"<<item->getStatus();
     }
 }
