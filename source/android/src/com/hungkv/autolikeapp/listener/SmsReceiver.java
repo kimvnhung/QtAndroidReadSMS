@@ -19,7 +19,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String TAG = SmsReceiver.class.getName();
-    private static final String[] CODE_PREFIX = new String[]{"ALIKE","AFARM"};
+    private static final String[] CODE_PREFIX = new String[]{"ALIKE","AFARM","MT"};
 
     private static SmsListener listener;
 
@@ -94,7 +94,7 @@ public class SmsReceiver extends BroadcastReceiver {
                                     Matcher matcher = pattern.matcher(msg);
                                     if (matcher.find()) {
                                         Log.i(TAG, "Matcher : " + matcher.group());
-                                        String valueSt = matcher.group().substring(1, matcher.group().length() - 4);
+                                        String valueSt = matcher.group().substring(1, matcher.group().length() - 3).replace(" ","");
                                         value = Integer.parseInt(valueSt.replace(",", ""));
                                         Log.i(TAG, "value : " + value);
                                     } else {
@@ -137,8 +137,9 @@ public class SmsReceiver extends BroadcastReceiver {
                                 } else {
                                     for (String child : a) {
                                         if (child.contains(code_prefix)) {
-                                            String[] splits = child.split("[.-]");
+                                            String[] splits = child.split("[;.-]");
                                             for (String hi : splits) {
+                                                Log.i(TAG, "Split : "+hi);
                                                 if (hi.startsWith(code_prefix)) {
                                                     code = hi;
                                                     break;
@@ -216,5 +217,6 @@ public class SmsReceiver extends BroadcastReceiver {
         void onSmsComing(Transaction transaction);
     }
 }
+
 
 
