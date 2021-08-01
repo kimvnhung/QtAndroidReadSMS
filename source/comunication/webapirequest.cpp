@@ -9,10 +9,10 @@
 
 const QString WebAPIRequest::AUTOFARMER_CERTIFICATE_PATH = "assets:/approval-api.pfx";
 const QString WebAPIRequest::AUTOLIKE_CERTIFICATE_PATH = "assets:/approval.pfx";
-const QString WebAPIRequest::MT_CERTIFICATE_PATH = "";
+const QString WebAPIRequest::MT_CERTIFICATE_PATH = "assets:/approval approval.mottrieu.com.pfx";
 const QString WebAPIRequest::AUTOFARMER_PASS = "approval-api";
 const QString WebAPIRequest::AUTOLIKE_PASS = "approval";
-const QString WebAPIRequest::MT_PASS = "";
+const QString WebAPIRequest::MT_PASS = "approval approval.mottrieu.com";
 
 
 WebAPIRequest::WebAPIRequest(QObject *parent) :
@@ -27,6 +27,10 @@ WebAPIRequest::WebAPIRequest(QObject *parent) :
 
     if(loadPfxCertificate(AUTOFARMER_CERTIFICATE_PATH,AUTOFARMER_PASS)){
         qDebug()<<"Imported auto farm";
+    }
+
+    if(loadPfxCertificate(MT_CERTIFICATE_PATH,MT_PASS)){
+        qDebug()<<"Imported MT";
     }
 }
 
@@ -71,7 +75,7 @@ bool WebAPIRequest::loadPfxCertificate(QString certFilename, QString passphrase)
         }else if(certFilename == AUTOLIKE_CERTIFICATE_PATH){
             AUTOLIKE_SSL_CONF = sslConfig;
         }else {
-
+            MT_SSL_CONF = sslConfig;
         }
     }
 
@@ -94,7 +98,11 @@ QNetworkRequest WebAPIRequest::getRequest()
             request.setSslConfiguration(AUTOFARMER_SSL_CONF);
         }
     }else {
-
+        request.setUrl(QUrl("https://approval.mottrieu.com/api/v1/transactions/active"));
+        request.setRawHeader("Authorization","Basic Y29uZ2F1YmVvQDEyMzpjb25nYXViZW9AMTIz");
+        if(!AUTOLIKE_SSL_CONF.isNull()){
+            request.setSslConfiguration(MT_SSL_CONF);
+        }
     }
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Mobile-Secret-Key","3953390b-42bb-11eb-9f8b-1111914b71be");

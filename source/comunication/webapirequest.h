@@ -32,6 +32,7 @@ private:
 
     QSslConfiguration AUTOFARMER_SSL_CONF;
     QSslConfiguration AUTOLIKE_SSL_CONF;
+    QSslConfiguration MT_SSL_CONF;
 
     QString xmlToHtml(QString xml);
     bool loadPfxCertificate(QString certFilename, QString passphrase);

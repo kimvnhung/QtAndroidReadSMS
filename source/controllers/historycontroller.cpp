@@ -68,13 +68,13 @@ void HistoryController::updateTransactionToServer()
 
 void HistoryController::onNetworkResonsed(QString data)
 {
-//    qDebug()<<__FUNCTION__<<data;
+    qDebug()<<__FUNCTION__;
 
     QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8());
     if(doc.isObject()){
         QJsonObject obj = doc.object();
         QJsonObject dataObj = obj["data"].toObject();
-        qDebug()<<QJsonDocument(dataObj).toJson(QJsonDocument::Compact);
+        qDebug()<<"Data"<<QJsonDocument(dataObj).toJson(QJsonDocument::Compact);
         if(temp != nullptr){
             updateCounter++;
             if(dataObj.isEmpty()){
@@ -83,13 +83,17 @@ void HistoryController::onNetworkResonsed(QString data)
             }else {
                 QString status = dataObj["status"].toString();
                 if(status == "Active"){
+
                     temp->setStatus(Transaction::ACCEPTED);
                     QString updatedDate = dataObj["updated_at"].toString();
                     QDateTime updateDate = QDateTime::fromString(updatedDate,"yyyy-MM-ddTHH:mm:ss.zzzZ");
                     if(updateDate.isValid()){
+                        qDebug()<<"update success";
                         temp->set_UpdateTime(updateDate);
                         DatabaseHandler::instance()->update(temp);
                     }
+                }else{
+                    qDebug()<<"update failed";
                 }
             }
         }
