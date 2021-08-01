@@ -84,12 +84,9 @@ void HistoryController::onNetworkResonsed(QString data)
                 QString status = dataObj["status"].toString();
                 if(status == "Active"){
                     temp->setStatus(Transaction::ACCEPTED);
-                    qDebug()<<"dataObj : "<<dataObj;
                     QString updatedDate = dataObj["updated_at"].toString();
-                    qDebug()<<"updated Date"<<updatedDate;
                     QDateTime updateDate = QDateTime::fromString(updatedDate,"yyyy-MM-ddTHH:mm:ss.zzzZ");
                     if(updateDate.isValid()){
-                        qDebug()<<__FUNCTION__<<__LINE__;
                         temp->set_UpdateTime(updateDate);
                         DatabaseHandler::instance()->update(temp);
                     }
