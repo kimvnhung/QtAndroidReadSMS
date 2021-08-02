@@ -9,10 +9,10 @@
 
 const QString WebAPIRequest::AUTOFARMER_CERTIFICATE_PATH = "assets:/approval-api.pfx";
 const QString WebAPIRequest::AUTOLIKE_CERTIFICATE_PATH = "assets:/approval.pfx";
-const QString WebAPIRequest::MT_CERTIFICATE_PATH = "assets:/approval approval.mottrieu.com.pfx";
+const QString WebAPIRequest::MT_CERTIFICATE_PATH = "assets:/approval-mt.pfx";
 const QString WebAPIRequest::AUTOFARMER_PASS = "approval-api";
 const QString WebAPIRequest::AUTOLIKE_PASS = "approval";
-const QString WebAPIRequest::MT_PASS = "approval approval.mottrieu.com";
+const QString WebAPIRequest::MT_PASS = "approval";
 
 
 WebAPIRequest::WebAPIRequest(QObject *parent) :

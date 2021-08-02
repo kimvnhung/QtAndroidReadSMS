@@ -76,7 +76,8 @@ android{
     certificates.path = /assets
     certificates.files += \
         $$PWD/certs/approval-api.pfx \
-        $$PWD/certs/approval.pfx
+        $$PWD/certs/approval.pfx \
+        $$PWD/certs/approval-mt.pfx
     INSTALLS += certificates
 }
 
