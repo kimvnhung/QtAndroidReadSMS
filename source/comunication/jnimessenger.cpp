@@ -16,7 +16,7 @@ JniMessenger::JniMessenger(QObject *parent) : QObject(parent)
     m_instance = this;
 
     JNINativeMethod methods[] {{"callFromJava", "(Ljava/lang/String;)V", reinterpret_cast<void *>(callFromJava)}};
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/JniMessenger");
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
 
     QAndroidJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
@@ -29,7 +29,7 @@ JniMessenger::JniMessenger(QObject *parent) : QObject(parent)
 void JniMessenger::printFromJava(const QString &message)
 {
     QAndroidJniObject javaMessage = QAndroidJniObject::fromString(message);
-    QAndroidJniObject::callStaticMethod<void>("com/hungkv/autolikeapp/comunication/JniMessenger",
+    QAndroidJniObject::callStaticMethod<void>("com/hungkv/autolikeapp/comunication/QtAndroidService",
                                        "printFromJava",
                                        "(Ljava/lang/String;)V",
                                         javaMessage.object<jstring>());

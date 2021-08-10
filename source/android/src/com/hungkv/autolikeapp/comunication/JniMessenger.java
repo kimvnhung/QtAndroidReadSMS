@@ -25,7 +25,6 @@ public class JniMessenger implements SmsReceiver.SmsListener
         SmsReceiver.bindingListener(this);
     }
 
-
     public static void printFromJava(String message)
     {
         Log.i(TAG,"This is printed from JAVA, message is: " + message);

@@ -46,7 +46,7 @@ MasterController::MasterController(QGuiApplication *parent) :
 
     QtAndroidService *initialier = new QtAndroidService(parent);
     connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
-    initialier->startBackgroundService();
+//    initialier->startBackgroundService();
 
 
     mAccount = new Account(this, "Username","pass","HungKV");

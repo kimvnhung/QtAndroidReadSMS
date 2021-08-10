@@ -25,6 +25,18 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 {
 
     private static native void sendToQt(String message);
+
+    private static native void callFromJava(String message);
+
+    public static void printFromJava(String message)
+    {
+        Log.i(TAG,"This is printed from JAVA, message is: " + message);
+        if (message.equals("abcXYZ")){
+            callFromJava("REFRESH_DATA");
+        }
+    }
+
+
     private static final String TAG = "QtAndroidService";
 
     private DatabaseHandler handler;
@@ -123,11 +135,6 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
                 break;
         }
         return START_STICKY;
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 
     //Notification Setting Up
@@ -246,6 +253,11 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 
         updateInfo();
 
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
 
