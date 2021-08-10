@@ -22,6 +22,7 @@ const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
 
 int main(int argc, char *argv[])
 {
+    qDebug()<<"argc :"<<argc;
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
