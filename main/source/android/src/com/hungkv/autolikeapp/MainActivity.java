@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.content.Intent;
 
 
-import com.hungkv.autolikeapp.comunication.QtAndroidService;
+import com.hungkv.autolikeapp.communication.QtAndroidService;
 import com.hungkv.autolikeapp.database.DatabaseHandler;
 
 import org.qtproject.qt5.android.bindings.QtActivity;

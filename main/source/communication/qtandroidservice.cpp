@@ -16,7 +16,7 @@ QtAndroidService::QtAndroidService(QObject *parent) : QObject(parent)
     m_instance = this;
 
     JNINativeMethod methods[] {{"sendToQt", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedFromAndroidService)}};
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
 
     QAndroidJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
@@ -30,7 +30,7 @@ void QtAndroidService::startBackgroundService()
 {
     QAndroidIntent serviceIntent(Constants::Action::START_BACKGROUND_SERVICE_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
     QAndroidJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     serviceIntent.handle().callObjectMethod(
@@ -49,7 +49,7 @@ void QtAndroidService::startForegroundService()
 {
     QAndroidIntent serviceIntent(Constants::Action::START_FOREGROUND_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
     QAndroidJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     serviceIntent.handle().callObjectMethod(
@@ -68,7 +68,7 @@ void QtAndroidService::updateTransaction(QString jsonTrans)
 {
     QAndroidIntent serviceIntent(Constants::Action::UPDATE_TRANSACTION_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
     QAndroidJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     serviceIntent.handle().callObjectMethod(
@@ -88,7 +88,7 @@ void QtAndroidService::log(const QString &message)
 {
     QAndroidIntent serviceIntent(Constants::Action::LOG_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/comunication/QtAndroidService");
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
     QAndroidJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     serviceIntent.handle().callObjectMethod(

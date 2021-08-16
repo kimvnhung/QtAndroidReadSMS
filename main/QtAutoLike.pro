@@ -12,10 +12,10 @@ QML_IMPORT_PATH = $$PWD
 INCLUDEPATH += source/
 
 SOURCES += \
-        source/comunication/jnimessenger.cpp \
-        source/comunication/qtandroidservice.cpp \
-        source/comunication/utility.cpp \
-        source/comunication/webapirequest.cpp \
+        source/communication/jnimessenger.cpp \
+        source/communication/qtandroidservice.cpp \
+        source/communication/utility.cpp \
+        source/communication/webapirequest.cpp \
         source/controllers/historycontroller.cpp \
         source/controllers/mastercontroller.cpp \
         source/controllers/reportcontroller.cpp \
@@ -29,11 +29,11 @@ SOURCES += \
         source/model/transaction.cpp
 
 HEADERS += \
-        source/comunication/constants.h \
-        source/comunication/jnimessenger.h \
-        source/comunication/qtandroidservice.h \
-        source/comunication/utility.h \
-        source/comunication/webapirequest.h \
+        source/communication/constants.h \
+        source/communication/jnimessenger.h \
+        source/communication/qtandroidservice.h \
+        source/communication/utility.h \
+        source/communication/webapirequest.h \
         source/controllers/historycontroller.h \
         source/controllers/mastercontroller.h \
         source/controllers/reportcontroller.h \
@@ -59,10 +59,13 @@ android{
         source/android/res/drawable/ic_launcher.png \
         source/android/src/com/hungkv/autolikeapp/MainActivity.java \
         source/android/src/com/hungkv/autolikeapp/Constants.java \
-        source/android/src/com/hungkv/autolikeapp/comunication/JniMessenger.java \
-        source/android/src/com/hungkv/autolikeapp/comunication/QtAndroidService.java \
+        source/android/src/com/hungkv/autolikeapp/communication/JniMessenger.java \
+        source/android/src/com/hungkv/autolikeapp/communication/QtAndroidService.java \
         source/android/src/com/hungkv/autolikeapp/database/DatabaseHandler.java \
         source/android/src/com/hungkv/autolikeapp/database/Transaction.java \
+        source/android/src/com/hungkv/autolikeapp/communication/NetworkChangeReceiver.java \
+        source/android/src/com/hungkv/autolikeapp/communication/NetworkUtil.java \
+        source/android/src/com/hungkv/autolikeapp/communication/WeakUprLibrary.java \
         source/android/AndroidManifest.xml \
         source/android/src/com/hungkv/autolikeapp/listener/SmsReceiver.java
 
@@ -80,10 +83,6 @@ android{
         $$PWD/certs/approval-mt.pfx
     INSTALLS += certificates
 }
-
-DISTFILES += \
-    source/android/src/com/hungkv/autolikeapp/comunication/NetworkChangeReceiver.java \
-    source/android/src/com/hungkv/autolikeapp/comunication/NetworkUtil.java
 
 
 

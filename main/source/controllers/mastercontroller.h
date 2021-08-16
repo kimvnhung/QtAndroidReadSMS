@@ -4,14 +4,14 @@
 #include <QObject>
 #include <QGuiApplication>
 
-#include "comunication/qtandroidservice.h"
-#include "comunication/jnimessenger.h"
+#include "communication/qtandroidservice.h"
+#include "communication/jnimessenger.h"
 #include "revenuecontroller.h"
 #include "settingcontroller.h"
 #include "reportcontroller.h"
 #include "historycontroller.h"
 
-#include "comunication/constants.h"
+#include "communication/constants.h"
 
 
 #include "model/tabaction.h"

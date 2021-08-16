@@ -1,7 +1,11 @@
-TEMPLATE = lib
-TARGET = service
-CONFIG += dll
+QT -= gui
+
 QT += core androidextras
+
+TEMPLATE = lib
+DEFINES += UPDATER_LIBRARY
+
+CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

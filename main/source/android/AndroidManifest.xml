@@ -82,12 +82,12 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".comunication.NetworkChangeReceiver" android:enabled="true">
+        <receiver android:name=".communication.NetworkChangeReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
-        <service android:name=".comunication.QtAndroidService">
+        <service android:name=".communication.QtAndroidService">
             <!-- Background running -->
             <meta-data android:name="android.app.background_running" android:value="true"/>
             <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>

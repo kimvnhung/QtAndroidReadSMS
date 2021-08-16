@@ -12,8 +12,8 @@
 
 #include "model/transaction.h"
 
-#include "comunication/jnimessenger.h"
-#include "comunication/qtandroidservice.h"
+#include "communication/jnimessenger.h"
+#include "communication/qtandroidservice.h"
 
 class DatabaseHandler : public QObject
 {

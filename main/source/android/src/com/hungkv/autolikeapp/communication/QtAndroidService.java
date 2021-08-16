@@ -1,4 +1,4 @@
-package com.hungkv.autolikeapp.comunication;
+package com.hungkv.autolikeapp.communication;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

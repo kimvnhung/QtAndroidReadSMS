@@ -1,5 +1,5 @@
 
-#include "comunication/jnimessenger.h"
+#include "communication/jnimessenger.h"
 
 #include <QAndroidService>
 
