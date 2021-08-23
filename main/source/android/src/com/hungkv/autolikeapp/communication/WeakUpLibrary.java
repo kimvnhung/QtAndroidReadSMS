@@ -1,4 +1,4 @@
-package com.hungkv.autolike.communication;
+package com.hungkv.autolikeapp.communication;
 
 public class WeakUpLibrary {
     static{
@@ -6,7 +6,6 @@ public class WeakUpLibrary {
     }
 
     private static native void callLibrary();
-
 
     public WeakUpLibrary() {}
 

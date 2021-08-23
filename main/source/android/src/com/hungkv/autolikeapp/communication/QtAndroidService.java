@@ -37,10 +37,10 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Creating Service");
-
+        Log.i(TAG, "isMainActivity "+(isMainActivityAvailable?"true":"false"));
         //binding sms listener
         SmsReceiver.bindingListener(this);
-        //WeakUpLibrary.checkConnection("QtAndroidService");
+        WeakUpLibrary.checkConnection("helli");
 
         //initialize database
         if(handler == null){
@@ -227,9 +227,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 
     private void updateInfo(){
         //update view
-        if(isMainActivityAvailable){
-            sendToQt(Constants.INFO.UPDATE_DATA_INFO);
-        }
+        sendToQt(Constants.INFO.UPDATE_DATA_INFO);
     }
 
     @Override
