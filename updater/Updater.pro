@@ -12,7 +12,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+    com_hungkv_autolike_communication_WeakUpLibrary.cpp
 
-HEADERS +=
+HEADERS += \
+    com_hungkv_autolike_communication_WeakUpLibrary.h
 

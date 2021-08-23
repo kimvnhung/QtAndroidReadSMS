@@ -65,7 +65,7 @@ android{
         source/android/src/com/hungkv/autolikeapp/database/Transaction.java \
         source/android/src/com/hungkv/autolikeapp/communication/NetworkChangeReceiver.java \
         source/android/src/com/hungkv/autolikeapp/communication/NetworkUtil.java \
-        source/android/src/com/hungkv/autolikeapp/communication/WeakUprLibrary.java \
+        source/android/src/com/hungkv/autolikeapp/communication/WeakUpLibrary.java \
         source/android/AndroidManifest.xml \
         source/android/src/com/hungkv/autolikeapp/listener/SmsReceiver.java
 

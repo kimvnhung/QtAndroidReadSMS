@@ -31,7 +31,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 
     private int NonSeenTransaction = 0;
     private int UpdateQueueCounter = 0;
-    private boolean isMainActivityAvailable = false;
+    private static boolean isMainActivityAvailable = false;
 
     @Override
     public void onCreate() {
@@ -40,6 +40,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 
         //binding sms listener
         SmsReceiver.bindingListener(this);
+        //WeakUpLibrary.checkConnection("QtAndroidService");
 
         //initialize database
         if(handler == null){
