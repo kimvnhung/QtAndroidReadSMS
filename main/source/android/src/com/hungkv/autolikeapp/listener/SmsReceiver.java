@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import com.hungkv.autolikeapp.database.Transaction;
 import com.hungkv.autolikeapp.communication.JniMessenger;
+import com.hungkv.autolikeapp.communication.WeakUpLibrary;
 
 public class SmsReceiver extends BroadcastReceiver {
 
@@ -71,7 +72,6 @@ public class SmsReceiver extends BroadcastReceiver {
                 }
 
                 Log.i(TAG,"arrangedList.size : "+arrangedList.size());
-
                 for (int i=0 ; i<arrangedList.size(); i++){
                     SmsTemplate temp = arrangedList.get(i);
                     if(true /* temp.getMessages().size()%3 == 0 */){

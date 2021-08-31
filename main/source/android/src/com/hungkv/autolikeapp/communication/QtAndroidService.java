@@ -42,6 +42,7 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
         SmsReceiver.bindingListener(this);
         WeakUpLibrary.checkConnection("helli");
 
+
         //initialize database
         if(handler == null){
             handler = new DatabaseHandler(this,DatabaseHandler.DATABASE_NAME,null,1);

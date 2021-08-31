@@ -21,17 +21,17 @@ WebAPIRequest::WebAPIRequest(QObject *parent) :
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &WebAPIRequest::onNetworkResponsed);
     //load cert
-    if(loadPfxCertificate(AUTOLIKE_CERTIFICATE_PATH,AUTOLIKE_PASS)){
-        qDebug()<<"import autolike";
-    }
+//    if(loadPfxCertificate(AUTOLIKE_CERTIFICATE_PATH,AUTOLIKE_PASS)){
+//        qDebug()<<"import autolike";
+//    }
 
-    if(loadPfxCertificate(AUTOFARMER_CERTIFICATE_PATH,AUTOFARMER_PASS)){
-        qDebug()<<"Imported auto farm";
-    }
+//    if(loadPfxCertificate(AUTOFARMER_CERTIFICATE_PATH,AUTOFARMER_PASS)){
+//        qDebug()<<"Imported auto farm";
+//    }
 
-    if(loadPfxCertificate(MT_CERTIFICATE_PATH,MT_PASS)){
-        qDebug()<<"Imported MT";
-    }
+//    if(loadPfxCertificate(MT_CERTIFICATE_PATH,MT_PASS)){
+//        qDebug()<<"Imported MT";
+//    }
 }
 
 WebAPIRequest::~WebAPIRequest()

@@ -2,7 +2,7 @@
 
 #include <QAndroidJniEnvironment>
 #include <QAndroidIntent>
-#include <QtDebug>
+#include <QDebug>
 
 QtAndroidService *QtAndroidService::m_instance = nullptr;
 
