@@ -18,6 +18,7 @@ CONFIG += c++11
 
 SOURCES += \
     com_hungkv_autolikeapp_communication_WeakUpLibrary.cpp \
+    service_main.cpp \
     webapirequest.cpp \
     qtandroidservice.cpp
 

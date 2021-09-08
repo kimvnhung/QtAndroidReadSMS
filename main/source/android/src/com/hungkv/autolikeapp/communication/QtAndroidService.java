@@ -4,7 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
+import org.qtproject.qt5.android.bindings.QtService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -21,7 +21,7 @@ import com.hungkv.autolikeapp.database.DatabaseHandler;
 import com.hungkv.autolikeapp.database.Transaction;
 import com.hungkv.autolikeapp.listener.SmsReceiver;
 
-public class QtAndroidService extends Service implements SmsReceiver.SmsListener
+public class QtAndroidService extends QtService implements SmsReceiver.SmsListener
 {
 
     private static native void sendToQt(String message);
@@ -35,12 +35,11 @@ public class QtAndroidService extends Service implements SmsReceiver.SmsListener
 
     @Override
     public void onCreate() {
-        super.onCreate();
         Log.i(TAG, "Creating Service");
         Log.i(TAG, "isMainActivity "+(isMainActivityAvailable?"true":"false"));
         //binding sms listener
         SmsReceiver.bindingListener(this);
-        WeakUpLibrary.checkConnection("helli");
+        //WeakUpLibrary.checkConnection("helli");
 
 
         //initialize database

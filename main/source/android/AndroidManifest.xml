@@ -87,9 +87,11 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
-        <service android:name=".communication.QtAndroidService">
+        <service
+            android:name=".communication.QtAndroidService"
+            android:process=":approval_service">
             <!-- Background running -->
-            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+            <meta-data android:name="android.app.lib_name" android:value="updater"/>
 
             <meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/>
             <meta-data android:name="android.app.repository" android:value="default"/>
