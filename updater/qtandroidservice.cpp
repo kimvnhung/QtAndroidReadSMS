@@ -9,9 +9,10 @@ QtAndroidService *QtAndroidService::m_instance = nullptr;
 static void receivedFromAndroidService(JNIEnv *env, jobject /*thiz*/, jstring value)
 {
     emit QtAndroidService::instance()->messageFromService(env->GetStringUTFChars(value, nullptr));
+    qDebug()<<value;
 }
 
-QtAndroidService::QtAndroidService(QObject *parent) : QObject(parent)
+QtAndroidService::QtAndroidService(QObject *parent) : QtAndroidServiceSource(parent)
 {
     m_instance = this;
 
@@ -102,4 +103,10 @@ void QtAndroidService::log(const QString &message)
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
+}
+
+//slots
+void QtAndroidService::sendToService(const QString &name)
+{
+    emit messageFromService(name);
 }

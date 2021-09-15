@@ -35,6 +35,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
 
     @Override
     public void onCreate() {
+        super.onCreate();
         Log.i(TAG, "Creating Service");
         Log.i(TAG, "isMainActivity "+(isMainActivityAvailable?"true":"false"));
         //binding sms listener
@@ -47,6 +48,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
             handler = new DatabaseHandler(this,DatabaseHandler.DATABASE_NAME,null,1);
             Log.i(TAG, "Initialize database handler");
         }
+        sendToQt("From seperate");
     }
 
     @Override
@@ -72,7 +74,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                 String path = this.getDatabasePath(handler.getDatabaseName()).getAbsolutePath();
                 if(path.length() > 0
                         && isMainActivityAvailable){
-                    sendToQt(Constants.INFO.DATABASE_DECLARE_INFO+path);
+                    //sendToQt(Constants.INFO.DATABASE_DECLARE_INFO+path);
                     Log.i(TAG,"Sent path : "+path);
                 }
 
@@ -118,7 +120,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                 break;
             case Constants.ACTION.NOTIFY_CONNECTION_ACTION:
                 if (isMainActivityAvailable){
-                    sendToQt(Constants.INFO.INTERNET_CONNECTED);
+                    //sendToQt(Constants.INFO.INTERNET_CONNECTED);
                     Log.i(TAG, "Internet Connected");
                 }
                 break;
@@ -227,7 +229,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
 
     private void updateInfo(){
         //update view
-        sendToQt(Constants.INFO.UPDATE_DATA_INFO);
+        //sendToQt(Constants.INFO.UPDATE_DATA_INFO);
     }
 
     @Override

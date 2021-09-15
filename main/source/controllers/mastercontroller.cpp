@@ -5,25 +5,25 @@ MasterController::MasterController(QGuiApplication *parent) :
 {
 //    JniMessenger *initialer = new JniMessenger(parent);
 //    Q_UNUSED(initialer)
-    connect(parent,&QGuiApplication::applicationStateChanged,[=](Qt::ApplicationState state){
-        switch (state) {
-        case Qt::ApplicationHidden:
-            QtAndroidService::instance()->log("Application Hidden");
-            break;
-        case Qt::ApplicationActive:
-            QtAndroidService::instance()->log("Application Active");
+//    connect(parent,&QGuiApplication::applicationStateChanged,[=](Qt::ApplicationState state){
+//        switch (state) {
+//        case Qt::ApplicationHidden:
+//            QtAndroidService::instance()->log("Application Hidden");
+//            break;
+//        case Qt::ApplicationActive:
+//            QtAndroidService::instance()->log("Application Active");
 
-            this->m_revenueController->updateList();
-            break;
-        case Qt::ApplicationInactive:
-            QtAndroidService::instance()->log("Application Inactive");
+//            this->m_revenueController->updateList();
+//            break;
+//        case Qt::ApplicationInactive:
+//            QtAndroidService::instance()->log("Application Inactive");
 
-            break;
-        case Qt::ApplicationSuspended:
-            QtAndroidService::instance()->log("Application Suspended");
+//            break;
+//        case Qt::ApplicationSuspended:
+//            QtAndroidService::instance()->log("Application Suspended");
 
-        }
-    });
+//        }
+//    });
 
 //    QtAndroid::runOnAndroidThread([=]()
 //    {
@@ -44,9 +44,9 @@ MasterController::MasterController(QGuiApplication *parent) :
     this->m_historyController = new HistoryController(this);
 
 
-    QtAndroidService *initialier = new QtAndroidService(parent);
-    connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
-    initialier->startBackgroundService();
+//    QtAndroidService *initialier = new QtAndroidService(parent);
+//    connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
+//    initialier->startBackgroundService();
 
 
     mAccount = new Account(this, "Username","pass","HungKV");

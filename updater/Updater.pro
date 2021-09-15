@@ -1,6 +1,7 @@
-QT -= gui
-
-QT += core androidextras xml network
+TEMPLATE = lib
+TARGET = updater
+CONFIG += dll
+QT += core androidextras xml network remoteobjects
 
 TEMPLATE = lib
 DEFINES += UPDATER_LIBRARY
@@ -16,16 +17,18 @@ CONFIG += c++11
 #INCLUDEPATH += $$PWD/include
 #DEPENDPATH += $PWD/include
 
+REPC_SOURCE += ../common/qtandroidservice.rep
+
+
 SOURCES += \
-    com_hungkv_autolikeapp_communication_WeakUpLibrary.cpp \
     service_main.cpp \
     webapirequest.cpp \
     qtandroidservice.cpp
 
 HEADERS += \
-    com_hungkv_autolikeapp_communication_WeakUpLibrary.h \
     webapirequest.h \
     constants.h \
-    qtandroidservice.h
+    qtandroidservice.h \
+    log.h
 
 include($$PWD/android_openssl/openssl.pri)

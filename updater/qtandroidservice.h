@@ -6,8 +6,9 @@
 #include <QAndroidIntent>
 
 #include "constants.h"
+#include "rep_qtandroidservice_source.h"
 
-class QtAndroidService : public QObject
+class QtAndroidService : public QtAndroidServiceSource
 {
     Q_OBJECT
 
@@ -19,6 +20,8 @@ public:
     Q_INVOKABLE void startForegroundService();
     Q_INVOKABLE void log(const QString &message);
     Q_INVOKABLE void updateTransaction(QString jsonTrans);
+public slots:
+    void sendToService(const QString &name) override;
 
 signals:
     void messageFromService(const QString &message);

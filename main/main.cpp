@@ -5,6 +5,8 @@
 
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QRemoteObjectNode>
+#include "rep_qtandroidservice_replica.h"
 
 #include "controllers/mastercontroller.h"
 #include "controllers/revenuecontroller.h"
@@ -58,6 +60,14 @@ int main(int argc, char *argv[])
 //    QtAndroidService *qtAndroidService = new QtAndroidService(&app);
 //    Q_UNUSED(qtAndroidService)
 
+
+    QRemoteObjectNode repNode;
+    repNode.connectToNode(QUrl(QStringLiteral("local:replica")));
+    QSharedPointer<QtAndroidServiceReplica> rep(repNode.acquire<QtAndroidServiceReplica>());
+//    engine.rootContext()->setContextProperty("qtAndroidService", rep.data());
+    bool res = rep->waitForSource();
+    Q_ASSERT(res);
+    rep->sendToService("Qt");
 
 
     MasterController *masterController = new MasterController(&app);

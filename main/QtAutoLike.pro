@@ -1,4 +1,4 @@
-QT += qml quick androidextras sql svg xml network
+QT += qml quick androidextras sql svg xml network remoteobjects
 
 CONFIG += c++11
 
@@ -8,6 +8,9 @@ CONFIG += c++11
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $$PWD
+
+REPC_REPLICA += ../common/qtandroidservice.rep
+
 
 INCLUDEPATH += source/
 
@@ -65,7 +68,6 @@ android{
         source/android/src/com/hungkv/autolikeapp/database/Transaction.java \
         source/android/src/com/hungkv/autolikeapp/communication/NetworkChangeReceiver.java \
         source/android/src/com/hungkv/autolikeapp/communication/NetworkUtil.java \
-        source/android/src/com/hungkv/autolikeapp/communication/WeakUpLibrary.java \
         source/android/AndroidManifest.xml \
         source/android/src/com/hungkv/autolikeapp/listener/SmsReceiver.java
 

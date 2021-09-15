@@ -43,6 +43,7 @@ void QtAndroidService::startBackgroundService()
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
+
 }
 
 void QtAndroidService::startForegroundService()
