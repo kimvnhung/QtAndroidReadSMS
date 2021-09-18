@@ -85,6 +85,9 @@ android{
     INSTALLS += certificates
 }
 
+DISTFILES += \
+    source/android/src/com/hungkv/autolikeapp/MainActivity.java
+
 
 
 

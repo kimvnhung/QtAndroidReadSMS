@@ -33,6 +33,7 @@ public slots:
         LOGD("onRequestServiceStatus");
         emit serviceStatusChanged(true);
     }
+
 private:
     static QtAndroidService *m_instance;
 };
