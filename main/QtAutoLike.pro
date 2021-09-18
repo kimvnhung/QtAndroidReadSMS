@@ -48,6 +48,7 @@ HEADERS += \
         source/model/tabaction.h \
         source/model/transaction.h
 
+
 RESOURCES += views.qrc \
     components.qrc \
     values.qrc
@@ -86,7 +87,8 @@ android{
 }
 
 DISTFILES += \
-    source/android/src/com/hungkv/autolikeapp/MainActivity.java
+    source/android/src/com/hungkv/autolikeapp/MainActivity.java \
+    source/android/src/com/hungkv/autolikeapp/communication/Utils.java
 
 
 

@@ -57,6 +57,7 @@ public:
     TabAction* settingTab();
 
     void startService();
+    void registerNative();
 
 signals:
     void revenueControllerChanged();
@@ -100,7 +101,6 @@ private:
 
     void onDatabaseAvailable(QString path);
     void updateAll();
-    void registerNative();
 
 
 };

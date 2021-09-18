@@ -230,7 +230,7 @@ void MasterController::requestDatabase()
 void MasterController::registerNative()
 {
     JNINativeMethod methods[] {{"emitToUI", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedFromAndroidService)}};
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/Utils");
 
     QAndroidJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
