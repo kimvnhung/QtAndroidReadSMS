@@ -9,7 +9,6 @@
 
 #include "model/transaction.h"
 #include "database/databasehandler.h"
-#include "communication/webapirequest.h"
 
 class HistoryController : public QObject
 {
@@ -26,7 +25,6 @@ public slots:
     void updateTransactionToServer();
 private:
     QList<Transaction*> m_transactionList;
-    WebAPIRequest *apiRequester{nullptr};
     Transaction* temp{nullptr};
     int updateCounter = 0;
 private slots:

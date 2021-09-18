@@ -1,7 +1,6 @@
 #include "transaction.h"
 
 #include <QDebug>
-#include "communication/qtandroidservice.h"
 
 QString Transaction::format = "dd-MM-yyyy  hh:mm:ss";
 
@@ -89,6 +88,6 @@ QString Transaction::getDisplayValue()
 //private
 void Transaction::log(QString msg)
 {
-    QtAndroidService::instance()->log(msg);
+//    QtAndroidService::instance()->log(msg);
 }
 

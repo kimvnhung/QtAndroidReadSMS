@@ -3,9 +3,6 @@ TARGET = updater
 CONFIG += dll
 QT += core androidextras xml network remoteobjects
 
-TEMPLATE = lib
-DEFINES += UPDATER_LIBRARY
-
 CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -18,7 +15,7 @@ CONFIG += c++11
 #DEPENDPATH += $PWD/include
 
 REPC_SOURCE += ../common/qtandroidservice.rep
-
+INCLUDEPATH += ../common
 
 SOURCES += \
     service_main.cpp \
@@ -28,7 +25,6 @@ SOURCES += \
 HEADERS += \
     webapirequest.h \
     constants.h \
-    qtandroidservice.h \
-    log.h
+    qtandroidservice.h
 
 include($$PWD/android_openssl/openssl.pri)

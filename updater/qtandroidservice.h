@@ -7,6 +7,7 @@
 
 #include "constants.h"
 #include "rep_qtandroidservice_source.h"
+#include "log.h"
 
 class QtAndroidService : public QtAndroidServiceSource
 {
@@ -20,12 +21,18 @@ public:
     Q_INVOKABLE void startForegroundService();
     Q_INVOKABLE void log(const QString &message);
     Q_INVOKABLE void updateTransaction(QString jsonTrans);
+    void registerNative();
+
 public slots:
-    void sendToService(const QString &name) override;
+    void sendToService(const QString &name) override{
+        LOGD("Message : %s",name.toUtf8().data());
+        emit messageFromService(name);
+    }
 
-signals:
-    void messageFromService(const QString &message);
-
+    void requestServiceStatus() override{
+        LOGD("onRequestServiceStatus");
+        emit serviceStatusChanged(true);
+    }
 private:
     static QtAndroidService *m_instance;
 };

@@ -1,18 +1,23 @@
-
-#include "communication/jnimessenger.h"
-
 #include <QAndroidService>
 
+#include <QAndroidIntent>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QRemoteObjectNode>
-#include "rep_qtandroidservice_replica.h"
+
+
+//#include <QRemoteObjectNode>
+//#include <QTimer>
+//#include <QUrl>
+//#include "rep_qtandroidservice_replica.h"
+
+#include "communication/servicecommunicator.h"
 
 #include "controllers/mastercontroller.h"
 #include "controllers/revenuecontroller.h"
 #include "controllers/settingcontroller.h"
 
 #if defined (Q_OS_ANDROID)
+#include <QAndroidJniEnvironment>
 #include <QtAndroid>
 #include <QtSvg>
 const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
@@ -21,6 +26,15 @@ const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
                                    "android.permission.GET_TASKS"});
 #endif
 
+void startService()
+{
+    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
+                                        "org/qtproject/example/qtandroidservice/QtAndroidService");
+    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+        "startService",
+        "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+        serviceIntent.handle().object());
+}
 
 int main(int argc, char *argv[])
 {
@@ -44,8 +58,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<MasterController>("SRC", 1, 0, "MasterController");
     qmlRegisterType<SettingController>("SRC", 1, 0,"SettingController");
     qmlRegisterType<RevenueController>("SRC", 1, 0,"RevenueController");
-    //qmlRegisterType<JniMessenger>("SRC", 1, 0,"JniMessenger");
-    qmlRegisterType<QtAndroidService>("SRC", 1, 0,"QtAndroidService");
 
     qmlRegisterType<Transaction>("SRC", 1, 0,"Transaction");
     qmlRegisterType<TabAction>("SRC", 1, 0,"TabAction");
@@ -55,22 +67,28 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
-    engine.addImportPath("qrc:/");
-    //init qtAndroidService
-//    QtAndroidService *qtAndroidService = new QtAndroidService(&app);
-//    Q_UNUSED(qtAndroidService)
+    MasterController *masterController = new MasterController(&app);
+    startService();
 
+    engine.addImportPath("qrc:/");
 
     QRemoteObjectNode repNode;
     repNode.connectToNode(QUrl(QStringLiteral("local:replica")));
     QSharedPointer<QtAndroidServiceReplica> rep(repNode.acquire<QtAndroidServiceReplica>());
-//    engine.rootContext()->setContextProperty("qtAndroidService", rep.data());
+    engine.rootContext()->setContextProperty("qtAndroidService", rep.data());
     bool res = rep->waitForSource();
     Q_ASSERT(res);
-    rep->sendToService("Qt");
+    rep->sendToService("Check for connecting remost");
 
+    QObject::connect(rep.data(), &QtAndroidServiceReplica::messageFromService, [](const QString &message){
+        qDebug() << "Service sent: " << message;
+        //waitingMessage = message;
+    });
 
-    MasterController *masterController = new MasterController(&app);
+    QObject::connect(masterController, &MasterController::sendMessage,[rep](const QString &msg){
+        rep->sendToService(msg);
+    });
+
     engine.rootContext()->setContextProperty(QLatin1String("masterController"), masterController);
 
     const QUrl url(QStringLiteral("qrc:/views/main.qml"));

@@ -135,11 +135,11 @@ void DatabaseHandler::update(Transaction *transaction)
     obj.insert(Constants::Transaction::TIME, transaction->getTime());
     obj.insert(Constants::Transaction::UPDATE_TIME, transaction->getUpdateTime());
     obj.insert(Constants::Transaction::STATUS, transaction->getStatus());
-    QtAndroidService::instance()->updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+//    QtAndroidService::instance()->updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
 }
 
 //private
 void DatabaseHandler::log(QString content)
 {
-    QtAndroidService::instance()->log(content);
+//    QtAndroidService::instance()->log(content);
 }

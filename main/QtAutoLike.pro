@@ -13,12 +13,12 @@ REPC_REPLICA += ../common/qtandroidservice.rep
 
 
 INCLUDEPATH += source/
+INCLUDEPATH += ../common
+
 
 SOURCES += \
-        source/communication/jnimessenger.cpp \
-        source/communication/qtandroidservice.cpp \
+        source/communication/servicecommunicator.cpp \
         source/communication/utility.cpp \
-        source/communication/webapirequest.cpp \
         source/controllers/historycontroller.cpp \
         source/controllers/mastercontroller.cpp \
         source/controllers/reportcontroller.cpp \
@@ -33,10 +33,8 @@ SOURCES += \
 
 HEADERS += \
         source/communication/constants.h \
-        source/communication/jnimessenger.h \
-        source/communication/qtandroidservice.h \
+        source/communication/servicecommunicator.h \
         source/communication/utility.h \
-        source/communication/webapirequest.h \
         source/controllers/historycontroller.h \
         source/controllers/mastercontroller.h \
         source/controllers/reportcontroller.h \
@@ -60,7 +58,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 android{
     DISTFILES += \
         source/android/res/drawable/ic_launcher.png \
-        source/android/src/com/hungkv/autolikeapp/MainActivity.java \
         source/android/src/com/hungkv/autolikeapp/Constants.java \
         source/android/src/com/hungkv/autolikeapp/communication/JniMessenger.java \
         source/android/src/com/hungkv/autolikeapp/communication/QtAndroidService.java \

@@ -6,8 +6,8 @@
 HistoryController::HistoryController(QObject *parent) : QObject(parent)
 {
     this->m_transactionList = QList<Transaction*>();
-    this->apiRequester = new WebAPIRequest(this);
-    connect(apiRequester, &WebAPIRequest::networkResponsed, this, &HistoryController::onNetworkResonsed);
+//    this->apiRequester = new WebAPIRequest(this);
+//    connect(apiRequester, &WebAPIRequest::networkResponsed, this, &HistoryController::onNetworkResonsed);
 }
 
 HistoryController::~HistoryController()
@@ -55,8 +55,8 @@ void HistoryController::updateTransactionToServer()
             QJsonObject obj;
             obj.insert("code",cur->getCode());
             obj.insert("money",cur->getValue());
-            apiRequester->setBody(QJsonDocument(obj).toJson(QJsonDocument::Compact));
-            apiRequester->post();
+//            apiRequester->setBody(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+//            apiRequester->post();
             temp = cur;
             break;
         }

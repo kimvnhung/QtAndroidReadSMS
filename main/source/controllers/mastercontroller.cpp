@@ -1,38 +1,20 @@
 #include "mastercontroller.h"
 
+#include <QAndroidIntent>
+#include <QAndroidJniEnvironment>
+
+
+static void receivedFromAndroidService(JNIEnv *env, jobject /*thiz*/, jstring value)
+{
+    MasterController::instace()->onReceiveMessageFromService(env->GetStringUTFChars(value, nullptr));
+}
+
+MasterController* MasterController::mInstance = nullptr;
+
 MasterController::MasterController(QGuiApplication *parent) :
     QObject(parent)
 {
-//    JniMessenger *initialer = new JniMessenger(parent);
-//    Q_UNUSED(initialer)
-//    connect(parent,&QGuiApplication::applicationStateChanged,[=](Qt::ApplicationState state){
-//        switch (state) {
-//        case Qt::ApplicationHidden:
-//            QtAndroidService::instance()->log("Application Hidden");
-//            break;
-//        case Qt::ApplicationActive:
-//            QtAndroidService::instance()->log("Application Active");
-
-//            this->m_revenueController->updateList();
-//            break;
-//        case Qt::ApplicationInactive:
-//            QtAndroidService::instance()->log("Application Inactive");
-
-//            break;
-//        case Qt::ApplicationSuspended:
-//            QtAndroidService::instance()->log("Application Suspended");
-
-//        }
-//    });
-
-//    QtAndroid::runOnAndroidThread([=]()
-//    {
-//        QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
-//        window.callMethod<void>("addFlags", "(I)V", 0x80000000);
-//        window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-//        window.callMethod<void>("setStatusBarColor", "(I)V", 0xffffffff); // Desired statusbar color
-//    });
-
+    mInstance = this;
 
     this->m_revenueController = new RevenueController(this);
     this->m_settingController = new SettingController(this);
@@ -64,19 +46,17 @@ MasterController::MasterController(QGuiApplication *parent) :
     connect(mOffersTab, &TabAction::clicked, this, &MasterController::onTabSelected);
     connect(mSettingTab, &TabAction::clicked, this, &MasterController::onTabSelected);
 
+
+//    tryToConnect = new QTimer(this);
+//    tryToConnect->setInterval(1000);
+//    connect(tryToConnect, &QTimer::timeout,this,&MasterController::tryToConnectionReplic);
+//    tryToConnect->start();
+
+    registerNative();
 }
 
 
 //publics
-QtAndroidService* MasterController::qtAndroidService()
-{
-    return QtAndroidService::instance();
-}
-
-JniMessenger* MasterController::jniMessenger()
-{
-    return JniMessenger::instance();
-}
 
 RevenueController* MasterController::revenueController()
 {
@@ -132,6 +112,7 @@ TabAction* MasterController::settingTab()
 //slots
 void MasterController::onReceiveMessageFromService(const QString &message)
 {
+    LOGD("onReceiveMess : %s %s %s",__FUNCTION__,__LINE__,message.toUtf8().data());
     if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
         onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
     }
@@ -140,7 +121,7 @@ void MasterController::onReceiveMessageFromService(const QString &message)
         qDebug()<<"onUpdateInfo";
         if(!DatabaseHandler::instance()->isDatabaseOpenable()){
             //restart service to reopen database
-            QtAndroidService::instance()->startBackgroundService();
+            //QtAndroidService::instance()->startBackgroundService();
         }else {
             updateAll();
         }
@@ -155,7 +136,7 @@ void MasterController::onReceiveMessageFromService(const QString &message)
     }
 
     if(message.contains("on")){
-        log(message);
+//        log(message);
     }
 }
 
@@ -214,7 +195,7 @@ void MasterController::swippedTo(int tabIndex)
 
 void MasterController::log(QString message)
 {
-    QtAndroidService::instance()->log(message);
+    LOGD("Qt - %s",message.toUtf8().data());
 }
 
 //private
@@ -234,4 +215,34 @@ void MasterController::updateAll()
     this->m_reportController->updateList();
 }
 
+void MasterController::requestDatabase()
+{
+    QAndroidIntent serviceIntent(Constants::Action::START_BACKGROUND_SERVICE_ACTION);
 
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    serviceIntent.handle().callObjectMethod(
+                "setClass",
+                "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
+                QtAndroid::androidActivity().object(),
+                objectClass);
+
+    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+                "startService",
+                "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+                serviceIntent.handle().object());
+}
+
+void MasterController::registerNative()
+{
+    JNINativeMethod methods[] {{"emitToUI", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedFromAndroidService)}};
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    env->RegisterNatives(objectClass,
+                         methods,
+                         sizeof(methods) / sizeof(methods[0]));
+    env->DeleteLocalRef(objectClass);
+}

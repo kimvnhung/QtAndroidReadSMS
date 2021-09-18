@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 
 import com.hungkv.autolikeapp.database.Transaction;
 import com.hungkv.autolikeapp.communication.JniMessenger;
-import com.hungkv.autolikeapp.communication.WeakUpLibrary;
 
 public class SmsReceiver extends BroadcastReceiver {
 

@@ -4,8 +4,12 @@
 #include <QObject>
 #include <QGuiApplication>
 
-#include "communication/qtandroidservice.h"
-#include "communication/jnimessenger.h"
+#include <QRemoteObjectNode>
+#include <QTimer>
+#include <QUrl>
+#include "rep_qtandroidservice_replica.h"
+
+
 #include "revenuecontroller.h"
 #include "settingcontroller.h"
 #include "reportcontroller.h"
@@ -16,13 +20,12 @@
 
 #include "model/tabaction.h"
 #include "model/account.h"
+#include "log.h"
 
 
 class MasterController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QtAndroidService* ui_qtAndroidService READ qtAndroidService CONSTANT)
-    Q_PROPERTY(JniMessenger* ui_jniMessenger READ jniMessenger CONSTANT)
     Q_PROPERTY(RevenueController* ui_revenueController READ revenueController NOTIFY revenueControllerChanged)
     Q_PROPERTY(SettingController* ui_settingController READ settingController NOTIFY settingControllerChanged)
     Q_PROPERTY(ReportController* ui_reportController READ reportController NOTIFY reportControllerChanged)
@@ -37,9 +40,8 @@ class MasterController : public QObject
     Q_PROPERTY(Account* ui_account READ account NOTIFY accountChanged)
 public:
     explicit MasterController(QGuiApplication *parent = nullptr);
+    static MasterController* instace(){return mInstance;};
 
-    QtAndroidService* qtAndroidService();
-    JniMessenger* jniMessenger();
     RevenueController* revenueController();
     SettingController* settingController();
     ReportController* reportController();
@@ -70,12 +72,16 @@ signals:
 
     void accountChanged();
     void tabChanged(int index);
+
+    void sendMessage(const QString &message);
 public slots:
     void log(QString message);
     void onReceiveMessageFromService(const QString &message);
     void onTabSelected();
     void swippedTo(int tabIndex);
 private:
+    static MasterController* mInstance;
+
     RevenueController* m_revenueController = nullptr;
     SettingController* m_settingController = nullptr;
     ReportController* m_reportController = nullptr;
@@ -92,6 +98,8 @@ private:
 
     void onDatabaseAvailable(QString path);
     void updateAll();
+    void registerNative();
+    void requestDatabase();
 
 };
 
