@@ -10,6 +10,7 @@
 //#include <QUrl>
 //#include "rep_qtandroidservice_replica.h"
 
+#include "appmain.h"
 #include "communication/servicecommunicator.h"
 
 #include "controllers/mastercontroller.h"
@@ -25,16 +26,6 @@ const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
                                    "android.permission.INTERNET",
                                    "android.permission.GET_TASKS"});
 #endif
-
-void startService()
-{
-    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
-                                        "org/qtproject/example/qtandroidservice/QtAndroidService");
-    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
-        "startService",
-        "(Landroid/content/Intent;)Landroid/content/ComponentName;",
-        serviceIntent.handle().object());
-}
 
 int main(int argc, char *argv[])
 {
@@ -63,33 +54,12 @@ int main(int argc, char *argv[])
     qmlRegisterType<TabAction>("SRC", 1, 0,"TabAction");
     qmlRegisterType<PropertyAction>("SRC", 1, 0,"PropertyAction");
 
-
-
-
     QQmlApplicationEngine engine;
-    MasterController *masterController = new MasterController(&app);
-    startService();
 
     engine.addImportPath("qrc:/");
 
-    QRemoteObjectNode repNode;
-    repNode.connectToNode(QUrl(QStringLiteral("local:replica")));
-    QSharedPointer<QtAndroidServiceReplica> rep(repNode.acquire<QtAndroidServiceReplica>());
-    engine.rootContext()->setContextProperty("qtAndroidService", rep.data());
-    bool res = rep->waitForSource();
-    Q_ASSERT(res);
-    rep->sendToService("Check for connecting remost");
-
-    QObject::connect(rep.data(), &QtAndroidServiceReplica::messageFromService, [](const QString &message){
-        qDebug() << "Service sent: " << message;
-        //waitingMessage = message;
-    });
-
-    QObject::connect(masterController, &MasterController::sendMessage,[rep](const QString &msg){
-        rep->sendToService(msg);
-    });
-
-    engine.rootContext()->setContextProperty(QLatin1String("masterController"), masterController);
+    AppMain appMain(&engine,&app);
+    appMain.initAplication();
 
     const QUrl url(QStringLiteral("qrc:/views/main.qml"));
     QObject::connect(

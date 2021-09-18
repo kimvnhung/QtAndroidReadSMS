@@ -11,7 +11,7 @@ static void receivedFromAndroidService(JNIEnv *env, jobject /*thiz*/, jstring va
 
 MasterController* MasterController::mInstance = nullptr;
 
-MasterController::MasterController(QGuiApplication *parent) :
+MasterController::MasterController(QObject *parent) :
     QObject(parent)
 {
     mInstance = this;
@@ -46,13 +46,6 @@ MasterController::MasterController(QGuiApplication *parent) :
     connect(mOffersTab, &TabAction::clicked, this, &MasterController::onTabSelected);
     connect(mSettingTab, &TabAction::clicked, this, &MasterController::onTabSelected);
 
-
-//    tryToConnect = new QTimer(this);
-//    tryToConnect->setInterval(1000);
-//    connect(tryToConnect, &QTimer::timeout,this,&MasterController::tryToConnectionReplic);
-//    tryToConnect->start();
-
-    registerNative();
 }
 
 
@@ -112,7 +105,7 @@ TabAction* MasterController::settingTab()
 //slots
 void MasterController::onReceiveMessageFromService(const QString &message)
 {
-    LOGD("onReceiveMess : %s %s %s",__FUNCTION__,__LINE__,message.toUtf8().data());
+    LOGD("onReceiveMess : %s",message.toUtf8().data());
     if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
         onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
     }
@@ -245,4 +238,14 @@ void MasterController::registerNative()
                          methods,
                          sizeof(methods) / sizeof(methods[0]));
     env->DeleteLocalRef(objectClass);
+}
+
+void MasterController::startService()
+{
+    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
+                                        "com/hungkv/autolikeapp/communication/QtAndroidService");
+    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+        "startService",
+        "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+        serviceIntent.handle().object());
 }

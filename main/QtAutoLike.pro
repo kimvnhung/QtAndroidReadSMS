@@ -17,6 +17,7 @@ INCLUDEPATH += ../common
 
 
 SOURCES += \
+        source/appmain.cpp \
         source/communication/servicecommunicator.cpp \
         source/communication/utility.cpp \
         source/controllers/historycontroller.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
         source/model/transaction.cpp
 
 HEADERS += \
+        source/appmain.h \
         source/communication/constants.h \
         source/communication/servicecommunicator.h \
         source/communication/utility.h \

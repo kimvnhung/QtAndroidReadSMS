@@ -39,7 +39,7 @@ class MasterController : public QObject
 
     Q_PROPERTY(Account* ui_account READ account NOTIFY accountChanged)
 public:
-    explicit MasterController(QGuiApplication *parent = nullptr);
+    explicit MasterController(QObject *parent = nullptr);
     static MasterController* instace(){return mInstance;};
 
     RevenueController* revenueController();
@@ -56,6 +56,7 @@ public:
     TabAction* offersTab();
     TabAction* settingTab();
 
+    void startService();
 
 signals:
     void revenueControllerChanged();
@@ -79,6 +80,7 @@ public slots:
     void onReceiveMessageFromService(const QString &message);
     void onTabSelected();
     void swippedTo(int tabIndex);
+    void requestDatabase();
 private:
     static MasterController* mInstance;
 
@@ -99,7 +101,7 @@ private:
     void onDatabaseAvailable(QString path);
     void updateAll();
     void registerNative();
-    void requestDatabase();
+
 
 };
 

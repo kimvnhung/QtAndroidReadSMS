@@ -6,9 +6,14 @@
 
 QtAndroidService *QtAndroidService::m_instance = nullptr;
 
-static void receivedFromAndroidService(JNIEnv *env, jobject /*thiz*/, jstring value)
+static void receivedAndTransferToUI(JNIEnv *env, jobject /*thiz*/, jstring value)
 {
     emit QtAndroidService::instance()->messageFromService(env->GetStringUTFChars(value, nullptr));
+}
+
+static void receivedAndPerform(JNIEnv *env, jobject /*thiz*/, jstring value)
+{
+    LOGD("Perform");
 }
 
 QtAndroidService::QtAndroidService(QObject *parent) : QtAndroidServiceSource(parent)
@@ -20,7 +25,10 @@ QtAndroidService::QtAndroidService(QObject *parent) : QtAndroidServiceSource(par
 
 void QtAndroidService::registerNative()
 {
-    JNINativeMethod methods[] {{"emitToBackground", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedFromAndroidService)}};
+    JNINativeMethod methods[] {
+        {"emitToUI", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedAndTransferToUI)},
+        {"emitToBackground", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedAndPerform)}
+    };
     QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
 
     QAndroidJniEnvironment env;
