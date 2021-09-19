@@ -5,11 +5,11 @@
 #include <QDebug>
 
 QtAndroidService *QtAndroidService::m_instance = nullptr;
+QList<QString> QtAndroidService::inbox = QList<QString>();
 
 static void receivedAndTransferToUI(JNIEnv *env, jobject /*thiz*/, jstring value)
 {
-    LOGD("");
-    emit QtAndroidService::instance()->messageFromService(env->GetStringUTFChars(value,nullptr));
+    QtAndroidService::inbox.append(env->GetStringUTFChars(value,nullptr));
 
 }
 
@@ -24,6 +24,25 @@ QtAndroidService::QtAndroidService(QObject *parent) :
     m_instance = this;
 
     registerNative();
+
+    if(inbox.size() > 0){
+        inbox.clear();
+    }
+
+    timer = new QTimer(this);
+    timer->setInterval(200);
+    connect(timer, &QTimer::timeout, this, &QtAndroidService::transferMessage);
+    timer->start();
+}
+
+QtAndroidService::~QtAndroidService()
+{
+    if(timer != nullptr){
+        if(timer->isActive()){
+            timer->stop();
+        }
+        delete timer;
+    }
 }
 
 void QtAndroidService::registerNative()
@@ -120,3 +139,10 @@ void QtAndroidService::log(const QString &message)
                 serviceIntent.handle().object());
 }
 
+void QtAndroidService::transferMessage()
+{
+    if(!inbox.isEmpty()){
+        emit messageFromService(inbox.first());
+        inbox.removeFirst();
+    }
+}

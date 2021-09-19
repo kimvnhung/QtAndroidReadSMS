@@ -23,6 +23,8 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private static SmsListener listener;
 
+    private static native void smsComming(String msg);
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceived : ");
@@ -150,7 +152,6 @@ public class SmsReceiver extends BroadcastReceiver {
                                 }
                                 Log.d(TAG, " Code : "+code);
                                 if (!code.isEmpty()){
-
                                     Transaction transaction = new Transaction(temp.getPhone(), code, value, time);
                                     if (listener != null) {
                                         listener.onSmsComing(transaction);

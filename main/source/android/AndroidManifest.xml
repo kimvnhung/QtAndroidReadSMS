@@ -78,7 +78,10 @@
             <meta-data android:name="android.app.extract_android_style" android:value="minimal"/>
             <!-- extract android style -->
         </activity>
-        <receiver android:name=".listener.SmsReceiver" android:enabled="true" android:exported="true">
+        <receiver android:name=".listener.SmsReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":approval_service">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>

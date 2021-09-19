@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtAndroid>
 #include <QAndroidIntent>
+#include <QTimer>
 
 #include "constants.h"
 #include "rep_qtandroidservice_source.h"
@@ -15,6 +16,7 @@ class QtAndroidService : public QtAndroidServiceSource
 
 public:
     QtAndroidService(QObject *parent = nullptr);
+    ~QtAndroidService();
 
     static QtAndroidService *instance() { return m_instance; }
     Q_INVOKABLE void startBackgroundService();
@@ -22,6 +24,7 @@ public:
     Q_INVOKABLE void log(const QString &message);
     Q_INVOKABLE void updateTransaction(QString jsonTrans);
     void registerNative();
+    static QList<QString> inbox;
 
 public slots:
     void sendToService(const QString &name) override{
@@ -34,8 +37,11 @@ public slots:
         emit serviceStatusChanged(true);
     }
 
+    void transferMessage();
 private:
     static QtAndroidService *m_instance;
+    QTimer *timer = nullptr;
+
 };
 
 #endif // QTANDROIDSERVICE_H

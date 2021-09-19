@@ -46,6 +46,7 @@ MasterController::MasterController(QObject *parent) :
     connect(mOffersTab, &TabAction::clicked, this, &MasterController::onTabSelected);
     connect(mSettingTab, &TabAction::clicked, this, &MasterController::onTabSelected);
 
+    registerNative();
 }
 
 
@@ -107,7 +108,9 @@ void MasterController::onReceiveMessageFromService(const QString &message)
 {
     LOGD("onReceiveMess : %s",message.toUtf8().data());
     if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
-        onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
+        if(DatabaseHandler::instance() == nullptr){
+            onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
+        }
     }
 
     if(message == Constants::Info::UPDATE_DATA_INFO){
@@ -229,8 +232,8 @@ void MasterController::requestDatabase()
 
 void MasterController::registerNative()
 {
-    JNINativeMethod methods[] {{"emitToUI", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedFromAndroidService)}};
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/Utils");
+    JNINativeMethod methods[] {{"smsComming", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedFromAndroidService)}};
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/listener/SmsReceiver");
 
     QAndroidJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
