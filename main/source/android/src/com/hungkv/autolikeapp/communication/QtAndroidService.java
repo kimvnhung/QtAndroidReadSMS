@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 
 import com.hungkv.autolikeapp.Constants;
+import com.hungkv.autolikeapp.MainActivity;
 import com.hungkv.autolikeapp.R;
 import com.hungkv.autolikeapp.database.DatabaseHandler;
 import com.hungkv.autolikeapp.database.Transaction;
@@ -25,21 +26,21 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
 
     private static native void emitToBackground(String message);
     private static native void emitToUI(String message);
-
     private static final String TAG = "QtAndroidService";
 
     private DatabaseHandler handler;
 
     private int NonSeenTransaction = 0;
     private int UpdateQueueCounter = 0;
+    private boolean isMainActivityAvailable = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Creating Service");
+
         //binding sms listener
         SmsReceiver.bindingListener(this);
-
 
         //initialize database
         if(handler == null){
@@ -69,7 +70,10 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                     Log.i(TAG, "Start Background Service");
                     String path = this.getDatabasePath(handler.getDatabaseName()).getAbsolutePath();
                     if(path.length() > 0){
-                        emitToUI(Constants.INFO.DATABASE_DECLARE_INFO+path);
+                        if(isMainActivityAvailable){
+                            emitToUI(Constants.INFO.DATABASE_DECLARE_INFO+path);
+                        }
+                        emitToBackground(Constants.INFO.DATABASE_DECLARE_INFO+path);
                         Log.i(TAG,"Sent path : "+path);
                     }
 
@@ -90,8 +94,10 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                     Log.i(TAG, Constants.QT_LOG + message);
                     break;
                 case Constants.ACTION.ACTIVITY_STOPPED_ACTION:
+                    isMainActivityAvailable = false;
                     break;
                 case Constants.ACTION.ACTIVITY_STARTED_ACTION:
+                    isMainActivityAvailable = true;
                     break;
                 case Constants.ACTION.UPDATE_TRANSACTION_ACTION:
                     String jsonTrans = new String(intent.getByteArrayExtra("Transaction"));
@@ -105,6 +111,23 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                                 trans.getString(Constants.TRANSACTION.UPDATE_TIME),
                                 trans.getInt(Constants.TRANSACTION.STATUS));
                         handler.updateTransaction(transaction);
+                        updateInfo();
+                    } catch (Exception e){
+                        Log.e(TAG, Constants.JAVA_LOG+" : "+e.getMessage() );
+                    }
+                    break;
+                case Constants.ACTION.UPDATE_TRANSACTION_STATUS_ACTION:
+                    jsonTrans = new String(intent.getByteArrayExtra("Transaction"));
+                    try {
+                        JSONObject trans = new JSONObject(jsonTrans);
+                        Transaction transaction = new Transaction(trans.getInt(Constants.TRANSACTION.ID),
+                                trans.getString(Constants.TRANSACTION.PHONE),
+                                trans.getString(Constants.TRANSACTION.CODE),
+                                trans.getInt(Constants.TRANSACTION.VALUE),
+                                trans.getString(Constants.TRANSACTION.TIME),
+                                trans.getString(Constants.TRANSACTION.UPDATE_TIME),
+                                trans.getInt(Constants.TRANSACTION.STATUS));
+                        handler.updateTransactionStatus(transaction);
                         updateInfo();
                     } catch (Exception e){
                         Log.e(TAG, Constants.JAVA_LOG+" : "+e.getMessage() );
@@ -169,7 +192,10 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
 
     private void updateInfo(){
         //update view
-        //sendToQt(Constants.INFO.UPDATE_DATA_INFO);
+        if(isMainActivityAvailable){
+            emitToUI(Constants.INFO.UPDATE_DATA_INFO);
+        }
+        emitToBackground(Constants.ACTION.UPDATE_TO_SERVER);
     }
 
     @Override

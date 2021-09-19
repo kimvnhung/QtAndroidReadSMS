@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = updater
 CONFIG += dll
-QT += core androidextras xml network remoteobjects
+QT += core androidextras sql svg xml network remoteobjects
 
 CONFIG += c++11
 
@@ -9,22 +9,23 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-
-#LIBS += -L$$PWD/libs/armeabi-v7a -lchilkatAndroid
-#INCLUDEPATH += $$PWD/include
-#DEPENDPATH += $PWD/include
-
 REPC_SOURCE += ../common/qtandroidservice.rep
 INCLUDEPATH += ../common
 
 SOURCES += \
     service_main.cpp \
     webapirequest.cpp \
-    qtandroidservice.cpp
+    qtandroidservice.cpp \
+    databasehandler.cpp \
+    transaction.cpp \
+    utility.cpp
 
 HEADERS += \
     webapirequest.h \
     constants.h \
-    qtandroidservice.h
+    qtandroidservice.h \
+    databasehandler.h \
+    transaction.h \
+    utility.h
 
 include($$PWD/android_openssl/openssl.pri)

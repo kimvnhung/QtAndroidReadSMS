@@ -3,8 +3,10 @@
 
 #include <QObject>
 
+#include <QMutex>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include "log.h"
 
 class WebAPIRequest : public QObject
 {
@@ -15,6 +17,9 @@ public:
 
     void setBody(QString body);
     void post();
+    void addPostRequest(QString body);
+    void postAsync();
+    QString getAsynBody();
 signals:
     void networkResponsed(QString response);
 public slots:
@@ -22,6 +27,10 @@ public slots:
 private:
     QNetworkAccessManager *manager{nullptr};
     QString body;
+
+
+    static bool isWaitingResponse;
+
 
     static const QString AUTOFARMER_CERTIFICATE_PATH;
     static const QString AUTOLIKE_CERTIFICATE_PATH;
@@ -37,6 +46,21 @@ private:
     QString xmlToHtml(QString xml);
     bool loadPfxCertificate(QString certFilename, QString passphrase);
     QNetworkRequest getRequest();
+
+    QMutex mutex;
+
+    class RequestQueueItem {
+    public:
+        QString body = "";
+        QNetworkRequest request;
+        RequestQueueItem(QNetworkRequest request, QString body){
+            this->body = body;
+            this->request = request;
+        }
+    };
+
+    QList<RequestQueueItem*> requestQueue;
+    static RequestQueueItem* currentRequestItem;
 
 };
 

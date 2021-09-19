@@ -181,6 +181,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return false;
     }
 
+    public boolean updateTransactionStatus(Transaction transaction){
+        Log.i(TAG, "updateTransaction - "+transaction.getCode());
+        SQLiteDatabase db = getWritableDatabase();
+
+        try {
+            String updateQuery = "UPDATE "+ TABLE_NAME_AGENCY+ " SET " +
+                    COLUMN_STATUS +" = "+transaction.getStatus()+" WHERE "+
+                    COLUMN_PHONE +"=\""+transaction.getPhone()+"\", "+
+                    COLUMN_TRANSACTION_CODE+"=\""+transaction.getCode()+"\","+
+                    COLUMN_VALUE+"= "+transaction.getValue();
+
+            db.execSQL(updateQuery);
+            db.close();
+            return true;
+        }catch (Exception e){
+            e.getMessage();
+            Toast.makeText(mContext,"Error: updateWord(NouveauMot nouveauMot)",Toast.LENGTH_LONG).show();
+        }
+        db.close();
+        return false;
+    }
+
     //tra ve danh sach tat ca transaction
     public ArrayList<Transaction> getAllTransaction(){
         SQLiteDatabase db = getWritableDatabase();

@@ -151,5 +151,29 @@ Window {
         }
     }
 
-
+    Rectangle {
+         id: loading_bg
+         width: parent.width
+         height: parent.height
+         color: "white"
+         opacity: 0.7
+         visible: masterController.ui_isLoading
+    }
+    Text {
+        id: loading_content
+        text: "Loading..."
+        font {
+            pixelSize:  Dimen.textSizeLv3
+            family: Draw.robotoBold
+            bold: true
+        }
+        color: Color.blueDark0
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        width: 100*Dimen.ratioH
+        height: 40*Dimen.ratioV
+        x: (parent.width-loading_content.width)/2
+        y: (parent.height-loading_content.height)/2
+        visible: masterController.ui_isLoading
+    }
 }

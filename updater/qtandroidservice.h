@@ -9,6 +9,9 @@
 #include "constants.h"
 #include "rep_qtandroidservice_source.h"
 #include "log.h"
+#include "webapirequest.h"
+#include "databasehandler.h"
+#include "transaction.h"
 
 class QtAndroidService : public QtAndroidServiceSource
 {
@@ -24,8 +27,12 @@ public:
     Q_INVOKABLE void log(const QString &message);
     Q_INVOKABLE void updateTransaction(QString jsonTrans);
     void registerNative();
+
     static QList<QString> inbox;
 
+    void handleServiceMessage(const QString &message);
+    void passingObject(QAndroidJniObject javaObject);
+    QAndroidJniObject* jniObject(){return m_javaServiceInstance;}
 public slots:
     void sendToService(const QString &name) override{
         LOGD("Message : %s",name.toUtf8().data());
@@ -37,11 +44,23 @@ public slots:
         emit serviceStatusChanged(true);
     }
 
-    void transferMessage();
+    void transferDatabasePath(QString path) override;
+
+    void handleAsynTask();
+
 private:
     static QtAndroidService *m_instance;
     QTimer *timer = nullptr;
+    QTimer *delayForUpdate = nullptr;
+    WebAPIRequest *webAPI = nullptr;
+    DatabaseHandler* databaseHandler = nullptr;
+    QAndroidJniObject *m_javaServiceInstance = nullptr;
+    static QString DatabasePath;
 
+    void updateToServer(QList<Transaction*> listTrans);
+    void pushOnGoogleSheet(QList<Transaction*> listTrans);
+private slots:
+    void onNetworkResponse(QString response);
 };
 
 #endif // QTANDROIDSERVICE_H

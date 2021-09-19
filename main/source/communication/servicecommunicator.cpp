@@ -60,3 +60,12 @@ void ServiceCommunicator::startService()
         "(Landroid/content/Intent;)Landroid/content/ComponentName;",
         serviceIntent.handle().object());
 }
+
+void ServiceCommunicator::onDatabaseAvailable(QString path)
+{
+    LOGD("");
+    if(m_isServiceConnected){
+        LOGD("Send database path");
+        rep->databaseAvailable(path);
+    }
+}

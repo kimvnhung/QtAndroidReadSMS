@@ -9,6 +9,7 @@ AppMain::AppMain(QQmlApplicationEngine *engine, QObject *parent) :
     masterController = new MasterController(this);
     masterController->startService();
     serviceCommunicator = new ServiceCommunicator(this);
+    connect(masterController, &MasterController::databaseAvailable, serviceCommunicator, &ServiceCommunicator::onDatabaseAvailable);
 }
 
 AppMain::~AppMain()
@@ -28,4 +29,5 @@ void AppMain::connectSignalSlots()
 {
     connect(serviceCommunicator, &ServiceCommunicator::serviceConnected, masterController, &MasterController::requestDatabase);
     connect(serviceCommunicator, &ServiceCommunicator::messageFromService, masterController, &MasterController::onReceiveMessageFromService);
+
 }

@@ -22,14 +22,8 @@ signals:
     void transactionListChanged();
 public slots:
     void updateList();
-    void updateTransactionToServer();
 private:
     QList<Transaction*> m_transactionList;
-    Transaction* temp{nullptr};
-    int updateCounter = 0;
-private slots:
-
-    void onNetworkResonsed(QString data);
 };
 
 #endif // HISTORYCONTROLLER_H

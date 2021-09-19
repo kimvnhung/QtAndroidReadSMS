@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
 
 
@@ -86,7 +87,8 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".communication.NetworkChangeReceiver" android:enabled="true">
+        <receiver android:name=".communication.NetworkChangeReceiver"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
@@ -117,6 +119,4 @@
             <!-- Background running -->
         </service>
     </application>
-
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>

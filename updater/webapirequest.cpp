@@ -14,29 +14,37 @@ const QString WebAPIRequest::AUTOFARMER_PASS = "approval-api";
 const QString WebAPIRequest::AUTOLIKE_PASS = "approval";
 const QString WebAPIRequest::MT_PASS = "approval";
 
+bool WebAPIRequest::isWaitingResponse = false;
+WebAPIRequest::RequestQueueItem* WebAPIRequest::currentRequestItem = nullptr;
 
 WebAPIRequest::WebAPIRequest(QObject *parent) :
     QObject(parent)
 {
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &WebAPIRequest::onNetworkResponsed);
+
+    requestQueue = QList<RequestQueueItem*>();
+
     //load cert
-//    if(loadPfxCertificate(AUTOLIKE_CERTIFICATE_PATH,AUTOLIKE_PASS)){
-//        qDebug()<<"import autolike";
-//    }
+    if(loadPfxCertificate(AUTOLIKE_CERTIFICATE_PATH,AUTOLIKE_PASS)){
+        qDebug()<<"import autolike";
+    }
 
-//    if(loadPfxCertificate(AUTOFARMER_CERTIFICATE_PATH,AUTOFARMER_PASS)){
-//        qDebug()<<"Imported auto farm";
-//    }
+    if(loadPfxCertificate(AUTOFARMER_CERTIFICATE_PATH,AUTOFARMER_PASS)){
+        qDebug()<<"Imported auto farm";
+    }
 
-//    if(loadPfxCertificate(MT_CERTIFICATE_PATH,MT_PASS)){
-//        qDebug()<<"Imported MT";
-//    }
+    if(loadPfxCertificate(MT_CERTIFICATE_PATH,MT_PASS)){
+        qDebug()<<"Imported MT";
+    }
 }
 
 WebAPIRequest::~WebAPIRequest()
 {
-    delete manager;
+    if(manager != nullptr){
+        delete manager;
+    }
+
 }
 
 //publics
@@ -97,7 +105,7 @@ QNetworkRequest WebAPIRequest::getRequest()
         if(!AUTOFARMER_SSL_CONF.isNull()){
             request.setSslConfiguration(AUTOFARMER_SSL_CONF);
         }
-    }else {
+    }else if(body.toUpper().contains("MT")){
         request.setUrl(QUrl("https://approval.mottrieu.com/api/v1/transactions/active"));
         request.setRawHeader("Authorization","Basic Y29uZ2F1YmVvQDEyMzpjb25nYXViZW9AMTIz");
         if(!AUTOLIKE_SSL_CONF.isNull()){
@@ -107,6 +115,33 @@ QNetworkRequest WebAPIRequest::getRequest()
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Mobile-Secret-Key","3953390b-42bb-11eb-9f8b-1111914b71be");
     return request;
+}
+
+void WebAPIRequest::addPostRequest(QString body)
+{
+    this->setBody(body);
+    QNetworkRequest request = getRequest();
+    requestQueue.append(new RequestQueueItem(request,body));
+    body = "";
+}
+
+void WebAPIRequest::postAsync()
+{
+    if(!isWaitingResponse
+            && requestQueue.size() > 0){
+        manager->post(requestQueue.first()->request,requestQueue.first()->body.toUtf8());
+        currentRequestItem = requestQueue.first();
+        requestQueue.removeFirst();
+        isWaitingResponse = true;
+    }
+}
+
+QString WebAPIRequest::getAsynBody()
+{
+    if(currentRequestItem != nullptr){
+        return currentRequestItem->body;
+    }
+    return "";
 }
 
 void WebAPIRequest::post(){
@@ -119,10 +154,11 @@ void WebAPIRequest::onNetworkResponsed(QNetworkReply *reply)
 {
     if(reply != nullptr){
         QByteArray data = reply->readAll();
-        qDebug()<<data;
-
+        LOGD("%s",data.data());
         emit networkResponsed(data);
     }
+    isWaitingResponse = false;
+    postAsync();
 }
 
 //private

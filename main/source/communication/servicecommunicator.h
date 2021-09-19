@@ -21,6 +21,7 @@ public slots:
     void onServiceStatusChanged(bool isConnected);
     void sendToService(const QString &message);
     void startService();
+    void onDatabaseAvailable(QString path);
 signals:
     void messageFromService(const QString &message);
     void serviceConnected();

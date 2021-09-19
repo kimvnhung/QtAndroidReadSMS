@@ -38,6 +38,7 @@ class MasterController : public QObject
     Q_PROPERTY(TabAction* ui_settingTab READ settingTab NOTIFY settingTabChanged)
 
     Q_PROPERTY(Account* ui_account READ account NOTIFY accountChanged)
+    Q_PROPERTY(bool ui_isLoading READ isLoading NOTIFY isLoadingChanged)
 public:
     explicit MasterController(QObject *parent = nullptr);
     static MasterController* instace(){return mInstance;};
@@ -48,6 +49,7 @@ public:
     HistoryController* historyController();
 
     Account* account();
+    bool isLoading();
 
     //tab action
     TabAction* revenueTab();
@@ -74,8 +76,10 @@ signals:
 
     void accountChanged();
     void tabChanged(int index);
+    void isLoadingChanged();
 
     void sendMessage(const QString &message);
+    void databaseAvailable(QString path);
 public slots:
     void log(QString message);
     void onReceiveMessageFromService(const QString &message);
@@ -102,7 +106,7 @@ private:
     void onDatabaseAvailable(QString path);
     void updateAll();
 
-
+    bool m_isLoading = true;
 };
 
 #endif // MAINCONTROLLER_H

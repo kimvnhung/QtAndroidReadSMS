@@ -1,7 +1,7 @@
 class QtAndroidService {
     SLOT(void sendToService(const QString &name));
     SLOT(void requestServiceStatus());
-
+    SLOT(void transferDatabasePath(QString path));
 
     SIGNAL(messageFromService(const QString &message));
     SIGNAL(databaseAvailable(const QString &databasePath));

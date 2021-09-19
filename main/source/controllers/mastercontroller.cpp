@@ -77,6 +77,11 @@ Account* MasterController::account()
     return this->mAccount;
 }
 
+bool MasterController::isLoading()
+{
+    return this->m_isLoading;
+}
+
 TabAction* MasterController::revenueTab()
 {
     return this->mRevenueTab;
@@ -106,10 +111,13 @@ TabAction* MasterController::settingTab()
 //slots
 void MasterController::onReceiveMessageFromService(const QString &message)
 {
-    LOGD("onReceiveMess : %s",message.toUtf8().data());
     if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
         if(DatabaseHandler::instance() == nullptr){
             onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
+            m_isLoading = false;
+            emit isLoadingChanged();
+
+            emit databaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
         }
     }
 
@@ -124,11 +132,11 @@ void MasterController::onReceiveMessageFromService(const QString &message)
     }
 
     if(message == Constants::Action::UPDATE_TO_SERVER){
-        this->historyController()->updateTransactionToServer();
+        //this->historyController()->updateTransactionToServer();
     }
 
     if(message == Constants::Info::INTERNET_CONNECTED){
-        this->historyController()->updateTransactionToServer();
+        //this->historyController()->updateTransactionToServer();
     }
 
     if(message.contains("on")){

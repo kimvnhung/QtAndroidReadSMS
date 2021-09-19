@@ -12,6 +12,7 @@ namespace Constants {
         const QString LOG_ACTION = "com.hungkv.autolikeapp.action.log";
         const QString ACTIVITY_STOPPED_ACTION = "com.hungkv.autolike.activitystopped";
         const QString UPDATE_TRANSACTION_ACTION = "com.hungkv.autolike.updatetransaction";
+        const QString UPDATE_TRANSACTION_STATUS_ACTION = "com.hungkv.autolike.updatetransactionstatus";
         const QString UPDATE_TO_SERVER = "com.hungkv.autolike.updatetoserver";
         const QString NOTIFY_CONNECTION_ACTION = "com.hungkv.autolike.notifyconnection";
     }

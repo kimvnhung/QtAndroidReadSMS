@@ -12,6 +12,7 @@ public class Constants {
         public static String ACTIVITY_STOPPED_ACTION = "com.hungkv.autolike.activitystopped";
         public static String ACTIVITY_STARTED_ACTION = "com.hungkv.autolike.activitystarted";
         public static String UPDATE_TRANSACTION_ACTION = "com.hungkv.autolike.updatetransaction";
+        public static String UPDATE_TRANSACTION_STATUS_ACTION = "com.hungkv.autolike.updatetransactionstatus";
         public static String UPDATE_TO_SERVER = "com.hungkv.autolike.updatetoserver";
         public static String NOTIFY_CONNECTION_ACTION = "com.hungkv.autolike.notifyconnection";
     }
