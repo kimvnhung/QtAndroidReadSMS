@@ -1,6 +1,3 @@
-
-#include "comunication/jnimessenger.h"
-
 #include <QAndroidService>
 
 #include <QQmlApplicationEngine>
@@ -74,11 +71,6 @@ int main(int argc, char *argv[])
         return app.exec();
     }else if(argc > 1 && strcmp(argv[1], "-service") == 0){
 
-        JniMessenger *messenger = new JniMessenger();
-        QObject::connect(messenger, &JniMessenger::messageFromJava, [=](QString msg){
-            qDebug()<<"Mess : "<<msg;
-        });
-        messenger->printFromJava("Hello World 123");
         return 1;
     }
 

@@ -4,14 +4,14 @@
 #include <QObject>
 #include <QGuiApplication>
 
-#include "comunication/qtandroidservice.h"
-#include "comunication/jnimessenger.h"
+#include "communication/qtandroidservice.h"
 #include "revenuecontroller.h"
 #include "settingcontroller.h"
 #include "reportcontroller.h"
 #include "historycontroller.h"
 
-#include "comunication/constants.h"
+#include "communication/constants.h"
+#include "log.h"
 
 
 #include "model/tabaction.h"
@@ -22,7 +22,6 @@ class MasterController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QtAndroidService* ui_qtAndroidService READ qtAndroidService CONSTANT)
-    Q_PROPERTY(JniMessenger* ui_jniMessenger READ jniMessenger CONSTANT)
     Q_PROPERTY(RevenueController* ui_revenueController READ revenueController NOTIFY revenueControllerChanged)
     Q_PROPERTY(SettingController* ui_settingController READ settingController NOTIFY settingControllerChanged)
     Q_PROPERTY(ReportController* ui_reportController READ reportController NOTIFY reportControllerChanged)
@@ -36,10 +35,9 @@ class MasterController : public QObject
 
     Q_PROPERTY(Account* ui_account READ account NOTIFY accountChanged)
 public:
-    explicit MasterController(QGuiApplication *parent = nullptr);
+    explicit MasterController(QObject *parent = nullptr);
 
     QtAndroidService* qtAndroidService();
-    JniMessenger* jniMessenger();
     RevenueController* revenueController();
     SettingController* settingController();
     ReportController* reportController();

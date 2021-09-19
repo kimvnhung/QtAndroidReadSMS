@@ -1,4 +1,4 @@
-QT += qml quick androidextras sql svg xml network
+QT += qml quick androidextras sql svg xml network remoteobjects
 
 CONFIG += c++11
 
@@ -9,13 +9,17 @@ CONFIG += c++11
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $$PWD
 
+REPC_SOURCE += $$PWD/qtandroidservice.rep
+REPC_REPLICA += $$PWD/qtandroidservice.rep
+
 INCLUDEPATH += source/
 
 SOURCES += \
-        source/comunication/jnimessenger.cpp \
-        source/comunication/qtandroidservice.cpp \
-        source/comunication/utility.cpp \
-        source/comunication/webapirequest.cpp \
+        source/appmain.cpp \
+        source/communication/qtandroidservice.cpp \
+        source/communication/servicecommunicator.cpp \
+        source/communication/utility.cpp \
+        source/communication/webapirequest.cpp \
         source/controllers/historycontroller.cpp \
         source/controllers/mastercontroller.cpp \
         source/controllers/reportcontroller.cpp \
@@ -29,11 +33,12 @@ SOURCES += \
         source/model/transaction.cpp
 
 HEADERS += \
-        source/comunication/constants.h \
-        source/comunication/jnimessenger.h \
-        source/comunication/qtandroidservice.h \
-        source/comunication/utility.h \
-        source/comunication/webapirequest.h \
+        source/appmain.h \
+        source/communication/constants.h \
+        source/communication/qtandroidservice.h \
+        source/communication/servicecommunicator.h \
+        source/communication/utility.h \
+        source/communication/webapirequest.h \
         source/controllers/historycontroller.h \
         source/controllers/mastercontroller.h \
         source/controllers/reportcontroller.h \

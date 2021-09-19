@@ -9,7 +9,7 @@
 
 #include "model/transaction.h"
 #include "database/databasehandler.h"
-#include "comunication/webapirequest.h"
+#include "communication/webapirequest.h"
 
 class HistoryController : public QObject
 {

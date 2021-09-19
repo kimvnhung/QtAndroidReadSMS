@@ -1,7 +1,7 @@
 #include "transaction.h"
 
 #include <QDebug>
-#include "comunication/qtandroidservice.h"
+#include "communication/qtandroidservice.h"
 
 QString Transaction::format = "dd-MM-yyyy  hh:mm:ss";
 
