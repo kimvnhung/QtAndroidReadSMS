@@ -87,8 +87,7 @@ android{
 }
 
 DISTFILES += \
-    source/android/src/com/hungkv/autolikeapp/MainActivity.java \
-    source/android/src/com/hungkv/autolikeapp/communication/Utils.java
+    source/android/src/com/hungkv/autolikeapp/MainActivity.java
 
 
 
