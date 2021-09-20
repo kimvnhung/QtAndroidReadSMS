@@ -9,13 +9,11 @@
 
 
 QtAndroidService *QtAndroidService::m_instance = nullptr;
-QList<QString> QtAndroidService::inbox = QList<QString>();
 QString QtAndroidService::DatabasePath = "";
 
 static void receivedAndTransferToUI(JNIEnv *env, jobject /*thiz*/, jstring value)
 {
-    QtAndroidService::inbox.append(env->GetStringUTFChars(value,nullptr));
-
+    emit QtAndroidService::instance()->sendToUi(env->GetStringUTFChars(value,nullptr));
 }
 
 static void receivedAndPerform(JNIEnv *env, jobject thiz, jstring value)
@@ -29,27 +27,18 @@ static void receivedAndPerform(JNIEnv *env, jobject thiz, jstring value)
 }
 
 QtAndroidService::QtAndroidService(QObject *parent) :
-    QtAndroidServiceSource(parent)
+    QObject(parent)
 {
     m_instance = this;
 
     registerNative();
-
-    if(inbox.size() > 0){
-        inbox.clear();
-    }
 
     timer = new QTimer(this);
     timer->setInterval(200);
     connect(timer, &QTimer::timeout, this, &QtAndroidService::handleAsynTask);
     timer->start();
 
-//    delayForUpdate = new QTimer(this);
-//    delayForUpdate->setInterval(1000);
-//    delayForUpdate->setSingleShot(true);
-//    connect(delayForUpdate, &QTimer::timeout,[]{
-//       inbox.append(Constants::Info::UPDATE_DATA_INFO);
-//    });
+    needToUpdate = QList<QString>();
 
     webAPI = new WebAPIRequest(this);
     connect(webAPI, &WebAPIRequest::networkResponsed,this, &QtAndroidService::onNetworkResponse);
@@ -126,23 +115,54 @@ void QtAndroidService::startForegroundService()
                 serviceIntent.handle().object());
 }
 
+QtAndroidService* QtAndroidService::instance()
+{
+    QMutex mutex;
+    mutex.lock();
+    if(m_instance == nullptr) {
+        m_instance = new QtAndroidService();
+    }
+    mutex.unlock();
+    return m_instance;
+}
+
 void QtAndroidService::updateTransaction(QString jsonTrans)
 {
     QAndroidIntent serviceIntent(Constants::Action::UPDATE_TRANSACTION_STATUS_ACTION);
 
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
     QAndroidJniEnvironment env;
-    jclass objectClass = env->GetObjectClass(m_javaServiceInstance->object());
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     serviceIntent.handle().callObjectMethod(
                 "setClass",
                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
-                m_javaServiceInstance->object(),
+                QtAndroid::androidContext().object(),
                 objectClass);
     serviceIntent.putExtra("Transaction", jsonTrans.toUtf8());
 
-    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+    QAndroidJniObject result = QtAndroid::androidContext().callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
+//    QAndroidJniObject service("com/hungkv/autolikeapp/communication/QtAndroidService");
+//    m_javaServiceInstance->callObjectMethod(
+//                "updateTransactionStatus",
+//                "(Ljava/lang/String;)V",
+//                QAndroidJniObject::fromString(jsonTrans).object());
+
+}
+
+void QtAndroidService::updateTransactionStatus()
+{
+    for(int i=0;i<needToUpdate.size();i++){
+        updateTransaction(needToUpdate.first());
+        needToUpdate.removeFirst();
+        i--;
+    }
+    //when finish posting
+//    if(webAPI->getAsynBody() == ""){
+//        updateInfo();
+//    }
 }
 
 void QtAndroidService::log(const QString &message)
@@ -167,13 +187,11 @@ void QtAndroidService::log(const QString &message)
 
 void QtAndroidService::handleAsynTask()
 {
-    if(!inbox.isEmpty()){
-        emit messageFromService(inbox.first());
-        inbox.removeFirst();
-    }
-
     webAPI->postAsync();
-//    delayForUpdate->start();
+    //while finish post
+    if(webAPI->getAsynBody() == ""){
+        updateTransactionStatus();
+    }
 }
 
 void QtAndroidService::handleServiceMessage(const QString &message)
@@ -181,8 +199,12 @@ void QtAndroidService::handleServiceMessage(const QString &message)
     LOGD("handleServiceMess : %s",message.toUtf8().data());
     if(message == Constants::Action::UPDATE_TO_SERVER){
         LOGD("onUpdateToServer");
+        if(!Utility::isNetworkConnected()){
+            LOGD("Network is not available!");
+            return;
+        }
         if(DatabasePath.size() > 0){
-            databaseHandler = new DatabaseHandler(sender(),DatabasePath);
+            databaseHandler = new DatabaseHandler(nullptr,DatabasePath);
             DatabasePath = "";
         }
         if(databaseHandler != nullptr
@@ -190,7 +212,7 @@ void QtAndroidService::handleServiceMessage(const QString &message)
             if(databaseHandler == nullptr){
                 databaseHandler = DatabaseHandler::instance();
             }
-            QList<Transaction*> listTrans = databaseHandler->getTransactionList(sender());
+            QList<Transaction*> listTrans = databaseHandler->getTransactionList();
             for(int i=0;i<listTrans.size();i++){
                 if(listTrans.at(i)->getStatus() != Transaction::PENDING){
                     listTrans.removeAt(i);
@@ -211,6 +233,13 @@ void QtAndroidService::handleServiceMessage(const QString &message)
     }
 }
 
+void QtAndroidService::onInternetConnectionChanged(bool isConnected)
+{
+    if(isConnected){
+        handleServiceMessage(Constants::Action::UPDATE_TO_SERVER);
+    }
+}
+
 void QtAndroidService::passingObject(QAndroidJniObject javaObject)
 {
     {
@@ -222,7 +251,7 @@ void QtAndroidService::passingObject(QAndroidJniObject javaObject)
             if(m_javaServiceInstance == nullptr) {
                 m_javaServiceInstance = new QAndroidJniObject(javaObject);
                 if(m_javaServiceInstance->isValid()) {
-
+                    LOGD("Valid jni");
                 } else {
                    m_javaServiceInstance = nullptr;
                 }
@@ -258,21 +287,21 @@ void QtAndroidService::onNetworkResponse(QString response)
             QString code = res["data"].toObject()["code"].toString();
             int value = res["data"].toObject()["value"].toInt();
             if(databaseHandler != nullptr){
-//                QJsonObject obj;
-//                obj.insert(Constants::Transaction::ID,0);
-//                obj.insert(Constants::Transaction::PHONE,phone);
-//                obj.insert(Constants::Transaction::CODE, code);
-//                obj.insert(Constants::Transaction::VALUE, value);
-//                obj.insert(Constants::Transaction::TIME, "");
-//                obj.insert(Constants::Transaction::UPDATE_TIME, "");
-//                obj.insert(Constants::Transaction::STATUS, Transaction::ACCEPTED);
-//                updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
-                Transaction trans;
-                trans.setCode(code);
-                trans.setPhone(phone);
-                trans.setValue(value);
-                trans.setStatus(Transaction::ACCEPTED);
-                databaseHandler->update(&trans);
+                QJsonObject obj;
+                obj.insert(Constants::Transaction::ID,0);
+                obj.insert(Constants::Transaction::PHONE,phone);
+                obj.insert(Constants::Transaction::CODE, code);
+                obj.insert(Constants::Transaction::VALUE, value);
+                obj.insert(Constants::Transaction::TIME, "");
+                obj.insert(Constants::Transaction::UPDATE_TIME, "");
+                obj.insert(Constants::Transaction::STATUS, Transaction::ACCEPTED);
+                needToUpdate.append(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+//                Transaction trans;
+//                trans.setCode(code);
+//                trans.setPhone(phone);
+//                trans.setValue(value);
+//                trans.setStatus(Transaction::ACCEPTED);
+//                databaseHandler->update(&trans);
             }
         }else {
             QJsonDocument body = QJsonDocument::fromJson(webAPI->getAsynBody().toUtf8());
@@ -281,27 +310,41 @@ void QtAndroidService::onNetworkResponse(QString response)
                     && databaseHandler != nullptr){
                 QString code = body["code"].toString();
                 int money = body["money"].toInt();
-                Transaction trans;
-                trans.setCode(code);
-                trans.setValue(money);
-                trans.setStatus(Transaction::REJECT);
-//                QJsonObject obj;
-//                obj.insert(Constants::Transaction::ID,0);
-//                obj.insert(Constants::Transaction::PHONE,"");
-//                obj.insert(Constants::Transaction::CODE, code);
-//                obj.insert(Constants::Transaction::VALUE, money);
-//                obj.insert(Constants::Transaction::TIME, "");
-//                obj.insert(Constants::Transaction::UPDATE_TIME, "");
-//                obj.insert(Constants::Transaction::STATUS, Transaction::REJECT);
-//                updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
-                databaseHandler->update(&trans);
+//                Transaction trans;
+//                trans.setCode(code);
+//                trans.setValue(money);
+//                trans.setStatus(Transaction::REJECT);
+                QJsonObject obj;
+                obj.insert(Constants::Transaction::ID,0);
+                obj.insert(Constants::Transaction::PHONE,"");
+                obj.insert(Constants::Transaction::CODE, code);
+                obj.insert(Constants::Transaction::VALUE, money);
+                obj.insert(Constants::Transaction::TIME, "");
+                obj.insert(Constants::Transaction::UPDATE_TIME, "");
+                obj.insert(Constants::Transaction::STATUS, Transaction::REJECT);
+                needToUpdate.append(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+//                databaseHandler->update(&trans);
             }
         }
     }
 }
 
-void QtAndroidService::transferDatabasePath(QString path)
+void QtAndroidService::updateInfo()
 {
-    LOGD("");
-    databaseHandler = new DatabaseHandler(this,path);
+    QAndroidIntent serviceIntent(Constants::Info::UPDATE_DATA_INFO);
+
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    serviceIntent.handle().callObjectMethod(
+                "setClass",
+                "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
+                QtAndroid::androidContext().object(),
+                objectClass);
+
+    QAndroidJniObject result = QtAndroid::androidContext().callObjectMethod(
+                "startService",
+                "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+                serviceIntent.handle().object());
 }
+

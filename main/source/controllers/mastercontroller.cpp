@@ -24,6 +24,10 @@ MasterController::MasterController(QObject *parent) :
     });
     this->m_reportController = new ReportController(this);
     this->m_historyController = new HistoryController(this);
+    connect(m_historyController, &HistoryController::updateToServer,[this]{
+       LOGD("emit Update server");
+       //emit sendMessage(Constants::Action::UPDATE_TO_SERVER);
+    });
 
 
 //    QtAndroidService *initialier = new QtAndroidService(parent);

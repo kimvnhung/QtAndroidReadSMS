@@ -13,6 +13,7 @@ REPC_SOURCE += ../common/qtandroidservice.rep
 INCLUDEPATH += ../common
 
 SOURCES += \
+    appcommunication.cpp \
     service_main.cpp \
     webapirequest.cpp \
     qtandroidservice.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
     utility.cpp
 
 HEADERS += \
+    appcommunication.h \
     webapirequest.h \
     constants.h \
     qtandroidservice.h \

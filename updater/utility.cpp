@@ -1,5 +1,8 @@
 #include "utility.h"
 
+#include <QProcess>
+#include "log.h"
+
 void Utility::showToast(const QString &message, int duration){
     // all the magic must happen on Android UI thread
     QtAndroid::runOnAndroidThread([message, duration] {
@@ -56,4 +59,35 @@ QString Utility::getDisplayValue(int number)
         rt = QString::number(para)+ "," + rt;
     }
     return rt;
+}
+
+bool Utility::isNetworkConnected(){
+
+    QString pingResult = runCommand("ping -c 1 google.com");
+    if (pingResult.contains("ping: unknown host www.google.com")){
+        return false;
+    }
+    QStringList lines = pingResult.split("\n");
+
+    for(QString line : lines){
+        if (line.startsWith("rtt min/avg/max/mdev")){
+            QString speedInfor = line.replace("rtt min/avg/max/mdev = ","");
+
+            QStringList speeds = speedInfor.split("/");
+            QString min = speeds.at(0);
+            min = min.replace(".","");
+
+            if (min.toInt() > 50000){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+QString Utility::runCommand(QString command){
+    QProcess process;
+    process.start(command);
+    process.waitForFinished(10000);
+    return process.readAll().data();
 }

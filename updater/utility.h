@@ -11,6 +11,8 @@ public:
     static QString getFullDigits(int number, int digitNumber);
     static int numberDigit(int number);
     static QString getDisplayValue(int number);
+    static bool isNetworkConnected();
+    static QString runCommand(QString command);
 };
 
 #endif // UTILITY_H

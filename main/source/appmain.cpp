@@ -10,6 +10,7 @@ AppMain::AppMain(QQmlApplicationEngine *engine, QObject *parent) :
     masterController->startService();
     serviceCommunicator = new ServiceCommunicator(this);
     connect(masterController, &MasterController::databaseAvailable, serviceCommunicator, &ServiceCommunicator::onDatabaseAvailable);
+    connect(masterController, &MasterController::sendMessage, serviceCommunicator, &ServiceCommunicator::sendToService);
 }
 
 AppMain::~AppMain()

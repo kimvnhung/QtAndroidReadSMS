@@ -66,7 +66,7 @@ QList<Transaction*> DatabaseHandler::getTransactionList(QObject *itemParent)
             QString time = query.value(COLUMN_TIME).toString();
             QString updateTime = query.value(COLUMN_UPDATE_TIME).toString();
             int status = query.value(COLUMN_STATUS).toInt();
-            Transaction* item = new Transaction(itemParent==nullptr?this:itemParent,id,phone,code,value,time,updateTime,status);
+            Transaction* item = new Transaction(nullptr,id,phone,code,value,time,updateTime,status);
             rt.append(item);
         }
         log("rtsize : "+QString::number(rt.size()));

@@ -13,7 +13,7 @@
 #include "databasehandler.h"
 #include "transaction.h"
 
-class QtAndroidService : public QtAndroidServiceSource
+class QtAndroidService : public QObject
 {
     Q_OBJECT
 
@@ -21,31 +21,21 @@ public:
     QtAndroidService(QObject *parent = nullptr);
     ~QtAndroidService();
 
-    static QtAndroidService *instance() { return m_instance; }
+    static QtAndroidService *instance();
     Q_INVOKABLE void startBackgroundService();
     Q_INVOKABLE void startForegroundService();
     Q_INVOKABLE void log(const QString &message);
     Q_INVOKABLE void updateTransaction(QString jsonTrans);
     void registerNative();
 
-    static QList<QString> inbox;
-
-    void handleServiceMessage(const QString &message);
     void passingObject(QAndroidJniObject javaObject);
     QAndroidJniObject* jniObject(){return m_javaServiceInstance;}
+
+signals:
+    void sendToUi(const QString &message);
 public slots:
-    void sendToService(const QString &name) override{
-        LOGD("Message : %s",name.toUtf8().data());
-        emit messageFromService(name);
-    }
-
-    void requestServiceStatus() override{
-        LOGD("onRequestServiceStatus");
-        emit serviceStatusChanged(true);
-    }
-
-    void transferDatabasePath(QString path) override;
-
+    void handleServiceMessage(const QString &message);
+    void onInternetConnectionChanged(bool isConnected);
     void handleAsynTask();
 
 private:
@@ -56,11 +46,19 @@ private:
     DatabaseHandler* databaseHandler = nullptr;
     QAndroidJniObject *m_javaServiceInstance = nullptr;
     static QString DatabasePath;
+    QList<QString> needToUpdate;
 
     void updateToServer(QList<Transaction*> listTrans);
     void pushOnGoogleSheet(QList<Transaction*> listTrans);
+
+    void updateInfo();
+    //async void
+    void updateTransactionStatus();
+
 private slots:
     void onNetworkResponse(QString response);
+
+
 };
 
 #endif // QTANDROIDSERVICE_H

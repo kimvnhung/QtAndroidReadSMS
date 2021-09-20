@@ -47,6 +47,7 @@ void ServiceCommunicator::sendToService(const QString &msg)
 {
     LOGD("");
     if(m_isServiceConnected){
+        LOGD("msg : %s",msg.toUtf8().data());
         rep->sendToService(msg);
     }
 }
@@ -69,3 +70,4 @@ void ServiceCommunicator::onDatabaseAvailable(QString path)
         rep->databaseAvailable(path);
     }
 }
+

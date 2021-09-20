@@ -28,5 +28,12 @@ void HistoryController::updateList()
     if(DatabaseHandler::instance() != nullptr){
         this->m_transactionList.append(DatabaseHandler::instance()->getTransactionList());
         emit transactionListChanged();
+
+        for(int i=0; i<m_transactionList.size(); i++){
+            if(m_transactionList.at(i)->getStatus() == Transaction::PENDING){
+                emit updateToServer();
+                break;
+            }
+        }
     }
 }

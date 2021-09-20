@@ -181,25 +181,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return false;
     }
 
-    public boolean updateTransactionStatus(Transaction transaction){
-        Log.i(TAG, "updateTransaction - "+transaction.getCode());
-        SQLiteDatabase db = getWritableDatabase();
-
-        try {
-            String updateQuery = "UPDATE "+ TABLE_NAME_AGENCY+ " SET " +
-                    COLUMN_STATUS +" = "+transaction.getStatus()+" WHERE "+
-                    COLUMN_PHONE +"=\""+transaction.getPhone()+"\", "+
-                    COLUMN_TRANSACTION_CODE+"=\""+transaction.getCode()+"\","+
-                    COLUMN_VALUE+"= "+transaction.getValue();
-
-            db.execSQL(updateQuery);
-            db.close();
-            return true;
-        }catch (Exception e){
-            e.getMessage();
-            Toast.makeText(mContext,"Error: updateWord(NouveauMot nouveauMot)",Toast.LENGTH_LONG).show();
+public boolean updateTransactionStatus(Transaction transaction){
+        Log.i(TAG, "updateTransactionStatus - "+transaction.getCode());
+        ArrayList<Transaction> listSpecialTrans = getSpecialTransaction(transaction);
+        int counter = 0;
+        Log.d(TAG,"List Special Size : "+listSpecialTrans.size());
+        for(int i=0;i<listSpecialTrans.size();i++){
+            listSpecialTrans.get(i).setStatus(transaction.getStatus());//Accept
+            if(updateTransaction(listSpecialTrans.get(i))){
+                counter++;
+            }
         }
-        db.close();
+        Log.d(TAG,"Update successed : "+counter);
+        if (counter == listSpecialTrans.size()){
+            return true;
+        }
         return false;
     }
 
@@ -233,4 +229,35 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return result;
     }
 
+    public ArrayList<Transaction> getSpecialTransaction(Transaction transaction){
+        SQLiteDatabase db = getWritableDatabase();
+        ArrayList<Transaction> result= new ArrayList<>();
+        try {
+            String query = "SELECT * FROM "+TABLE_NAME_AGENCY+" WHERE "+
+                    COLUMN_PHONE +" = '"+transaction.getPhone()+"' AND "+
+                    COLUMN_TRANSACTION_CODE+" = '"+transaction.getCode()+"' AND "+
+                    COLUMN_VALUE+" = "+transaction.getValue();
+            Cursor c = db.rawQuery(query,null);
+            c.moveToFirst();
+
+            while (!c.isAfterLast()){
+                Transaction trans = new Transaction(
+                        c.getInt(c.getColumnIndex(COLUMN_ID)),
+                        c.getString(c.getColumnIndex(COLUMN_PHONE)),
+                        c.getString(c.getColumnIndex(COLUMN_TRANSACTION_CODE)),
+                        c.getInt(c.getColumnIndex(COLUMN_VALUE)),
+                        c.getString(c.getColumnIndex(COLUMN_TIME)),
+                        c.getString(c.getColumnIndex(COLUMN_UPDATE_TIME)),
+                        c.getInt(c.getColumnIndex(COLUMN_STATUS))
+                );
+
+                result.add(trans);
+                c.moveToNext();
+            }
+        }catch (Exception e){
+            e.getMessage();
+            Toast.makeText(mContext,"Error: getAllTransactiion",Toast.LENGTH_LONG).show();
+        }
+        return result;
+    }
 }

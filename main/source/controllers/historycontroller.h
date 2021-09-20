@@ -20,6 +20,7 @@ public:
     QQmlListProperty<Transaction> transactionList();
 signals:
     void transactionListChanged();
+    void updateToServer();
 public slots:
     void updateList();
 private:

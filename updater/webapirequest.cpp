@@ -129,6 +129,7 @@ void WebAPIRequest::postAsync()
 {
     if(!isWaitingResponse
             && requestQueue.size() > 0){
+        LOGD("");
         manager->post(requestQueue.first()->request,requestQueue.first()->body.toUtf8());
         currentRequestItem = requestQueue.first();
         requestQueue.removeFirst();
@@ -158,6 +159,7 @@ void WebAPIRequest::onNetworkResponsed(QNetworkReply *reply)
         emit networkResponsed(data);
     }
     isWaitingResponse = false;
+    currentRequestItem = nullptr;
     postAsync();
 }
 

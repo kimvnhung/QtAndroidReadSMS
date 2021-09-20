@@ -5,6 +5,7 @@
 #include "qtandroidservice.h"
 #include <QUrl>
 #include <QRemoteObjectHost>
+#include "appcommunication.h"
 
 
 int main(int argc, char *argv[])
@@ -14,8 +15,8 @@ int main(int argc, char *argv[])
     QAndroidService app(argc, argv);
 
     QRemoteObjectHost srcNode(QUrl(QStringLiteral("local:replica")));
-    QtAndroidService qtAndroidService;
-    srcNode.enableRemoting(&qtAndroidService);
+    AppCommunication appCommunication;
+    srcNode.enableRemoting(&appCommunication);
     LOGD(__FUNCTION__+__LINE__);
     LOGD("Hello World!");
 
