@@ -18,16 +18,16 @@ SOURCES += \
     webapirequest.cpp \
     qtandroidservice.cpp \
     databasehandler.cpp \
-    transaction.cpp \
-    utility.cpp
+    ../common/utility.cpp \
+    ../common/transaction.cpp
 
 HEADERS += \
     appcommunication.h \
     webapirequest.h \
-    constants.h \
+    ../common/constants.h \
     qtandroidservice.h \
     databasehandler.h \
-    transaction.h \
-    utility.h
+    ../common/transaction.h \
+    ../common/utility.h
 
 include($$PWD/android_openssl/openssl.pri)

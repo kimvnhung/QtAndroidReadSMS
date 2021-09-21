@@ -7,7 +7,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "model/transaction.h"
+#include "transaction.h"
 
 class HistoryController : public QObject
 {

@@ -9,21 +9,25 @@
 
 
 QtAndroidService *QtAndroidService::m_instance = nullptr;
-QString QtAndroidService::DatabasePath = "";
 
-static void receivedAndTransferToUI(JNIEnv *env, jobject /*thiz*/, jstring value)
+static void receivedActionAndData(JNIEnv *env, jobject thiz, jstring action,jstring data)
 {
-    emit QtAndroidService::instance()->sendToUi(env->GetStringUTFChars(value,nullptr));
+    LOGD("");
+    if(QtAndroidService::instance()->jniObject() == nullptr){
+        jobject globObj = env->NewGlobalRef(thiz);
+        QtAndroidService::instance()->passingObject(globObj);
+    }
+    QtAndroidService::instance()->handleActionWithData(env->GetStringUTFChars(action,nullptr),env->GetStringUTFChars(data,nullptr));
 }
 
-static void receivedAndPerform(JNIEnv *env, jobject thiz, jstring value)
+static void receivedAction(JNIEnv *env, jobject thiz, jstring action)
 {
     LOGD("Perform");
     if(QtAndroidService::instance()->jniObject() == nullptr){
         jobject globObj = env->NewGlobalRef(thiz);
         QtAndroidService::instance()->passingObject(globObj);
     }
-    QtAndroidService::instance()->handleServiceMessage(env->GetStringUTFChars(value,nullptr));
+    QtAndroidService::instance()->handleAction(env->GetStringUTFChars(action,nullptr));
 }
 
 QtAndroidService::QtAndroidService(QObject *parent) :
@@ -64,8 +68,8 @@ QtAndroidService::~QtAndroidService()
 void QtAndroidService::registerNative()
 {
     JNINativeMethod methods[] {
-        {"emitToUI", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedAndTransferToUI)},
-        {"emitToBackground", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedAndPerform)}
+        {"emitToBackground", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedAction)},
+        {"emitToBackground", "(Ljava/lang/String;Ljava/lang/String;)V", reinterpret_cast<void *>(receivedActionAndData)}
     };
     QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
 
@@ -194,25 +198,17 @@ void QtAndroidService::handleAsynTask()
     }
 }
 
-void QtAndroidService::handleServiceMessage(const QString &message)
+void QtAndroidService::handleAction(const QString &action)
 {
-    LOGD("handleServiceMess : %s",message.toUtf8().data());
-    if(message == Constants::Action::UPDATE_TO_SERVER){
+    LOGD("Action : %s",action.toUtf8().data());
+    if(action == Constants::Action::UPDATE_TO_SERVER){
         LOGD("onUpdateToServer");
         if(!Utility::isNetworkConnected()){
             LOGD("Network is not available!");
             return;
         }
-        if(DatabasePath.size() > 0){
-            databaseHandler = new DatabaseHandler(nullptr,DatabasePath);
-            DatabasePath = "";
-        }
-        if(databaseHandler != nullptr
-                || DatabaseHandler::instance() != nullptr){
-            if(databaseHandler == nullptr){
-                databaseHandler = DatabaseHandler::instance();
-            }
-            QList<Transaction*> listTrans = databaseHandler->getTransactionList();
+        if(DatabaseHandler::instance() != nullptr){
+            QList<Transaction*> listTrans = DatabaseHandler::instance()->getTransactionList();
             for(int i=0;i<listTrans.size();i++){
                 if(listTrans.at(i)->getStatus() != Transaction::PENDING){
                     listTrans.removeAt(i);
@@ -225,10 +221,28 @@ void QtAndroidService::handleServiceMessage(const QString &message)
             LOGD("Database null");
         }
     }
+}
 
-    if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
+void QtAndroidService::handleActionWithData(const QString &action, const QString &data)
+{
+    if(action == Constants::Info::DATABASE_DECLARE_INFO){
         if(DatabaseHandler::instance() == nullptr){
-            DatabasePath = message.mid(Constants::Info::DATABASE_DECLARE_INFO.length());
+            DatabaseHandler *database = new DatabaseHandler(nullptr,data);
+            Q_UNUSED(database)
+            LOGD("Database Size : %d",DatabaseHandler::instance()->getTransactionList().size());
+
+            Transaction *trans = DatabaseHandler::instance()->getTransactionList().first();
+            trans->setStatus(Transaction::ACCEPTED);
+            QJsonObject obj;
+            obj.insert(Constants::Transaction::ID,trans->getId());
+            obj.insert(Constants::Transaction::PHONE,trans->getPhone());
+            obj.insert(Constants::Transaction::CODE, trans->getCode());
+            obj.insert(Constants::Transaction::VALUE, trans->getValue());
+            obj.insert(Constants::Transaction::TIME, trans->getTime());
+            obj.insert(Constants::Transaction::UPDATE_TIME, trans->getUpdateTime());
+            obj.insert(Constants::Transaction::STATUS, Transaction::ACCEPTED);
+
+            updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
         }
     }
 }
@@ -236,7 +250,7 @@ void QtAndroidService::handleServiceMessage(const QString &message)
 void QtAndroidService::onInternetConnectionChanged(bool isConnected)
 {
     if(isConnected){
-        handleServiceMessage(Constants::Action::UPDATE_TO_SERVER);
+        handleAction(Constants::Action::UPDATE_TO_SERVER);
     }
 }
 
@@ -286,7 +300,7 @@ void QtAndroidService::onNetworkResponse(QString response)
             QString phone = res["data"].toObject()["username"].toString();
             QString code = res["data"].toObject()["code"].toString();
             int value = res["data"].toObject()["value"].toInt();
-            if(databaseHandler != nullptr){
+            if(DatabaseHandler::instance() != nullptr){
                 QJsonObject obj;
                 obj.insert(Constants::Transaction::ID,0);
                 obj.insert(Constants::Transaction::PHONE,phone);
@@ -307,7 +321,7 @@ void QtAndroidService::onNetworkResponse(QString response)
             QJsonDocument body = QJsonDocument::fromJson(webAPI->getAsynBody().toUtf8());
             if(!body.isEmpty()
                     && body.isObject()
-                    && databaseHandler != nullptr){
+                    && DatabaseHandler::instance() != nullptr){
                 QString code = body["code"].toString();
                 int money = body["money"].toInt();
 //                Transaction trans;

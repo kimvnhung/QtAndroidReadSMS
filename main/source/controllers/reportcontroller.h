@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QDate>
-#include <model/transaction.h>
+#include <transaction.h>
 
 class ReportController : public QObject
 {

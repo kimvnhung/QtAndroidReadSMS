@@ -5,7 +5,7 @@
 #include <QQmlListProperty>
 
 
-#include "model/transaction.h"
+#include "transaction.h"
 
 class RevenueController : public QObject
 {

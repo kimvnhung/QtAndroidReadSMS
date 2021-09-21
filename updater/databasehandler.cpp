@@ -126,7 +126,7 @@ QList<Transaction*> DatabaseHandler::getTransactionListByDate(QDate date)
 void DatabaseHandler::update(Transaction *transaction)
 {
     if(db.isOpen()){
-        QString qry = "UPDATE "+TABLE_NAME_AGENCY+" SET "+COLUMN_STATUS+" = "+QString::number(transaction->PENDING)+
+        QString qry = "UPDATE "+TABLE_NAME_AGENCY+" SET "+COLUMN_STATUS+" = "+QString::number(transaction->getStatus())+
                             " WHERE "+COLUMN_PHONE +" = \""+transaction->getPhone()+"\" , "+
                             COLUMN_TRANSACTION_CODE +" = \""+transaction->getCode()+"\" , "+
                             COLUMN_VALUE +" = "+QString::number(transaction->getValue());

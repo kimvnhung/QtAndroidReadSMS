@@ -15,7 +15,7 @@
 #include "reportcontroller.h"
 #include "historycontroller.h"
 
-#include "communication/constants.h"
+#include "constants.h"
 
 
 #include "model/tabaction.h"

@@ -19,7 +19,6 @@ INCLUDEPATH += ../common
 SOURCES += \
         source/appmain.cpp \
         source/communication/servicecommunicator.cpp \
-        source/communication/utility.cpp \
         source/controllers/historycontroller.cpp \
         source/controllers/mastercontroller.cpp \
         source/controllers/reportcontroller.cpp \
@@ -29,13 +28,12 @@ SOURCES += \
         source/model/account.cpp \
         source/model/propertyAction.cpp \
         source/model/tabaction.cpp \
-        source/model/transaction.cpp
+        ../common/transaction.cpp \
+        ../common/utility.cpp
 
 HEADERS += \
         source/appmain.h \
-        source/communication/constants.h \
         source/communication/servicecommunicator.h \
-        source/communication/utility.h \
         source/controllers/historycontroller.h \
         source/controllers/mastercontroller.h \
         source/controllers/reportcontroller.h \
@@ -44,7 +42,8 @@ HEADERS += \
         source/model/account.h \
         source/model/propertyaction.h \
         source/model/tabaction.h \
-        source/model/transaction.h
+        ../common/transaction.h \
+        ../common/utility.h
 
 
 RESOURCES += views.qrc \
@@ -67,7 +66,8 @@ android{
         source/android/src/com/hungkv/autolikeapp/communication/NetworkChangeReceiver.java \
         source/android/src/com/hungkv/autolikeapp/communication/NetworkUtil.java \
         source/android/AndroidManifest.xml \
-        source/android/src/com/hungkv/autolikeapp/listener/SmsReceiver.java
+        source/android/src/com/hungkv/autolikeapp/listener/SmsReceiver.java \
+        source/android/src/com/hungkv/autolikeapp/MainActivity.java
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/source/android
     include($$PWD/android_openssl/openssl.pri)
@@ -84,8 +84,6 @@ android{
     INSTALLS += certificates
 }
 
-DISTFILES += \
-    source/android/src/com/hungkv/autolikeapp/MainActivity.java
 
 
 

@@ -34,7 +34,8 @@ public:
 signals:
     void sendToUi(const QString &message);
 public slots:
-    void handleServiceMessage(const QString &message);
+    void handleAction(const QString &action);
+    void handleActionWithData(const QString &action, const QString &data);
     void onInternetConnectionChanged(bool isConnected);
     void handleAsynTask();
 
@@ -43,7 +44,6 @@ private:
     QTimer *timer = nullptr;
     QTimer *delayForUpdate = nullptr;
     WebAPIRequest *webAPI = nullptr;
-    DatabaseHandler* databaseHandler = nullptr;
     QAndroidJniObject *m_javaServiceInstance = nullptr;
     static QString DatabasePath;
     QList<QString> needToUpdate;

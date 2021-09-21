@@ -24,8 +24,8 @@ import com.hungkv.autolikeapp.listener.SmsReceiver;
 public class QtAndroidService extends QtService implements SmsReceiver.SmsListener
 {
 
-    private static native void emitToBackground(String message);
-    private static native void emitToUI(String message);
+    private static native void emitToBackground(String action, String data);
+    private static native void emitToBackground(String action);
     private static final String TAG = "QtAndroidService";
 
     private DatabaseHandler handler;
@@ -70,10 +70,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                     Log.i(TAG, "Start Background Service");
                     String path = this.getDatabasePath(handler.getDatabaseName()).getAbsolutePath();
                     if(path.length() > 0){
-                        if(isMainActivityAvailable){
-                            emitToUI(Constants.INFO.DATABASE_DECLARE_INFO+path);
-                        }
-                        emitToBackground(Constants.INFO.DATABASE_DECLARE_INFO+path);
+                        emitToBackground(Constants.INFO.DATABASE_DECLARE_INFO,path);
                         Log.i(TAG,"Sent path : "+path);
                     }
 
@@ -196,9 +193,6 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
 
     public void updateInfo(){
         //update view
-        if(isMainActivityAvailable){
-            emitToUI(Constants.INFO.UPDATE_DATA_INFO);
-        }
         emitToBackground(Constants.ACTION.UPDATE_TO_SERVER);
     }
 

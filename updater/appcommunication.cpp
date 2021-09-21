@@ -41,5 +41,5 @@ void AppCommunication::transferDatabasePath(QString path)
 void AppCommunication::sendToService(const QString &name)
 {
     LOGD("%s",name.toUtf8().data());
-    QtAndroidService::instance()->handleServiceMessage(name);
+    //QtAndroidService::instance()->handleServiceMessage(name);
 }

@@ -162,11 +162,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         try {
             String updateQuery = "UPDATE "+ TABLE_NAME_AGENCY+ " SET " +
-                    COLUMN_PHONE +"=\""+transaction.getPhone()+"\", "+
-                    COLUMN_TRANSACTION_CODE+"=\""+transaction.getCode()+"\","+
+                    COLUMN_PHONE +"='"+transaction.getPhone()+"' , "+
+                    COLUMN_TRANSACTION_CODE+"='"+transaction.getCode()+"',"+
                     COLUMN_VALUE+"= "+transaction.getValue()+" ,"+
-                    COLUMN_TIME+"= \""+transaction.getTime()+"\" ," +
-                    COLUMN_UPDATE_TIME+"=\""+transaction.getUpdateTime()+"\" ," +
+                    COLUMN_TIME+"= '"+transaction.getTime()+"' ," +
+                    COLUMN_UPDATE_TIME+"='"+transaction.getUpdateTime()+"' ," +
                     COLUMN_STATUS +" = "+transaction.getStatus()+" WHERE "+
                     COLUMN_ID+"= "+transaction.getId();
 
