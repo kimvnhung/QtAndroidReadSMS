@@ -13,14 +13,12 @@ public:
     explicit AppCommunication(QObject *parent = nullptr);
     ~AppCommunication();
 public slots:
-    void sendToService(const QString &name) override;
-
+    void requestBackground(const QString &action, const QString &data) override;
     void requestServiceStatus() override{
         LOGD("onRequestServiceStatus");
         emit serviceStatusChanged(true);
     }
 
-    void transferDatabasePath(QString path) override;
 signals:
     void internetConnectionChanged(bool isConnected);
 private:

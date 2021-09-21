@@ -231,18 +231,18 @@ void QtAndroidService::handleActionWithData(const QString &action, const QString
             Q_UNUSED(database)
             LOGD("Database Size : %d",DatabaseHandler::instance()->getTransactionList().size());
 
-            Transaction *trans = DatabaseHandler::instance()->getTransactionList().first();
-            trans->setStatus(Transaction::ACCEPTED);
-            QJsonObject obj;
-            obj.insert(Constants::Transaction::ID,trans->getId());
-            obj.insert(Constants::Transaction::PHONE,trans->getPhone());
-            obj.insert(Constants::Transaction::CODE, trans->getCode());
-            obj.insert(Constants::Transaction::VALUE, trans->getValue());
-            obj.insert(Constants::Transaction::TIME, trans->getTime());
-            obj.insert(Constants::Transaction::UPDATE_TIME, trans->getUpdateTime());
-            obj.insert(Constants::Transaction::STATUS, Transaction::ACCEPTED);
+//            Transaction *trans = DatabaseHandler::instance()->getTransactionList().first();
+//            trans->setStatus(Transaction::ACCEPTED);
+//            QJsonObject obj;
+//            obj.insert(Constants::Transaction::ID,trans->getId());
+//            obj.insert(Constants::Transaction::PHONE,trans->getPhone());
+//            obj.insert(Constants::Transaction::CODE, trans->getCode());
+//            obj.insert(Constants::Transaction::VALUE, trans->getValue());
+//            obj.insert(Constants::Transaction::TIME, trans->getTime());
+//            obj.insert(Constants::Transaction::UPDATE_TIME, trans->getUpdateTime());
+//            obj.insert(Constants::Transaction::STATUS, Transaction::ACCEPTED);
 
-            updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+//            updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
         }
     }
 }

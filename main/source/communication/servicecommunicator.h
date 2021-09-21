@@ -19,11 +19,10 @@ public:
 public slots:
     void onCheckReplicConnection();
     void onServiceStatusChanged(bool isConnected);
-    void sendToService(const QString &message);
+    void requestBackground(const QString &action, const QString &data);
     void startService();
-    void onDatabaseAvailable(QString path);
 signals:
-    void messageFromService(const QString &message);
+    void messageFromBackground(const QString &action, const QString &data);
     void serviceConnected();
 
 private:

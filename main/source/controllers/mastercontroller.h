@@ -59,7 +59,6 @@ public:
     TabAction* settingTab();
 
     void startService();
-    void registerNative();
 
 signals:
     void revenueControllerChanged();
@@ -78,11 +77,11 @@ signals:
     void tabChanged(int index);
     void isLoadingChanged();
 
-    void sendMessage(const QString &message);
+    void requestBackground(const QString &action,const QString &data);
     void databaseAvailable(QString path);
 public slots:
     void log(QString message);
-    void onReceiveMessageFromService(const QString &message);
+    void messageFromBackground(const QString &action, const QString &data);
     void onTabSelected();
     void swippedTo(int tabIndex);
     void requestDatabase();
@@ -103,10 +102,12 @@ private:
     TabAction* mOffersTab;
     TabAction* mSettingTab;
 
-    void onDatabaseAvailable(QString path);
     void updateAll();
 
     bool m_isLoading = true;
+
+    void handleAction(const QString &action);
+    void handleActionWithData(const QString &action, const QString &data);
 };
 
 #endif // MAINCONTROLLER_H

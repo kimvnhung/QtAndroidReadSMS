@@ -24,7 +24,7 @@ void ServiceCommunicator::onCheckReplicConnection()
         m_isInitializedReplica = rep->waitForSource(3000);
         if(m_isInitializedReplica) {
             connect(rep.data(), &QtAndroidServiceReplica::serviceStatusChanged, this, &ServiceCommunicator::onServiceStatusChanged);
-            connect(rep.data(), &QtAndroidServiceReplica::messageFromService, this, &ServiceCommunicator::messageFromService);
+            connect(rep.data(), &QtAndroidServiceReplica::sendToUI, this, &ServiceCommunicator::messageFromBackground);
 
         }
 
@@ -43,12 +43,12 @@ void ServiceCommunicator::onServiceStatusChanged(bool isConnected)
     m_isServiceConnected = isConnected;
 }
 
-void ServiceCommunicator::sendToService(const QString &msg)
+void ServiceCommunicator::requestBackground(const QString &action, const QString &data)
 {
     LOGD("");
     if(m_isServiceConnected){
-        LOGD("msg : %s",msg.toUtf8().data());
-        rep->sendToService(msg);
+        LOGD("msg : %s - %s",action.toUtf8().data(),data.toUtf8().data());
+        rep->requestBackground(action,data);
     }
 }
 
@@ -60,14 +60,5 @@ void ServiceCommunicator::startService()
         "startService",
         "(Landroid/content/Intent;)Landroid/content/ComponentName;",
         serviceIntent.handle().object());
-}
-
-void ServiceCommunicator::onDatabaseAvailable(QString path)
-{
-    LOGD("");
-    if(m_isServiceConnected){
-        LOGD("Send database path");
-        rep->databaseAvailable(path);
-    }
 }
 

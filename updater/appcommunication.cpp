@@ -6,7 +6,7 @@
 AppCommunication::AppCommunication(QObject *parent) : QtAndroidServiceSource(parent)
 {
     QtAndroidService::instance();
-    connect(QtAndroidService::instance(), &QtAndroidService::sendToUi, this, &AppCommunication::messageFromService);
+    connect(QtAndroidService::instance(), &QtAndroidService::requestUI, this, &AppCommunication::sendToUI);
     internetCheckingTimer = new QTimer(this);
     internetCheckingTimer->setInterval(1000);
     isConnectedInternet = Utility::isNetworkConnected();
@@ -31,15 +31,12 @@ AppCommunication::~AppCommunication()
     }
 }
 
-void AppCommunication::transferDatabasePath(QString path)
+void AppCommunication::requestBackground(const QString &action, const QString &data)
 {
     LOGD("");
-    DatabaseHandler* databaseHandler = new DatabaseHandler(this,path);
-    Q_UNUSED(databaseHandler)
-}
-
-void AppCommunication::sendToService(const QString &name)
-{
-    LOGD("%s",name.toUtf8().data());
-    //QtAndroidService::instance()->handleServiceMessage(name);
+    if(data == ""){
+        QtAndroidService::instance()->handleAction(action);
+    }else {
+        QtAndroidService::instance()->handleActionWithData(action,data);
+    }
 }

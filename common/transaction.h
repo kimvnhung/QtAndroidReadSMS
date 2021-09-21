@@ -30,6 +30,8 @@ public:
     };
 
     static QString format;
+    static Transaction* fromJson(QString json);
+
 
     void setId(int id);
     void setPhone(QString phone);
@@ -53,6 +55,7 @@ public:
     int getStatus(){return this->m_status;}
 
 
+    QString toJson();
 signals:
     void idChanged();
     void phoneChanged();
@@ -69,8 +72,6 @@ private:
     QDateTime m_time;
     QDateTime m_updateTime;
     int m_status;
-
-    void log(QString msg);
 };
 
 #endif // TRANSACTION_H

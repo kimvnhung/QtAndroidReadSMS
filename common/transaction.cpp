@@ -1,6 +1,8 @@
 #include "transaction.h"
 
 #include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 QString Transaction::format = "dd-MM-yyyy  hh:mm:ss";
 
@@ -85,9 +87,33 @@ QString Transaction::getDisplayValue()
     return Utility::getDisplayValue(m_value);
 }
 
-//private
-void Transaction::log(QString msg)
+Transaction* Transaction::fromJson(QString json)
 {
-//    QtAndroidService::instance()->log(msg);
+    QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
+    if(!doc.isEmpty()
+            && doc.isObject()){
+        int id = doc[Constants::Transaction::ID].toInt();
+        QString phone = doc[Constants::Transaction::PHONE].toString();
+        QString code = doc[Constants::Transaction::CODE].toString();
+        int value = doc[Constants::Transaction::VALUE].toInt();
+        QString time  = doc[Constants::Transaction::TIME].toString();
+        QString update_time = doc[Constants::Transaction::UPDATE_TIME].toString();
+        int status = doc[Constants::Transaction::STATUS].toInt();
+        return new Transaction(nullptr,id,phone,code,value,time,update_time,status);
+    }
+
+    return nullptr;
 }
 
+QString Transaction::toJson()
+{
+    QJsonObject obj;
+    obj.insert(Constants::Transaction::ID,this->getId());
+    obj.insert(Constants::Transaction::PHONE,this->getPhone());
+    obj.insert(Constants::Transaction::CODE, this->getCode());
+    obj.insert(Constants::Transaction::VALUE, this->getValue());
+    obj.insert(Constants::Transaction::TIME, this->getTime());
+    obj.insert(Constants::Transaction::UPDATE_TIME, this->getUpdateTime());
+    obj.insert(Constants::Transaction::STATUS, this->getStatus());
+    return QJsonDocument(obj).toJson(QJsonDocument::Compact);
+}

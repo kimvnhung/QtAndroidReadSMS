@@ -4,11 +4,6 @@
 #include <QAndroidJniEnvironment>
 
 
-static void receivedFromAndroidService(JNIEnv *env, jobject /*thiz*/, jstring value)
-{
-    MasterController::instace()->onReceiveMessageFromService(env->GetStringUTFChars(value, nullptr));
-}
-
 MasterController* MasterController::mInstance = nullptr;
 
 MasterController::MasterController(QObject *parent) :
@@ -49,8 +44,6 @@ MasterController::MasterController(QObject *parent) :
     connect(mHistoryTab, &TabAction::clicked, this, &MasterController::onTabSelected);
     connect(mOffersTab, &TabAction::clicked, this, &MasterController::onTabSelected);
     connect(mSettingTab, &TabAction::clicked, this, &MasterController::onTabSelected);
-
-    registerNative();
 }
 
 
@@ -113,40 +106,7 @@ TabAction* MasterController::settingTab()
 
 
 //slots
-void MasterController::onReceiveMessageFromService(const QString &message)
-{
-    if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
-//        if(DatabaseHandler::instance() == nullptr){
-//            onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
-//            m_isLoading = false;
-//            emit isLoadingChanged();
 
-//            emit databaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
-//        }
-    }
-
-    if(message == Constants::Info::UPDATE_DATA_INFO){
-        qDebug()<<"onUpdateInfo";
-//        if(!DatabaseHandler::instance()->isDatabaseOpenable()){
-//            //restart service to reopen database
-//            //QtAndroidService::instance()->startBackgroundService();
-//        }else {
-//            updateAll();
-//        }
-    }
-
-    if(message == Constants::Action::UPDATE_TO_SERVER){
-        //this->historyController()->updateTransactionToServer();
-    }
-
-    if(message == Constants::Info::INTERNET_CONNECTED){
-        //this->historyController()->updateTransactionToServer();
-    }
-
-    if(message.contains("on")){
-//        log(message);
-    }
-}
 
 void MasterController::onTabSelected()
 {
@@ -206,12 +166,55 @@ void MasterController::log(QString message)
     LOGD("Qt - %s",message.toUtf8().data());
 }
 
-//private
-void MasterController::onDatabaseAvailable(QString path)
+void MasterController::messageFromBackground(const QString &action, const QString &data)
 {
-    //Declare database
+    if(data == ""){
+        handleAction(action);
+    }else {
+        handleActionWithData(action,data);
+    }
+}
 
-    updateAll();
+//private
+
+void MasterController::handleActionWithData(const QString &action, const QString &data)
+{
+
+}
+
+void MasterController::handleAction(const QString &action)
+{
+    if(action.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
+//        if(DatabaseHandler::instance() == nullptr){
+//            onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
+//            m_isLoading = false;
+//            emit isLoadingChanged();
+
+//            emit databaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
+//        }
+    }
+
+    if(action == Constants::Info::UPDATE_DATA_INFO){
+        qDebug()<<"onUpdateInfo";
+//        if(!DatabaseHandler::instance()->isDatabaseOpenable()){
+//            //restart service to reopen database
+//            //QtAndroidService::instance()->startBackgroundService();
+//        }else {
+//            updateAll();
+//        }
+    }
+
+    if(action == Constants::Action::UPDATE_TO_SERVER){
+        //this->historyController()->updateTransactionToServer();
+    }
+
+    if(action == Constants::Info::INTERNET_CONNECTED){
+        //this->historyController()->updateTransactionToServer();
+    }
+
+    if(action.contains("on")){
+//        log(message);
+    }
 }
 
 void MasterController::updateAll()
@@ -238,19 +241,6 @@ void MasterController::requestDatabase()
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
-}
-
-void MasterController::registerNative()
-{
-    JNINativeMethod methods[] {{"smsComming", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedFromAndroidService)}};
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/listener/SmsReceiver");
-
-    QAndroidJniEnvironment env;
-    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
-    env->RegisterNatives(objectClass,
-                         methods,
-                         sizeof(methods) / sizeof(methods[0]));
-    env->DeleteLocalRef(objectClass);
 }
 
 void MasterController::startService()
