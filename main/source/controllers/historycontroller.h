@@ -8,7 +8,6 @@
 #include <QJsonDocument>
 
 #include "model/transaction.h"
-#include "database/databasehandler.h"
 
 class HistoryController : public QObject
 {
@@ -21,8 +20,9 @@ public:
 signals:
     void transactionListChanged();
     void updateToServer();
+    void requestData();
 public slots:
-    void updateList();
+    void updateList(QList<Transaction*> updatedList);
 private:
     QList<Transaction*> m_transactionList;
 };

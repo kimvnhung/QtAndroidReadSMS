@@ -6,7 +6,6 @@
 
 
 #include "model/transaction.h"
-#include "database/databasehandler.h"
 
 class RevenueController : public QObject
 {
@@ -21,8 +20,9 @@ public:
 signals:
     void transactionListChanged();
     void todayIncomeChanged();
+    void requestData(QDate date);
 public slots:
-    void updateList();
+    void updateList(QList<Transaction*> updatedList);
 private:
     QList<Transaction*> m_transactionList;
 

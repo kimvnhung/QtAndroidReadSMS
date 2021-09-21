@@ -58,7 +58,7 @@ void ReportController::dateAccepted(QDate newValue)
     this->mIsCalendarVisible = false;
     emit selectedDateChanged();
     emit isCalendarVisibleChanged();
-    updateList();
+    emit requestData(*mSelectedDate);
 }
 
 void ReportController::dateCancel()
@@ -74,11 +74,11 @@ void ReportController::showCalendar()
 }
 
 //privates
-void ReportController::updateList()
+void ReportController::updateList(QList<Transaction*> updatedList)
 {
     this->listTrans.clear();
-    if(DatabaseHandler::instance() != nullptr){
-        this->listTrans.append(DatabaseHandler::instance()->getTransactionListByDate(*this->mSelectedDate));
+    if(updatedList.size() > 0){
+        this->listTrans.append(updatedList);
         qDebug()<<"List tran size"<<this->listTrans.size();
         emit totalRevenueChanged();
         emit totalTransactionChanged();

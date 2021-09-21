@@ -116,23 +116,23 @@ TabAction* MasterController::settingTab()
 void MasterController::onReceiveMessageFromService(const QString &message)
 {
     if(message.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
-        if(DatabaseHandler::instance() == nullptr){
-            onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
-            m_isLoading = false;
-            emit isLoadingChanged();
+//        if(DatabaseHandler::instance() == nullptr){
+//            onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
+//            m_isLoading = false;
+//            emit isLoadingChanged();
 
-            emit databaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
-        }
+//            emit databaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
+//        }
     }
 
     if(message == Constants::Info::UPDATE_DATA_INFO){
         qDebug()<<"onUpdateInfo";
-        if(!DatabaseHandler::instance()->isDatabaseOpenable()){
-            //restart service to reopen database
-            //QtAndroidService::instance()->startBackgroundService();
-        }else {
-            updateAll();
-        }
+//        if(!DatabaseHandler::instance()->isDatabaseOpenable()){
+//            //restart service to reopen database
+//            //QtAndroidService::instance()->startBackgroundService();
+//        }else {
+//            updateAll();
+//        }
     }
 
     if(message == Constants::Action::UPDATE_TO_SERVER){
@@ -210,17 +210,15 @@ void MasterController::log(QString message)
 void MasterController::onDatabaseAvailable(QString path)
 {
     //Declare database
-    DatabaseHandler *handler = new DatabaseHandler(this,path);
-    Q_UNUSED(handler)
 
     updateAll();
 }
 
 void MasterController::updateAll()
 {
-    this->m_revenueController->updateList();
-    this->m_historyController->updateList();
-    this->m_reportController->updateList();
+//    this->m_revenueController->updateList();
+//    this->m_historyController->updateList();
+//    this->m_reportController->updateList();
 }
 
 void MasterController::requestDatabase()

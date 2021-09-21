@@ -23,11 +23,11 @@ QString RevenueController::todayIncome()
 }
 
 //slots
-void RevenueController::updateList()
+void RevenueController::updateList(QList<Transaction*> updatedList)
 {
     this->m_transactionList.clear();
-    if(DatabaseHandler::instance() != nullptr){
-        this->m_transactionList.append(DatabaseHandler::instance()->getTransactionListByDate(QDate::currentDate()));
+    if(updatedList.size() > 0){
+        this->m_transactionList.append(updatedList);
         emit transactionListChanged();
         emit todayIncomeChanged();
     }

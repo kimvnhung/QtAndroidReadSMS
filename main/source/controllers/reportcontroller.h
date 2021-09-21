@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QDate>
-#include <database/databasehandler.h>
 #include <model/transaction.h>
 
 class ReportController : public QObject
@@ -26,11 +25,12 @@ signals:
     void isCalendarVisibleChanged();
     void totalTransactionChanged();
     void totalRevenueChanged();
+    void requestData(QDate date);
 public slots:
     void showCalendar();
     void dateAccepted(QDate newValue);
     void dateCancel();
-    void updateList();
+    void updateList(QList<Transaction*> updatedList);
 private:
     QDate *mSelectedDate{nullptr};
     bool mIsCalendarVisible = false;

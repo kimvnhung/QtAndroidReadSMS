@@ -25,7 +25,6 @@ SOURCES += \
         source/controllers/reportcontroller.cpp \
         source/controllers/revenuecontroller.cpp \
         source/controllers/settingcontroller.cpp \
-        source/database/databasehandler.cpp \
         main.cpp \
         source/model/account.cpp \
         source/model/propertyAction.cpp \
@@ -42,7 +41,6 @@ HEADERS += \
         source/controllers/reportcontroller.h \
         source/controllers/revenuecontroller.h \
         source/controllers/settingcontroller.h \
-        source/database/databasehandler.h \
         source/model/account.h \
         source/model/propertyaction.h \
         source/model/tabaction.h \

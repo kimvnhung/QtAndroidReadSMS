@@ -22,11 +22,11 @@ QQmlListProperty<Transaction> HistoryController::transactionList()
 
 
 //slots
-void HistoryController::updateList()
+void HistoryController::updateList(QList<Transaction*> updatedList)
 {
     this->m_transactionList.clear();
-    if(DatabaseHandler::instance() != nullptr){
-        this->m_transactionList.append(DatabaseHandler::instance()->getTransactionList());
+    if(updatedList.size() > 0){
+        this->m_transactionList.append(updatedList);
         emit transactionListChanged();
 
         for(int i=0; i<m_transactionList.size(); i++){
