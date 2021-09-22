@@ -77,7 +77,7 @@ signals:
     void tabChanged(int index);
     void isLoadingChanged();
 
-    void requestBackground(const QString &action,const QString &data);
+    void requestBackground(const QString &action,const QString &data = "");
     void databaseAvailable(QString path);
 public slots:
     void log(QString message);
@@ -108,6 +108,9 @@ private:
 
     void handleAction(const QString &action);
     void handleActionWithData(const QString &action, const QString &data);
+
+private slots:
+    void onIsLoadingChanged(bool isLoading);
 };
 
 #endif // MAINCONTROLLER_H

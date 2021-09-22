@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QDateTime>
-#include "utility.h"
 
 class Transaction : public QObject
 {

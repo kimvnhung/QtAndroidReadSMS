@@ -2,7 +2,7 @@
 
 #include <QAndroidIntent>
 #include <QAndroidJniEnvironment>
-
+#include "utility.h"
 
 MasterController* MasterController::mInstance = nullptr;
 
@@ -18,6 +18,9 @@ MasterController::MasterController(QObject *parent) :
 
     });
     this->m_reportController = new ReportController(this);
+    connect(m_reportController, &ReportController::requestData,[this](QDate date){
+        emit requestBackground(Constants::Action::REPORTS_REQUEST_ACTION,date.toString("dd/MM/yy"));
+    });
     this->m_historyController = new HistoryController(this);
     connect(m_historyController, &HistoryController::updateToServer,[this]{
        LOGD("emit Update server");
@@ -110,6 +113,7 @@ TabAction* MasterController::settingTab()
 
 void MasterController::onTabSelected()
 {
+    LOGD("");
     mRevenueTab->setSelected(false);
     mReportsTab->setSelected(false);
     mHistoryTab->setSelected(false);
@@ -142,12 +146,18 @@ void MasterController::swippedTo(int tabIndex)
     switch (tabIndex) {
     case 0:
         mRevenueTab->setSelected(true);
+        onIsLoadingChanged(true);
+        emit requestBackground(Constants::Action::REVENUE_REQUEST_ACTION);
         break;
     case 1:
         mReportsTab->setSelected(true);
+        onIsLoadingChanged(true);
+        emit requestBackground(Constants::Action::REPORTS_REQUEST_ACTION,this->m_reportController->getSelected_Date().toString("dd/MM/yy"));
         break;
     case 2:
         mHistoryTab->setSelected(true);
+        onIsLoadingChanged(true);
+        emit requestBackground(Constants::Action::HISTORY_REQUEST_ACTION);
         break;
     case 3:
         mOffersTab->setSelected(true);
@@ -179,22 +189,24 @@ void MasterController::messageFromBackground(const QString &action, const QStrin
 
 void MasterController::handleActionWithData(const QString &action, const QString &data)
 {
-
+    if(action == Constants::Action::REVENUE_REQUEST_ACTION){
+        this->m_revenueController->updateList(Utility::fromJson(data));
+        onIsLoadingChanged(false);
+    }else if(action == Constants::Action::REPORTS_REQUEST_ACTION){
+        onIsLoadingChanged(false);
+        this->m_reportController->updateList(Utility::fromJson(data));
+    }else if(action == Constants::Action::HISTORY_REQUEST_ACTION){
+        onIsLoadingChanged(false);
+        this->m_historyController->updateList(Utility::fromJson(data));
+    }
 }
 
 void MasterController::handleAction(const QString &action)
 {
     if(action.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
-//        if(DatabaseHandler::instance() == nullptr){
-//            onDatabaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
-//            m_isLoading = false;
-//            emit isLoadingChanged();
-
-//            emit databaseAvailable(message.mid(Constants::Info::DATABASE_DECLARE_INFO.length()));
-//        }
-    }
-
-    if(action == Constants::Info::UPDATE_DATA_INFO){
+        onIsLoadingChanged(true);
+        emit requestBackground(Constants::Action::REVENUE_REQUEST_ACTION);
+    }else if(action == Constants::Info::UPDATE_DATA_INFO){
         qDebug()<<"onUpdateInfo";
 //        if(!DatabaseHandler::instance()->isDatabaseOpenable()){
 //            //restart service to reopen database
@@ -202,18 +214,10 @@ void MasterController::handleAction(const QString &action)
 //        }else {
 //            updateAll();
 //        }
-    }
-
-    if(action == Constants::Action::UPDATE_TO_SERVER){
+    }else if(action == Constants::Action::UPDATE_TO_SERVER){
         //this->historyController()->updateTransactionToServer();
-    }
-
-    if(action == Constants::Info::INTERNET_CONNECTED){
+    }else if(action == Constants::Info::INTERNET_CONNECTED){
         //this->historyController()->updateTransactionToServer();
-    }
-
-    if(action.contains("on")){
-//        log(message);
     }
 }
 
@@ -241,6 +245,7 @@ void MasterController::requestDatabase()
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
+
 }
 
 void MasterController::startService()
@@ -251,4 +256,11 @@ void MasterController::startService()
         "startService",
         "(Landroid/content/Intent;)Landroid/content/ComponentName;",
         serviceIntent.handle().object());
+}
+
+
+void MasterController::onIsLoadingChanged(bool isLoading)
+{
+    m_isLoading = isLoading;
+    emit isLoadingChanged();
 }

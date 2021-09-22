@@ -1,5 +1,8 @@
 #include "utility.h"
 
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include <QProcess>
 #include "log.h"
 
@@ -61,9 +64,9 @@ QString Utility::getDisplayValue(int number)
     return rt;
 }
 
-bool Utility::isNetworkConnected(){
+bool Utility::isNetworkConnected(int timeout){
 
-    QString pingResult = runCommand("ping -c 1 google.com");
+    QString pingResult = runCommand("ping -c 1 google.com",timeout);
     if (pingResult.contains("ping: unknown host www.google.com")){
         return false;
     }
@@ -85,9 +88,37 @@ bool Utility::isNetworkConnected(){
     return false;
 }
 
-QString Utility::runCommand(QString command){
+QString Utility::runCommand(QString command,int timeout){
     QProcess process;
     process.start(command);
-    process.waitForFinished(10000);
+    process.waitForFinished(timeout);
     return process.readAll().data();
+}
+
+QList<Transaction*> Utility::fromJson(QString json)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
+    if(!doc.isEmpty()
+            && doc.isArray()){
+        QJsonArray jsonArr = doc.array();
+        QList<Transaction*> result = QList<Transaction*>();
+        for(int i=0;i<jsonArr.size();i++){
+            result.append(Transaction::fromJson(QJsonDocument(jsonArr.at(i).toObject()).toJson(QJsonDocument::Compact)));
+        }
+        return result;
+    }
+
+    return QList<Transaction*>();
+}
+
+QString Utility::toJsonArray(QList<Transaction *> list)
+{
+    QJsonArray jsonArr;
+    for(int i=0;i<list.size();i++){
+        jsonArr.append(QJsonDocument::fromJson(list.at(i)->toJson().toUtf8()).object());
+    }
+    if(jsonArr.size() > 0){
+        return QJsonDocument(jsonArr).toJson(QJsonDocument::Compact);
+    }
+    return "[]";
 }

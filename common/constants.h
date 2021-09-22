@@ -15,9 +15,12 @@ namespace Constants {
         const QString UPDATE_TRANSACTION_STATUS_ACTION = "com.hungkv.autolike.updatetransactionstatus";
         const QString UPDATE_TO_SERVER = "com.hungkv.autolike.updatetoserver";
         const QString NOTIFY_CONNECTION_ACTION = "com.hungkv.autolike.notifyconnection";
+        const QString REVENUE_REQUEST_ACTION = "com.hungkv.autolike.revenuedatarequest";
+        const QString REPORTS_REQUEST_ACTION = "com.hungkv.autolike.reportdatarequest";
+        const QString HISTORY_REQUEST_ACTION = "com.hungkv.autolike.historydatarequest";
     }
 
-    namespace Transaction{
+    namespace TransactionField{
         const QString ID = "id";
         const QString PHONE = "phone";
         const QString CODE = "code";

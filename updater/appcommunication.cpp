@@ -2,17 +2,18 @@
 
 #include "databasehandler.h"
 #include "qtandroidservice.h"
+#include "utility.h"
 
 AppCommunication::AppCommunication(QObject *parent) : QtAndroidServiceSource(parent)
 {
     QtAndroidService::instance();
     connect(QtAndroidService::instance(), &QtAndroidService::requestUI, this, &AppCommunication::sendToUI);
     internetCheckingTimer = new QTimer(this);
-    internetCheckingTimer->setInterval(1000);
-    isConnectedInternet = Utility::isNetworkConnected();
+    internetCheckingTimer->setInterval(3000);
+    isConnectedInternet = Utility::isNetworkConnected(900);
     connect(internetCheckingTimer,&QTimer::timeout,[this]{
        if(Utility::isNetworkConnected() != isConnectedInternet){
-            isConnectedInternet = Utility::isNetworkConnected();
+            isConnectedInternet = Utility::isNetworkConnected(900);
             LOGD("IsInternetConnected : %s",isConnectedInternet?"true":"false");
             emit internetConnectionChanged(isConnectedInternet);
        }

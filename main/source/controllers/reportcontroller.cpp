@@ -1,6 +1,7 @@
 #include "reportcontroller.h"
 
 #include <QDebug>
+#include "utility.h"
 
 ReportController::ReportController(QObject *parent) :
     QObject(parent)
@@ -29,6 +30,11 @@ QString ReportController::getSelectedDate()
         return "Tomorrow";
     }
     return this->mSelectedDate->toString("dd/MM/yy");
+}
+
+QDate ReportController::getSelected_Date()
+{
+    return *this->mSelectedDate;
 }
 
 bool ReportController::isCalendarVisible()

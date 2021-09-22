@@ -4,6 +4,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "utility.h"
+
+
 QString Transaction::format = "dd-MM-yyyy  hh:mm:ss";
 
 Transaction::Transaction(QObject *parent, QString phone,
@@ -92,13 +95,13 @@ Transaction* Transaction::fromJson(QString json)
     QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     if(!doc.isEmpty()
             && doc.isObject()){
-        int id = doc[Constants::Transaction::ID].toInt();
-        QString phone = doc[Constants::Transaction::PHONE].toString();
-        QString code = doc[Constants::Transaction::CODE].toString();
-        int value = doc[Constants::Transaction::VALUE].toInt();
-        QString time  = doc[Constants::Transaction::TIME].toString();
-        QString update_time = doc[Constants::Transaction::UPDATE_TIME].toString();
-        int status = doc[Constants::Transaction::STATUS].toInt();
+        int id = doc[Constants::TransactionField::ID].toInt();
+        QString phone = doc[Constants::TransactionField::PHONE].toString();
+        QString code = doc[Constants::TransactionField::CODE].toString();
+        int value = doc[Constants::TransactionField::VALUE].toInt();
+        QString time  = doc[Constants::TransactionField::TIME].toString();
+        QString update_time = doc[Constants::TransactionField::UPDATE_TIME].toString();
+        int status = doc[Constants::TransactionField::STATUS].toInt();
         return new Transaction(nullptr,id,phone,code,value,time,update_time,status);
     }
 
@@ -108,12 +111,12 @@ Transaction* Transaction::fromJson(QString json)
 QString Transaction::toJson()
 {
     QJsonObject obj;
-    obj.insert(Constants::Transaction::ID,this->getId());
-    obj.insert(Constants::Transaction::PHONE,this->getPhone());
-    obj.insert(Constants::Transaction::CODE, this->getCode());
-    obj.insert(Constants::Transaction::VALUE, this->getValue());
-    obj.insert(Constants::Transaction::TIME, this->getTime());
-    obj.insert(Constants::Transaction::UPDATE_TIME, this->getUpdateTime());
-    obj.insert(Constants::Transaction::STATUS, this->getStatus());
+    obj.insert(Constants::TransactionField::ID,this->getId());
+    obj.insert(Constants::TransactionField::PHONE,this->getPhone());
+    obj.insert(Constants::TransactionField::CODE, this->getCode());
+    obj.insert(Constants::TransactionField::VALUE, this->getValue());
+    obj.insert(Constants::TransactionField::TIME, this->getTime());
+    obj.insert(Constants::TransactionField::UPDATE_TIME, this->getUpdateTime());
+    obj.insert(Constants::TransactionField::STATUS, this->getStatus());
     return QJsonDocument(obj).toJson(QJsonDocument::Compact);
 }

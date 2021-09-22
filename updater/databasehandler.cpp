@@ -107,7 +107,7 @@ QList<Transaction*> DatabaseHandler::getTransactionListByDate(QDate date)
             QString time = query.value(COLUMN_TIME).toString();
             QString updateTime = query.value(COLUMN_UPDATE_TIME).toString();
             int status = query.value(COLUMN_STATUS).toInt();
-            Transaction* item = new Transaction(this,id,phone,code,value,time,updateTime,status);
+            Transaction* item = new Transaction(nullptr,id,phone,code,value,time,updateTime,status);
             qDebug()<<__FUNCTION__<<time;
             qDebug()<<"day : "<<item->get_Time().date().day();
             qDebug()<<"today : "<<date.day();

@@ -32,7 +32,7 @@ public:
     QAndroidJniObject* jniObject(){return m_javaServiceInstance;}
 
 signals:
-    void requestUI(const QString &action,const QString &data);
+    void requestUI(const QString &action,const QString &data = "");
 public slots:
     void handleAction(const QString &action);
     void handleActionWithData(const QString &action, const QString &data);

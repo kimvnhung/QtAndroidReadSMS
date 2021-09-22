@@ -1,6 +1,7 @@
 #include "revenuecontroller.h"
 
 #include <QDebug>
+#include "utility.h"
 
 RevenueController::RevenueController(QObject *parent) : QObject(parent)
 {

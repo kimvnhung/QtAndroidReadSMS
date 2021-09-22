@@ -11,6 +11,7 @@ CONFIG += c++11
 
 REPC_SOURCE += ../common/qtandroidservice.rep
 INCLUDEPATH += ../common
+INCLUDEPATH += ../google
 
 SOURCES += \
     appcommunication.cpp \

@@ -5,6 +5,7 @@
 #include <QDate>
 #include <transaction.h>
 
+
 class ReportController : public QObject
 {
     Q_OBJECT
@@ -17,6 +18,7 @@ public:
     ~ReportController();
 
     QString getSelectedDate();
+    QDate getSelected_Date();
     bool isCalendarVisible();
     QString getTotalTransaction();
     QString getTotalRevenue();
