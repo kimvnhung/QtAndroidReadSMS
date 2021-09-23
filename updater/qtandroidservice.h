@@ -5,6 +5,7 @@
 #include <QtAndroid>
 #include <QAndroidIntent>
 #include <QTimer>
+#include <QThread>
 
 #include "constants.h"
 #include "rep_qtandroidservice_source.h"
@@ -42,6 +43,7 @@ public slots:
 private:
     static QtAndroidService *m_instance;
     QTimer *timer = nullptr;
+    QThread updateThread;
     QTimer *delayForUpdate = nullptr;
     WebAPIRequest *webAPI = nullptr;
     QAndroidJniObject *m_javaServiceInstance = nullptr;

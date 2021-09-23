@@ -15,6 +15,7 @@ public class Constants {
         public static String UPDATE_TRANSACTION_STATUS_ACTION = "com.hungkv.autolike.updatetransactionstatus";
         public static String UPDATE_TO_SERVER = "com.hungkv.autolike.updatetoserver";
         public static String NOTIFY_CONNECTION_ACTION = "com.hungkv.autolike.notifyconnection";
+        public static String SERVICE_CLOCK_ACTION = "com.hungkv.autolike.serviceclock";
     }
 
     public interface INFO {
@@ -40,4 +41,3 @@ public class Constants {
         public static String NOTIFICATION_DESCRIPTION = "Notification Description";
     }
 }
-

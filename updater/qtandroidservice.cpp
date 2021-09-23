@@ -38,8 +38,9 @@ QtAndroidService::QtAndroidService(QObject *parent) :
 
     registerNative();
 
+    LOGD("Timer start");
     timer = new QTimer(this);
-    timer->setInterval(200);
+    timer->setInterval(1000);
     connect(timer, &QTimer::timeout, this, &QtAndroidService::handleAsynTask);
     timer->start();
 
@@ -159,6 +160,7 @@ void QtAndroidService::updateTransaction(QString jsonTrans)
 
 void QtAndroidService::updateTransactionStatus()
 {
+    qDebug()<<__FUNCTION__<<__LINE__;
     for(int i=0;i<needToUpdate.size();i++){
         updateTransaction(needToUpdate.first());
         needToUpdate.removeFirst();
@@ -193,10 +195,7 @@ void QtAndroidService::log(const QString &message)
 void QtAndroidService::handleAsynTask()
 {
     webAPI->postAsync();
-    //while finish post
-    if(webAPI->getAsynBody() == ""){
-        updateTransactionStatus();
-    }
+    updateTransactionStatus();
 }
 
 void QtAndroidService::handleAction(const QString &action)
@@ -211,11 +210,13 @@ void QtAndroidService::handleAction(const QString &action)
         if(DatabaseHandler::instance() != nullptr){
             QList<Transaction*> listTrans = DatabaseHandler::instance()->getTransactionList();
             for(int i=0;i<listTrans.size();i++){
+                LOGD("id : %d - status : %d",listTrans.at(i)->getId(),listTrans.at(i)->getStatus());
                 if(listTrans.at(i)->getStatus() != Transaction::PENDING){
                     listTrans.removeAt(i);
                     i--;
                 }
             }
+            LOGD("listTrans size : %d",listTrans.size());
             if(listTrans.size() == 0){
                 return;
             }
@@ -236,6 +237,9 @@ void QtAndroidService::handleAction(const QString &action)
             LOGD("dataList size : %d",dataList.size());
             emit requestUI(Constants::Action::HISTORY_REQUEST_ACTION,Utility::toJsonArray(dataList));
         }
+    }else if(action == Constants::Action::SERVICE_CLOCK_ACTION){
+        LOGD("");
+
     }
 }
 
@@ -248,6 +252,7 @@ void QtAndroidService::handleActionWithData(const QString &action, const QString
             Q_UNUSED(database)
 
             emit requestUI(Constants::Info::DATABASE_DECLARE_INFO);
+
         }
     }else if(action == Constants::Action::REPORTS_REQUEST_ACTION){
         if(DatabaseHandler::instance() != nullptr){
@@ -287,6 +292,7 @@ void QtAndroidService::passingObject(QAndroidJniObject javaObject)
 
 void QtAndroidService::updateToServer(QList<Transaction*> listTrans)
 {
+    qDebug()<<__FUNCTION__<<__LINE__;
     for(int i=0;i<listTrans.size();i++){
         Transaction* para = listTrans.at(i);
         QJsonObject update;
@@ -326,7 +332,8 @@ void QtAndroidService::onNetworkResponse(QString response)
 //                trans.setPhone(phone);
 //                trans.setValue(value);
 //                trans.setStatus(Transaction::ACCEPTED);
-//                databaseHandler->update(&trans);
+//                DatabaseHandler::instance()->update(&trans);
+//                updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
             }
         }else {
             QJsonDocument body = QJsonDocument::fromJson(webAPI->getAsynBody().toUtf8());

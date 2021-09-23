@@ -13,6 +13,8 @@ import android.util.Log;
 import android.widget.Toast;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.hungkv.autolikeapp.Constants;
 import com.hungkv.autolikeapp.MainActivity;
@@ -34,6 +36,15 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
     private int UpdateQueueCounter = 0;
     private boolean isMainActivityAvailable = false;
 
+    TimerTask serviceClock = new TimerTask() {
+        @Override
+        public void run() {
+            emitToBackground(Constants.ACTION.SERVICE_CLOCK_ACTION);
+        }
+    };
+
+    Timer operator  = new Timer();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -47,6 +58,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
             handler = new DatabaseHandler(this,DatabaseHandler.DATABASE_NAME,null,1);
             Log.i(TAG, "Initialize database handler");
         }
+
     }
 
     @Override
@@ -72,6 +84,8 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                     if(path.length() > 0){
                         emitToBackground(Constants.INFO.DATABASE_DECLARE_INFO,path);
                         Log.i(TAG,"Sent path : "+path);
+                        Log.d(TAG, "Start service clock");
+                        operator.schedule(serviceClock,500,3000);
                     }
 
                     NonSeenTransaction = 0;
