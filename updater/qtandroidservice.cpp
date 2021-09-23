@@ -6,10 +6,12 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonDocument>
+#include <QDir>
 #include "utility.h"
 
 
 QtAndroidService *QtAndroidService::m_instance = nullptr;
+QString QtAndroidService::checkedPath = QDir::currentPath()+"/checked.info";
 
 static void receivedActionAndData(JNIEnv *env, jobject thiz, jstring action,jstring data)
 {
@@ -23,7 +25,7 @@ static void receivedActionAndData(JNIEnv *env, jobject thiz, jstring action,jstr
 
 static void receivedAction(JNIEnv *env, jobject thiz, jstring action)
 {
-    LOGD("Perform");
+    LOGD("");
     if(QtAndroidService::instance()->jniObject() == nullptr){
         jobject globObj = env->NewGlobalRef(thiz);
         QtAndroidService::instance()->passingObject(globObj);
@@ -132,9 +134,9 @@ QtAndroidService* QtAndroidService::instance()
     return m_instance;
 }
 
-void QtAndroidService::updateTransaction(QString jsonTrans)
+void QtAndroidService::updateTransaction(QString jsonTrans, QString action)
 {
-    QAndroidIntent serviceIntent(Constants::Action::UPDATE_TRANSACTION_STATUS_ACTION);
+    QAndroidIntent serviceIntent(action);
 
     QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
     QAndroidJniEnvironment env;
@@ -150,26 +152,20 @@ void QtAndroidService::updateTransaction(QString jsonTrans)
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
-//    QAndroidJniObject service("com/hungkv/autolikeapp/communication/QtAndroidService");
-//    m_javaServiceInstance->callObjectMethod(
-//                "updateTransactionStatus",
-//                "(Ljava/lang/String;)V",
-//                QAndroidJniObject::fromString(jsonTrans).object());
 
 }
 
 void QtAndroidService::updateTransactionStatus()
 {
-    qDebug()<<__FUNCTION__<<__LINE__;
     for(int i=0;i<needToUpdate.size();i++){
+        if(i==0){
+            qDebug()<<__FUNCTION__<<__LINE__;
+        }
         updateTransaction(needToUpdate.first());
         needToUpdate.removeFirst();
         i--;
+
     }
-    //when finish posting
-//    if(webAPI->getAsynBody() == ""){
-//        updateInfo();
-//    }
 }
 
 void QtAndroidService::log(const QString &message)
@@ -195,12 +191,13 @@ void QtAndroidService::log(const QString &message)
 void QtAndroidService::handleAsynTask()
 {
     webAPI->postAsync();
-    updateTransactionStatus();
+
+
 }
 
 void QtAndroidService::handleAction(const QString &action)
 {
-    LOGD("Action : %s",action.toUtf8().data());
+    //LOGD("Action : %s",action.toUtf8().data());
     if(action == Constants::Action::UPDATE_TO_SERVER){
         LOGD("onUpdateToServer");
         if(!Utility::isNetworkConnected()){
@@ -233,13 +230,18 @@ void QtAndroidService::handleAction(const QString &action)
         }
     }else if(action == Constants::Action::HISTORY_REQUEST_ACTION){
         if(DatabaseHandler::instance() != nullptr){
+            updateTransactionStatus();
             QList<Transaction*> dataList = DatabaseHandler::instance()->getTransactionList();
             LOGD("dataList size : %d",dataList.size());
             emit requestUI(Constants::Action::HISTORY_REQUEST_ACTION,Utility::toJsonArray(dataList));
         }
     }else if(action == Constants::Action::SERVICE_CLOCK_ACTION){
-        LOGD("");
+        //LOGD("");
 
+    }else if(action == Constants::Action::REFRESH_UI_ACTION){
+        if(DatabaseHandler::instance() != nullptr){
+            emit requestUI(Constants::Action::REFRESH_UI_ACTION);
+        }
     }
 }
 
@@ -251,7 +253,9 @@ void QtAndroidService::handleActionWithData(const QString &action, const QString
             DatabaseHandler *database = new DatabaseHandler(nullptr,data);
             Q_UNUSED(database)
 
+            updateTransactionStatus();
             emit requestUI(Constants::Info::DATABASE_DECLARE_INFO);
+            saveCheckedTransaction();
 
         }
     }else if(action == Constants::Action::REPORTS_REQUEST_ACTION){
@@ -327,6 +331,7 @@ void QtAndroidService::onNetworkResponse(QString response)
                 obj.insert(Constants::TransactionField::UPDATE_TIME, "");
                 obj.insert(Constants::TransactionField::STATUS, Transaction::ACCEPTED);
                 needToUpdate.append(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+                saveCheckedTransaction();
 //                Transaction trans;
 //                trans.setCode(code);
 //                trans.setPhone(phone);
@@ -342,10 +347,6 @@ void QtAndroidService::onNetworkResponse(QString response)
                     && DatabaseHandler::instance() != nullptr){
                 QString code = body["code"].toString();
                 int money = body["money"].toInt();
-//                Transaction trans;
-//                trans.setCode(code);
-//                trans.setValue(money);
-//                trans.setStatus(Transaction::REJECT);
                 QJsonObject obj;
                 obj.insert(Constants::TransactionField::ID,0);
                 obj.insert(Constants::TransactionField::PHONE,"");
@@ -355,7 +356,13 @@ void QtAndroidService::onNetworkResponse(QString response)
                 obj.insert(Constants::TransactionField::UPDATE_TIME, "");
                 obj.insert(Constants::TransactionField::STATUS, Transaction::REJECT);
                 needToUpdate.append(QJsonDocument(obj).toJson(QJsonDocument::Compact));
-//                databaseHandler->update(&trans);
+//                updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+
+//                Transaction trans;
+//                trans.setCode(code);
+//                trans.setValue(money);
+//                trans.setStatus(Transaction::REJECT);
+//                DatabaseHandler::instance()->update(&trans);
             }
         }
     }
@@ -380,3 +387,11 @@ void QtAndroidService::updateInfo()
                 serviceIntent.handle().object());
 }
 
+void QtAndroidService::saveCheckedTransaction()
+{
+    LOGD("Checked Transaction path : %s",checkedPath.toUtf8().data());
+    QFile checked(checkedPath);
+    if(checked.open(QIODevice::WriteOnly | QIODevice::Append)){
+
+    }
+}

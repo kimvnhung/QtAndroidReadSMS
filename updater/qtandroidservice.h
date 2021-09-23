@@ -26,7 +26,8 @@ public:
     Q_INVOKABLE void startBackgroundService();
     Q_INVOKABLE void startForegroundService();
     Q_INVOKABLE void log(const QString &message);
-    Q_INVOKABLE void updateTransaction(QString jsonTrans);
+    Q_INVOKABLE void updateTransaction(QString jsonTrans,
+                                       QString action = Constants::Action::UPDATE_TRANSACTION_STATUS_ACTION);
     void registerNative();
 
     void passingObject(QAndroidJniObject javaObject);
@@ -42,12 +43,13 @@ public slots:
 
 private:
     static QtAndroidService *m_instance;
+    static QString checkedPath;
     QTimer *timer = nullptr;
-    QThread updateThread;
     QTimer *delayForUpdate = nullptr;
     WebAPIRequest *webAPI = nullptr;
+
     QAndroidJniObject *m_javaServiceInstance = nullptr;
-    static QString DatabasePath;
+
     QList<QString> needToUpdate;
 
     void updateToServer(QList<Transaction*> listTrans);
@@ -56,6 +58,7 @@ private:
     void updateInfo();
     //async void
     void updateTransactionStatus();
+    void saveCheckedTransaction();
 
 private slots:
     void onNetworkResponse(QString response);

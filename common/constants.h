@@ -19,6 +19,7 @@ namespace Constants {
         const QString REPORTS_REQUEST_ACTION = "com.hungkv.autolike.reportdatarequest";
         const QString HISTORY_REQUEST_ACTION = "com.hungkv.autolike.historydatarequest";
         const QString SERVICE_CLOCK_ACTION = "com.hungkv.autolike.serviceclock";
+        const QString REFRESH_UI_ACTION = "com.hungkv.autolikeapp.refreshui";
     }
 
     namespace TransactionField{

@@ -157,9 +157,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     //cap nhat
     public boolean updateTransaction(Transaction transaction){
-        Log.i(TAG, "updateTransaction - "+transaction.getCode());
+        Log.i(TAG, "updateTransaction - "+transaction.getCode() + " - status :" +transaction.getStatus());
         SQLiteDatabase db = getWritableDatabase();
-
         try {
             String updateQuery = "UPDATE "+ TABLE_NAME_AGENCY+ " SET " +
                     COLUMN_PHONE +"='"+transaction.getPhone()+"' , "+
@@ -181,7 +180,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return false;
     }
 
-public boolean updateTransactionStatus(Transaction transaction){
+    public boolean updateTransactionStatus(Transaction transaction){
         Log.i(TAG, "updateTransactionStatus - "+transaction.getCode());
         ArrayList<Transaction> listSpecialTrans = getSpecialTransaction(transaction);
         int counter = 0;
@@ -234,9 +233,7 @@ public boolean updateTransactionStatus(Transaction transaction){
         ArrayList<Transaction> result= new ArrayList<>();
         try {
             String query = "SELECT * FROM "+TABLE_NAME_AGENCY+" WHERE "+
-                    COLUMN_PHONE +" = '"+transaction.getPhone()+"' AND "+
-                    COLUMN_TRANSACTION_CODE+" = '"+transaction.getCode()+"' AND "+
-                    COLUMN_VALUE+" = "+transaction.getValue();
+                    COLUMN_TRANSACTION_CODE+" = '"+transaction.getCode()+"'";
             Cursor c = db.rawQuery(query,null);
             c.moveToFirst();
 
@@ -254,6 +251,13 @@ public boolean updateTransactionStatus(Transaction transaction){
                 result.add(trans);
                 c.moveToNext();
             }
+            for(int i=0;i<result.size();i++){
+                if(!result.get(i).getPhone().equals(transaction.getPhone())
+                    || result.get(i).getValue() != transaction.getValue()){
+                    result.remove(i);
+                    i--;
+                }
+            }
         }catch (Exception e){
             e.getMessage();
             Toast.makeText(mContext,"Error: getAllTransactiion",Toast.LENGTH_LONG).show();
@@ -261,3 +265,4 @@ public boolean updateTransactionStatus(Transaction transaction){
         return result;
     }
 }
+

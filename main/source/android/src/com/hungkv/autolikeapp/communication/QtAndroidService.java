@@ -30,20 +30,19 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
     private static native void emitToBackground(String action);
     private static final String TAG = "QtAndroidService";
 
-    private DatabaseHandler handler;
+    private static DatabaseHandler handler;
 
     private int NonSeenTransaction = 0;
     private int UpdateQueueCounter = 0;
-    private boolean isMainActivityAvailable = false;
 
     TimerTask serviceClock = new TimerTask() {
-        @Override
-        public void run() {
-            emitToBackground(Constants.ACTION.SERVICE_CLOCK_ACTION);
-        }
-    };
+            @Override
+            public void run() {
+                emitToBackground(Constants.ACTION.SERVICE_CLOCK_ACTION);
+            }
+        };
 
-    Timer operator  = new Timer();
+        Timer operator  = new Timer();
 
     @Override
     public void onCreate() {
@@ -85,7 +84,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                         emitToBackground(Constants.INFO.DATABASE_DECLARE_INFO,path);
                         Log.i(TAG,"Sent path : "+path);
                         Log.d(TAG, "Start service clock");
-                        operator.schedule(serviceClock,500,3000);
+                                                operator.schedule(serviceClock,500,3000);
                     }
 
                     NonSeenTransaction = 0;
@@ -105,10 +104,8 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                     Log.i(TAG, Constants.QT_LOG + message);
                     break;
                 case Constants.ACTION.ACTIVITY_STOPPED_ACTION:
-                    isMainActivityAvailable = false;
                     break;
                 case Constants.ACTION.ACTIVITY_STARTED_ACTION:
-                    isMainActivityAvailable = true;
                     break;
                 case Constants.ACTION.UPDATE_TRANSACTION_ACTION:
                     String jsonTrans = new String(intent.getByteArrayExtra("Transaction"));
@@ -122,14 +119,20 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                                 trans.getString(Constants.TRANSACTION.UPDATE_TIME),
                                 trans.getInt(Constants.TRANSACTION.STATUS));
                         handler.updateTransaction(transaction);
-                        updateInfo();
+                        emitToBackground(Constants.ACTION.REFRESH_UI_ACTION);
                     } catch (Exception e){
                         Log.e(TAG, Constants.JAVA_LOG+" : "+e.getMessage() );
                     }
                     break;
                 case Constants.ACTION.UPDATE_TRANSACTION_STATUS_ACTION:
+                    path = this.getDatabasePath(handler.getDatabaseName()).getAbsolutePath();
+                    Log.d(TAG, path);
                     jsonTrans = new String(intent.getByteArrayExtra("Transaction"));
                     try {
+                        if(jsonTrans.equals("")){
+                            Log.d(TAG,"jsonTrans empty");
+                            break;
+                        }
                         JSONObject trans = new JSONObject(jsonTrans);
                         Transaction transaction = new Transaction(trans.getInt(Constants.TRANSACTION.ID),
                                 trans.getString(Constants.TRANSACTION.PHONE),
@@ -139,6 +142,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                                 trans.getString(Constants.TRANSACTION.UPDATE_TIME),
                                 trans.getInt(Constants.TRANSACTION.STATUS));
                         handler.updateTransactionStatus(transaction);
+                        emitToBackground(Constants.ACTION.REFRESH_UI_ACTION);
                         Log.d(TAG, jsonTrans);
                     } catch (Exception e){
                         Log.e(TAG, Constants.JAVA_LOG+" : "+e.getMessage() );
@@ -146,7 +150,6 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                     break;
                 case Constants.INFO.UPDATE_DATA_INFO:
                     Log.d(TAG, "Update DAta info");
-                    updateInfo();
                     break;
                 case Constants.ACTION.NOTIFY_CONNECTION_ACTION:
                     emitToBackground(Constants.INFO.INTERNET_CONNECTED);
@@ -204,39 +207,6 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
     }
     //End Setting
 
-
-    public void updateInfo(){
-        //update view
-        emitToBackground(Constants.ACTION.UPDATE_TO_SERVER);
-    }
-
-    public void updateTransactionStatus(String jsonTrans){
-        try {
-            if(jsonTrans == ""){
-                return;
-            }
-            JSONObject trans = new JSONObject(jsonTrans);
-            Transaction transaction = new Transaction(trans.getInt(Constants.TRANSACTION.ID),
-                    trans.getString(Constants.TRANSACTION.PHONE),
-                    trans.getString(Constants.TRANSACTION.CODE),
-                    trans.getInt(Constants.TRANSACTION.VALUE),
-                    trans.getString(Constants.TRANSACTION.TIME),
-                    trans.getString(Constants.TRANSACTION.UPDATE_TIME),
-                    trans.getInt(Constants.TRANSACTION.STATUS));
-            handler.updateTransactionStatus(transaction);
-            updateInfo();
-        } catch (Exception e){
-            Log.e(TAG, Constants.JAVA_LOG+" : "+e.getMessage() );
-        }
-    }
-
-    public boolean functionTest(String msg)
-    {
-        Log.d(TAG, "Test ok"+msg);
-        return true;
-    }
-
-
     @Override
     public void onSmsComing(Transaction transaction) {
         Log.i(TAG, "onSmsComming : "+transaction.getCode());
@@ -250,7 +220,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
             //notify();
         }
 
-        updateInfo();
+        emitToBackground(Constants.ACTION.UPDATE_TO_SERVER);
 
     }
 }

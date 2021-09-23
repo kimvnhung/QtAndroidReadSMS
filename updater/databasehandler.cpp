@@ -30,10 +30,11 @@ DatabaseHandler::DatabaseHandler(QObject *parent, QString databasePath) : QObjec
         log("Database Valid");
     }
     log("Test log");
-    QFile dfile("assets:/databases/"+DATABASE_NAME);
+    QFile dfile(databasePath);
     if (dfile.exists())
     {
-         log("Database Existed");
+         LOGD("Data path exist");
+         QFile::setPermissions(databasePath,QFile::WriteOwner | QFile::ReadOwner);
     }
     if(!db.open()){
         log("Database Open Fail");
@@ -111,6 +112,8 @@ QList<Transaction*> DatabaseHandler::getTransactionListByDate(QDate date)
             qDebug()<<__FUNCTION__<<time;
             qDebug()<<"day : "<<item->get_Time().date().day();
             qDebug()<<"today : "<<date.day();
+            qDebug()<<"id : "<<item->getId();
+            qDebug()<<"status : "<<item->getStatus();
             if(item->get_Time().date().day() == date.day()){
                 rt.append(item);
             }
@@ -127,13 +130,12 @@ void DatabaseHandler::update(Transaction *transaction)
 {
     if(db.isOpen()){
         QString qry = "UPDATE "+TABLE_NAME_AGENCY+" SET "+COLUMN_STATUS+" = "+QString::number(transaction->getStatus())+
-                            " WHERE "+COLUMN_PHONE +" = \""+transaction->getPhone()+"\" , "+
-                            COLUMN_TRANSACTION_CODE +" = \""+transaction->getCode()+"\" , "+
+                            " WHERE "+COLUMN_PHONE +" = \""+transaction->getPhone()+"\" AND "+
+                            COLUMN_TRANSACTION_CODE +" = \""+transaction->getCode()+"\" AND "+
                             COLUMN_VALUE +" = "+QString::number(transaction->getValue());
-        QSqlQuery query(db);
-
-        if(!query.exec(qry)){
-            LOGD("Query failed");
+        QSqlQuery query = db.exec(qry);
+        if(!query.isValid()){
+            LOGD("Not valid");
         }
     }
 }

@@ -108,6 +108,7 @@ private:
 
     void handleAction(const QString &action);
     void handleActionWithData(const QString &action, const QString &data);
+    // void updateTransaction(QString jsonTrans, QString action);
 
 private slots:
     void onIsLoadingChanged(bool isLoading);

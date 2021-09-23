@@ -22,16 +22,6 @@ MasterController::MasterController(QObject *parent) :
         emit requestBackground(Constants::Action::REPORTS_REQUEST_ACTION,date.toString("dd/MM/yy"));
     });
     this->m_historyController = new HistoryController(this);
-    connect(m_historyController, &HistoryController::updateToServer,[this]{
-       LOGD("emit Update server");
-       //emit sendMessage(Constants::Action::UPDATE_TO_SERVER);
-    });
-
-
-//    QtAndroidService *initialier = new QtAndroidService(parent);
-//    connect(initialier, &QtAndroidService::messageFromService,this, &MasterController::onReceiveMessageFromService);
-//    initialier->startBackgroundService();
-
 
     mAccount = new Account(this, "Username","pass","HungKV");
 
@@ -206,6 +196,16 @@ void MasterController::handleAction(const QString &action)
     if(action.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
         onIsLoadingChanged(true);
         emit requestBackground(Constants::Action::REVENUE_REQUEST_ACTION);
+        // QJsonObject obj;
+        // obj.insert(Constants::TransactionField::ID,0);
+        // obj.insert(Constants::TransactionField::PHONE,"0354445540");
+        // obj.insert(Constants::TransactionField::CODE, "MTXMI62");
+        // obj.insert(Constants::TransactionField::VALUE, 100000);
+        // obj.insert(Constants::TransactionField::TIME, "");
+        // obj.insert(Constants::TransactionField::UPDATE_TIME, "");
+        // obj.insert(Constants::TransactionField::STATUS, Transaction::ACCEPTED);
+        // updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact),
+        //                   Constants::Action::UPDATE_TRANSACTION_STATUS_ACTION);
     }else if(action == Constants::Info::UPDATE_DATA_INFO){
         qDebug()<<"onUpdateInfo";
 //        if(!DatabaseHandler::instance()->isDatabaseOpenable()){
@@ -218,6 +218,15 @@ void MasterController::handleAction(const QString &action)
         //this->historyController()->updateTransactionToServer();
     }else if(action == Constants::Info::INTERNET_CONNECTED){
         //this->historyController()->updateTransactionToServer();
+    }else if(action == Constants::Action::REFRESH_UI_ACTION){
+        if(mRevenueTab->selected()){
+            emit requestBackground(Constants::Action::REVENUE_REQUEST_ACTION);
+        }else if(mReportsTab->selected()){
+            emit requestBackground(Constants::Action::REPORTS_REQUEST_ACTION,
+                                   this->m_reportController->getSelected_Date().toString("dd/MM/yy"));
+        }else if (mHistoryTab->selected()) {
+            emit requestBackground(Constants::Action::REPORTS_REQUEST_ACTION);
+        }
     }
 }
 
@@ -247,6 +256,27 @@ void MasterController::requestDatabase()
                 serviceIntent.handle().object());
 
 }
+
+// void MasterController::updateTransaction(QString jsonTrans, QString action)
+// {
+//     QAndroidIntent serviceIntent(action);
+
+//     QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+//     QAndroidJniEnvironment env;
+//     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+//     serviceIntent.handle().callObjectMethod(
+//                 "setClass",
+//                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
+//                 QtAndroid::androidContext().object(),
+//                 objectClass);
+//     serviceIntent.putExtra("Transaction", jsonTrans.toUtf8());
+
+//     QAndroidJniObject result = QtAndroid::androidContext().callObjectMethod(
+//                 "startService",
+//                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+//                 serviceIntent.handle().object());
+
+// }
 
 void MasterController::startService()
 {
