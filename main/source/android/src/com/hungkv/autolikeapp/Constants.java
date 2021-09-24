@@ -17,6 +17,7 @@ public class Constants {
         public static String NOTIFY_CONNECTION_ACTION = "com.hungkv.autolike.notifyconnection";
         public static String SERVICE_CLOCK_ACTION = "com.hungkv.autolike.serviceclock";
         public static String REFRESH_UI_ACTION = "com.hungkv.autolikeapp.refreshui";
+        public static String DELETE_SMS_ACTION = "com.hungkv.autolikeapp.deletesms";
     }
 
     public interface INFO {
@@ -33,6 +34,7 @@ public class Constants {
         public static String TIME = "time";
         public static String UPDATE_TIME = "update_time";
         public static String STATUS = "status";
+        public static String SMS_CONTENT = "sms_content";
     }
 
     public interface NOTIFICATION {

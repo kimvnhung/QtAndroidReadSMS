@@ -35,6 +35,7 @@ public:
     static const QString COLUMN_TIME ;
     static const QString COLUMN_UPDATE_TIME ;
     static const QString COLUMN_STATUS ;
+    static const QString COLUMN_SMS_CONTENT;
 
 private:
     static DatabaseHandler* m_instance;

@@ -20,6 +20,7 @@ namespace Constants {
         const QString HISTORY_REQUEST_ACTION = "com.hungkv.autolike.historydatarequest";
         const QString SERVICE_CLOCK_ACTION = "com.hungkv.autolike.serviceclock";
         const QString REFRESH_UI_ACTION = "com.hungkv.autolikeapp.refreshui";
+        const QString DELETE_SMS_ACTION = "com.hungkv.autolikeapp.deletesms";
     }
 
     namespace TransactionField{
@@ -30,6 +31,7 @@ namespace Constants {
         const QString TIME = "time";
         const QString UPDATE_TIME = "update_time";
         const QString STATUS = "status";
+        const QString SMS_CONTENT = "sms_content";
     }
 
     namespace Info {

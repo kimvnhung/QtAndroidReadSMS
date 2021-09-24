@@ -16,6 +16,7 @@ const QString DatabaseHandler::COLUMN_VALUE = "_value";
 const QString DatabaseHandler::COLUMN_TIME = "_time";
 const QString DatabaseHandler::COLUMN_UPDATE_TIME = "_update_time";
 const QString DatabaseHandler::COLUMN_STATUS = "_status";
+const QString DatabaseHandler::COLUMN_SMS_CONTENT = "_sms_content";
 
 DatabaseHandler::DatabaseHandler(QObject *parent, QString databasePath) : QObject(parent)
 {
@@ -67,7 +68,8 @@ QList<Transaction*> DatabaseHandler::getTransactionList(QObject *itemParent)
             QString time = query.value(COLUMN_TIME).toString();
             QString updateTime = query.value(COLUMN_UPDATE_TIME).toString();
             int status = query.value(COLUMN_STATUS).toInt();
-            Transaction* item = new Transaction(nullptr,id,phone,code,value,time,updateTime,status);
+            QString smsContent = query.value(COLUMN_SMS_CONTENT).toString();
+            Transaction* item = new Transaction(nullptr,id,phone,code,value,time,updateTime,status,smsContent);
             rt.append(item);
         }
         log("rtsize : "+QString::number(rt.size()));
@@ -108,7 +110,8 @@ QList<Transaction*> DatabaseHandler::getTransactionListByDate(QDate date)
             QString time = query.value(COLUMN_TIME).toString();
             QString updateTime = query.value(COLUMN_UPDATE_TIME).toString();
             int status = query.value(COLUMN_STATUS).toInt();
-            Transaction* item = new Transaction(nullptr,id,phone,code,value,time,updateTime,status);
+            QString smsContent = query.value(COLUMN_SMS_CONTENT).toString();
+            Transaction* item = new Transaction(nullptr,id,phone,code,value,time,updateTime,status,smsContent);
             qDebug()<<__FUNCTION__<<time;
             qDebug()<<"day : "<<item->get_Time().date().day();
             qDebug()<<"today : "<<date.day();

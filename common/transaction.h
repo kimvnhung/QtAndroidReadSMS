@@ -16,9 +16,9 @@ class Transaction : public QObject
     Q_PROPERTY(int ui_status READ getStatus WRITE setStatus NOTIFY statusChanged)
 public:
     explicit Transaction(QObject *parent = nullptr, QString phone = "",
-                         QString code = "", int value = 0, QString time = "");
+                         QString code = "", int value = 0, QString time = "",QString smsContent = "");
     Transaction(QObject *parent, int id, QString phone,
-                QString code, int value, QString time, QString updateTime, int status);
+                QString code, int value, QString time, QString updateTime, int status, QString smsContent);
     ~Transaction();
 
     enum UpdateStatus{
@@ -41,6 +41,7 @@ public:
     void setUpdateTime(QString updateTime);
     void set_UpdateTime(QDateTime updateTime);
     void setStatus(int isUpdated);
+    void setSmsContent(QString smsContent);
 
     int getId(){return this->m_id;}
     QString getPhone(){return this->m_phone;}
@@ -52,7 +53,7 @@ public:
     QString getUpdateTime(){return this->m_updateTime.toString(format);}
     QDateTime get_UpdateTime(){return this->m_updateTime;}
     int getStatus(){return this->m_status;}
-
+    QString getSmsContent(){return this->m_smsContent;}
 
     QString toJson();
 signals:
@@ -71,6 +72,7 @@ private:
     QDateTime m_time;
     QDateTime m_updateTime;
     int m_status;
+    QString m_smsContent;
 };
 
 #endif // TRANSACTION_H

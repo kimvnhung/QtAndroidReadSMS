@@ -12,9 +12,12 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 import org.json.JSONObject;
+import android.database.Cursor;
+import android.net.Uri;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Date;
 
 import com.hungkv.autolikeapp.Constants;
 import com.hungkv.autolikeapp.MainActivity;
@@ -36,13 +39,13 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
     private int UpdateQueueCounter = 0;
 
     TimerTask serviceClock = new TimerTask() {
-            @Override
-            public void run() {
-                emitToBackground(Constants.ACTION.SERVICE_CLOCK_ACTION);
-            }
-        };
+        @Override
+        public void run() {
+            emitToBackground(Constants.ACTION.SERVICE_CLOCK_ACTION);
+        }
+    };
 
-        Timer operator  = new Timer();
+    Timer operator  = new Timer();
 
     @Override
     public void onCreate() {
@@ -84,7 +87,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                         emitToBackground(Constants.INFO.DATABASE_DECLARE_INFO,path);
                         Log.i(TAG,"Sent path : "+path);
                         Log.d(TAG, "Start service clock");
-                                                operator.schedule(serviceClock,500,3000);
+                        operator.schedule(serviceClock,500,3000);
                     }
 
                     NonSeenTransaction = 0;
@@ -117,7 +120,8 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                                 trans.getInt(Constants.TRANSACTION.VALUE),
                                 trans.getString(Constants.TRANSACTION.TIME),
                                 trans.getString(Constants.TRANSACTION.UPDATE_TIME),
-                                trans.getInt(Constants.TRANSACTION.STATUS));
+                                trans.getInt(Constants.TRANSACTION.STATUS),
+                                trans.getString(Constants.TRANSACTION.SMS_CONTENT));
                         handler.updateTransaction(transaction);
                         emitToBackground(Constants.ACTION.REFRESH_UI_ACTION);
                     } catch (Exception e){
@@ -140,7 +144,8 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                                 trans.getInt(Constants.TRANSACTION.VALUE),
                                 trans.getString(Constants.TRANSACTION.TIME),
                                 trans.getString(Constants.TRANSACTION.UPDATE_TIME),
-                                trans.getInt(Constants.TRANSACTION.STATUS));
+                                trans.getInt(Constants.TRANSACTION.STATUS),
+                                trans.getString(Constants.TRANSACTION.SMS_CONTENT));
                         handler.updateTransactionStatus(transaction);
                         emitToBackground(Constants.ACTION.REFRESH_UI_ACTION);
                         Log.d(TAG, jsonTrans);
@@ -150,6 +155,42 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                     break;
                 case Constants.INFO.UPDATE_DATA_INFO:
                     Log.d(TAG, "Update DAta info");
+                    break;
+                case Constants.ACTION.DELETE_SMS_ACTION:
+                    try {
+                        String keys = new String(intent.getByteArrayExtra("Keys"));
+                        if(keys.equals("")){
+                            break;
+                        }
+                        Log.d(TAG,"Deleting SMS from inbox");
+                        Uri uriSms = Uri.parse("content://sms/inbox");
+                        Cursor c = this.getContentResolver().query(uriSms,
+                                new String[] { "_id", "thread_id", "address",
+                                        "person", "date", "body" }, null, null, null);
+
+                        if (c != null && c.moveToFirst()) {
+                            do {
+                                long id = c.getLong(0);
+                                String address = c.getString(2);
+                                String date = c.getString(4);
+
+                                if (keys.contains(address)){
+                                    Date dateObj = new Date(Long.parseLong(date));
+                                    //add 30 days
+                                    dateObj.setTime(dateObj.getTime()+30*24*60*60*1000);
+                                    if (dateObj.before(new Date())){
+                                        Log.d(TAG,"Delete sms wit address : "+address);
+                                        this.getContentResolver().delete(
+                                                Uri.parse("content://sms/" + id), null, null);
+                                    }
+                                }
+
+
+                            } while (c.moveToNext());
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG,"Could not delete SMS from inbox: " + e.getMessage());
+                    }
                     break;
                 case Constants.ACTION.NOTIFY_CONNECTION_ACTION:
                     emitToBackground(Constants.INFO.INTERNET_CONNECTED);

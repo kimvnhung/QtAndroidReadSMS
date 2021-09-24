@@ -12,6 +12,7 @@
 
 QtAndroidService *QtAndroidService::m_instance = nullptr;
 QString QtAndroidService::checkedPath = QDir::currentPath()+"/checked.info";
+int QtAndroidService::ASYNC_INTERVAL = 1000;
 
 static void receivedActionAndData(JNIEnv *env, jobject thiz, jstring action,jstring data)
 {
@@ -42,7 +43,7 @@ QtAndroidService::QtAndroidService(QObject *parent) :
 
     LOGD("Timer start");
     timer = new QTimer(this);
-    timer->setInterval(1000);
+    timer->setInterval(ASYNC_INTERVAL);
     connect(timer, &QTimer::timeout, this, &QtAndroidService::handleAsynTask);
     timer->start();
 
@@ -193,6 +194,13 @@ void QtAndroidService::handleAsynTask()
     webAPI->postAsync();
 
     updateTransactionStatus();
+
+    //counter for delete sms
+    counterForDeleteSms++;
+    if(counterForDeleteSms*ASYNC_INTERVAL >= 30*1000){
+        counterForDeleteSms = 0;
+        deleteSmsOverMonth();
+    }
 }
 
 void QtAndroidService::handleAction(const QString &action)
@@ -253,9 +261,7 @@ void QtAndroidService::handleActionWithData(const QString &action, const QString
             DatabaseHandler *database = new DatabaseHandler(nullptr,data);
             Q_UNUSED(database)
 
-            updateTransactionStatus();
             emit requestUI(Constants::Info::DATABASE_DECLARE_INFO);
-            saveCheckedTransaction();
 
         }
     }else if(action == Constants::Action::REPORTS_REQUEST_ACTION){
@@ -308,7 +314,9 @@ void QtAndroidService::updateToServer(QList<Transaction*> listTrans)
 
 void QtAndroidService::pushOnGoogleSheet(QList<Transaction*> listTrans)
 {
-
+    if(listTrans.size()>0){
+        LOGD("Trans - id : %d, \nsms_content : %s",listTrans.at(0)->getId(),listTrans.at(0)->getSmsContent().toUtf8().data());
+    }
 }
 
 void QtAndroidService::onNetworkResponse(QString response)
@@ -326,15 +334,17 @@ void QtAndroidService::onNetworkResponse(QString response)
                         "yyyy-MM-ddTHH:mm:ss.zzzZ")
                     .toString(Transaction::format);
             if(DatabaseHandler::instance() != nullptr){
-                QJsonObject obj;
-                obj.insert(Constants::TransactionField::ID,0);
-                obj.insert(Constants::TransactionField::PHONE,phone);
-                obj.insert(Constants::TransactionField::CODE, code);
-                obj.insert(Constants::TransactionField::VALUE, value);
-                obj.insert(Constants::TransactionField::TIME, "");
-                obj.insert(Constants::TransactionField::UPDATE_TIME, update_time);
-                obj.insert(Constants::TransactionField::STATUS, Transaction::ACCEPTED);
-                needToUpdate.append(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+//                QJsonObject obj;
+//                obj.insert(Constants::TransactionField::ID,0);
+//                obj.insert(Constants::TransactionField::PHONE,phone);
+//                obj.insert(Constants::TransactionField::CODE, code);
+//                obj.insert(Constants::TransactionField::VALUE, value);
+//                obj.insert(Constants::TransactionField::TIME, "");
+//                obj.insert(Constants::TransactionField::UPDATE_TIME, update_time);
+//                obj.insert(Constants::TransactionField::STATUS, Transaction::ACCEPTED);
+//                obj.insert(Con)
+                Transaction trans(nullptr,-1,phone,code,value,"",update_time,Transaction::ACCEPTED,"");
+                needToUpdate.append(trans.toJson());
             }
         }else {
             QJsonDocument body = QJsonDocument::fromJson(webAPI->getAsynBody().toUtf8());
@@ -344,15 +354,8 @@ void QtAndroidService::onNetworkResponse(QString response)
                 QString code = body["code"].toString();
                 int money = body["money"].toInt();
                 QString updateTime = QDateTime::currentDateTime().toString(Transaction::format);
-                QJsonObject obj;
-                obj.insert(Constants::TransactionField::ID,0);
-                obj.insert(Constants::TransactionField::PHONE,"");
-                obj.insert(Constants::TransactionField::CODE, code);
-                obj.insert(Constants::TransactionField::VALUE, money);
-                obj.insert(Constants::TransactionField::TIME, "");
-                obj.insert(Constants::TransactionField::UPDATE_TIME, updateTime);
-                obj.insert(Constants::TransactionField::STATUS, Transaction::REJECT);
-                needToUpdate.append(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+                Transaction trans(nullptr,-1,"",code,money,"",updateTime,Transaction::REJECT,"");
+                needToUpdate.append(trans.toJson());
             }
         }
     }
@@ -377,11 +380,30 @@ void QtAndroidService::updateInfo()
                 serviceIntent.handle().object());
 }
 
-void QtAndroidService::saveCheckedTransaction()
+void QtAndroidService::deleteSmsOverMonth()
 {
-    LOGD("Checked Transaction path : %s",checkedPath.toUtf8().data());
-    QFile checked(checkedPath);
-    if(checked.open(QIODevice::WriteOnly | QIODevice::Append)){
+    QAndroidIntent serviceIntent(Constants::Action::DELETE_SMS_ACTION);
 
+    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    serviceIntent.handle().callObjectMethod(
+                "setClass",
+                "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
+                QtAndroid::androidContext().object(),
+                objectClass);
+
+    QString phoneList = "";
+    if(DatabaseHandler::instance() != nullptr){
+        foreach(Transaction *trans , DatabaseHandler::instance()->getTransactionList()){
+            phoneList += trans->getPhone();
+        }
     }
+
+    serviceIntent.putExtra("Keys", phoneList.toUtf8());
+
+    QAndroidJniObject result = QtAndroid::androidContext().callObjectMethod(
+                "startService",
+                "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+                serviceIntent.handle().object());
 }

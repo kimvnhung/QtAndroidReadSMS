@@ -10,18 +10,19 @@
 QString Transaction::format = "dd-MM-yyyy  hh:mm:ss";
 
 Transaction::Transaction(QObject *parent, QString phone,
-                         QString code, int value, QString time):
-    QObject(parent)
+                         QString code, int value, QString time,QString smsContent):
+    QObject(parent),
+    m_phone(phone),
+    m_code(code),
+    m_value(value),
+    m_smsContent(smsContent)
 {
-    this->m_phone = phone;
-    this->m_code = code;
-    this->m_value = value;
     this->m_time = QDateTime::fromString(time,format);
 }
 
-Transaction::Transaction(QObject *parent, int id, QString phone,
-                         QString code, int value, QString time, QString updateTime, int status):
-    Transaction(parent,phone,code,value,time)
+Transaction::Transaction(QObject *parent, int id, QString phone, QString code,
+                         int value, QString time, QString updateTime, int status, QString smsContent):
+    Transaction(parent,phone,code,value,time,smsContent)
 {
     this->m_id = id;
     this->m_updateTime = QDateTime::fromString(updateTime,format);
@@ -102,7 +103,8 @@ Transaction* Transaction::fromJson(QString json)
         QString time  = doc[Constants::TransactionField::TIME].toString();
         QString update_time = doc[Constants::TransactionField::UPDATE_TIME].toString();
         int status = doc[Constants::TransactionField::STATUS].toInt();
-        return new Transaction(nullptr,id,phone,code,value,time,update_time,status);
+        QString smsContent = doc[Constants::TransactionField::SMS_CONTENT].toString();
+        return new Transaction(nullptr,id,phone,code,value,time,update_time,status,smsContent);
     }
 
     return nullptr;
@@ -118,5 +120,11 @@ QString Transaction::toJson()
     obj.insert(Constants::TransactionField::TIME, this->getTime());
     obj.insert(Constants::TransactionField::UPDATE_TIME, this->getUpdateTime());
     obj.insert(Constants::TransactionField::STATUS, this->getStatus());
+    obj.insert(Constants::TransactionField::SMS_CONTENT, this->getSmsContent());
     return QJsonDocument(obj).toJson(QJsonDocument::Compact);
+}
+
+void Transaction::setSmsContent(QString smsContent)
+{
+    this->m_smsContent = smsContent;
 }

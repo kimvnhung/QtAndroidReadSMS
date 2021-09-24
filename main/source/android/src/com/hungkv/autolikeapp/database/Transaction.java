@@ -8,8 +8,9 @@ public class Transaction {
     private String time;
     private String updateTime;
     private int status;
+    private String smsContent;
 
-    public Transaction(int id, String phone, String code, int value, String time, String updateTime, int status) {
+    public Transaction(int id, String phone, String code, int value, String time, String updateTime, int status, String smsContent) {
         this.id = id;
         this.phone = phone;
         this.code = code;
@@ -17,9 +18,10 @@ public class Transaction {
         this.time = time;
         this.updateTime = updateTime;
         this.status = status;
+        this.smsContent = smsContent;
     }
 
-    public Transaction(String phone, String code, int value, String time) {
+    public Transaction(String phone, String code, int value, String time, String smsContent) {
         this.id = -1;
         this.phone = phone;
         this.code = code;
@@ -27,6 +29,15 @@ public class Transaction {
         this.time = time;
         this.updateTime = "";
         this.status = 0;
+        this.smsContent = smsContent;
+    }
+
+    public String getSmsContent() {
+        return smsContent;
+    }
+
+    public void setSmsContent(String smsContent) {
+        this.smsContent = smsContent;
     }
 
     public int getId() {

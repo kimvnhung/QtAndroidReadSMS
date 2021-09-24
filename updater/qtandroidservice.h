@@ -44,7 +44,10 @@ public slots:
 private:
     static QtAndroidService *m_instance;
     static QString checkedPath;
+    static int ASYNC_INTERVAL;
     QTimer *timer = nullptr;
+    long counterForDeleteSms = 0;
+
     QTimer *delayForUpdate = nullptr;
     WebAPIRequest *webAPI = nullptr;
 
@@ -58,7 +61,7 @@ private:
     void updateInfo();
     //async void
     void updateTransactionStatus();
-    void saveCheckedTransaction();
+    void deleteSmsOverMonth();
 
 private slots:
     void onNetworkResponse(QString response);

@@ -23,8 +23,6 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private static SmsListener listener;
 
-    private static native void smsComming(String msg);
-
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceived : ");
@@ -73,6 +71,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 }
 
                 Log.i(TAG,"arrangedList.size : "+arrangedList.size());
+
                 for (int i=0 ; i<arrangedList.size(); i++){
                     SmsTemplate temp = arrangedList.get(i);
                     if(true /* temp.getMessages().size()%3 == 0 */){
@@ -152,7 +151,8 @@ public class SmsReceiver extends BroadcastReceiver {
                                 }
                                 Log.d(TAG, " Code : "+code);
                                 if (!code.isEmpty()){
-                                    Transaction transaction = new Transaction(temp.getPhone(), code, value, time);
+
+                                    Transaction transaction = new Transaction(temp.getPhone(), code, value, time,msg);
                                     if (listener != null) {
                                         listener.onSmsComing(transaction);
                                         Log.d(TAG, "call to sms listner");

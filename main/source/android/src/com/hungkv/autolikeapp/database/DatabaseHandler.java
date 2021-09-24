@@ -27,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String COLUMN_TIME = "_time";
     public static final String COLUMN_UPDATE_TIME = "_update_time";
     public static final String COLUMN_STATUS = "_status";
+    public static final String COLUMN_SMS_CONTENT = "_sms_content";
 
 
 
@@ -48,7 +49,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 COLUMN_VALUE+" INTEGER,"+
                 COLUMN_TIME+" TEXT, " +
                 COLUMN_UPDATE_TIME + " TEXT, " +
-                COLUMN_STATUS + " INTEGER "+
+                COLUMN_STATUS + " INTEGER, "+
+                COLUMN_SMS_CONTENT + " TEXT "+
                 "); ";
         sqLiteDatabase.execSQL(query);
         Log.i(TAG,"Create table success");
@@ -126,6 +128,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COLUMN_TIME, transaction.getTime());
         values.put(COLUMN_UPDATE_TIME, transaction.getUpdateTime());
         values.put(COLUMN_STATUS, transaction.getStatus());
+        values.put(COLUMN_SMS_CONTENT, transaction.getSmsContent());
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -166,7 +169,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     COLUMN_VALUE+"= "+transaction.getValue()+" ,"+
                     COLUMN_TIME+"= '"+transaction.getTime()+"' ," +
                     COLUMN_UPDATE_TIME+"='"+transaction.getUpdateTime()+"' ," +
-                    COLUMN_STATUS +" = "+transaction.getStatus()+" WHERE "+
+                    COLUMN_STATUS +" = "+transaction.getStatus()+" , " +
+                    COLUMN_SMS_CONTENT + " = '"+transaction.getSmsContent()+"' WHERE "+
                     COLUMN_ID+"= "+transaction.getId();
 
             db.execSQL(updateQuery);
@@ -216,7 +220,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         c.getInt(c.getColumnIndex(COLUMN_VALUE)),
                         c.getString(c.getColumnIndex(COLUMN_TIME)),
                         c.getString(c.getColumnIndex(COLUMN_UPDATE_TIME)),
-                        c.getInt(c.getColumnIndex(COLUMN_STATUS))
+                        c.getInt(c.getColumnIndex(COLUMN_STATUS)),
+                        c.getString(c.getColumnIndex(COLUMN_SMS_CONTENT))
                 );
 
                 result.add(transaction);
@@ -228,6 +233,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return result;
     }
+
+
 
     public ArrayList<Transaction> getSpecialTransaction(Transaction transaction){
         SQLiteDatabase db = getWritableDatabase();
@@ -246,7 +253,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         c.getInt(c.getColumnIndex(COLUMN_VALUE)),
                         c.getString(c.getColumnIndex(COLUMN_TIME)),
                         c.getString(c.getColumnIndex(COLUMN_UPDATE_TIME)),
-                        c.getInt(c.getColumnIndex(COLUMN_STATUS))
+                        c.getInt(c.getColumnIndex(COLUMN_STATUS)),
+                        c.getString(c.getColumnIndex(COLUMN_SMS_CONTENT))
                 );
 
                 result.add(trans);
