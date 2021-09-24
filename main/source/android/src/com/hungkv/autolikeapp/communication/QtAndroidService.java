@@ -186,8 +186,7 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                                     if (dateObj.before(new Date())){
                                         Log.d(TAG,"Delete sms wit address : "+address);
                                         this.getContentResolver().delete(
-                                            Uri.parse("content://sms/" + id), "date=?",
-                                            new String[] { date });
+                                            Uri.parse("content://sms/" + id), null,null);
                                     }
                                 }
 
