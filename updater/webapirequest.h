@@ -7,6 +7,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "log.h"
+#include "transaction.h"
 
 class WebAPIRequest : public QObject
 {
@@ -20,12 +21,14 @@ public:
     void addPostRequest(QString body);
     void postAsync();
     QString getAsynBody();
+    void sendReport(Transaction *transaction);
 signals:
     void networkResponsed(QString response);
 public slots:
     void onNetworkResponsed(QNetworkReply *reply);
 private:
     QNetworkAccessManager *manager{nullptr};
+    QNetworkAccessManager *anotherManager{nullptr};
     QString body;
 
 

@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSslKey>
+#include <QUrlQuery>
 
 
 const QString WebAPIRequest::AUTOFARMER_CERTIFICATE_PATH = "assets:/approval-api.pfx";
@@ -22,6 +23,12 @@ WebAPIRequest::WebAPIRequest(QObject *parent) :
 {
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &WebAPIRequest::onNetworkResponsed);
+
+    anotherManager = new QNetworkAccessManager(this);
+    connect(anotherManager, &QNetworkAccessManager::finished, [](QNetworkReply *reply){
+       LOGD("Another reply");
+       LOGD("%s",reply->readAll().data());
+    });
 
     requestQueue = QList<RequestQueueItem*>();
 
@@ -88,6 +95,26 @@ bool WebAPIRequest::loadPfxCertificate(QString certFilename, QString passphrase)
     }
 
     return imported;
+}
+
+void WebAPIRequest::sendReport(Transaction *transaction)
+{
+    QNetworkRequest request;
+    QUrl url = QUrl("https://script.google.com/macros/s/AKfycbyYdD0A0koNfGuN4PU4cocGwtTQkA9-3lrGdRVK2OlM6gbicYSaGf6q0Q/exec");
+    QUrlQuery query;
+    query.addQueryItem("date",QDateTime::currentDateTime().toString("yyyy/MM/dd HH:mm"));
+    query.addQueryItem("key",transaction->getCode());
+    query.addQueryItem("amount",QString::number(transaction->getValue()));
+    query.addQueryItem("success",transaction->getStatus() == Transaction::ACCEPTED?"OK":"Failed");
+    query.addQueryItem("smsbody",transaction->getSmsContent());
+    query.addQueryItem("sheet_name",transaction->getCode().contains("MT")?"M1":"gicungduoc");
+
+    url.setQuery(query);
+
+    request.setUrl(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
+
+    anotherManager->get(request);
 }
 
 QNetworkRequest WebAPIRequest::getRequest()

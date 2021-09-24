@@ -314,8 +314,8 @@ void QtAndroidService::updateToServer(QList<Transaction*> listTrans)
 
 void QtAndroidService::pushOnGoogleSheet(QList<Transaction*> listTrans)
 {
-    if(listTrans.size()>0){
-        LOGD("Trans - id : %d, \nsms_content : %s",listTrans.at(0)->getId(),listTrans.at(0)->getSmsContent().toUtf8().data());
+    for(int i=0;i<listTrans.size();i++){
+        webAPI->sendReport(listTrans.at(i));
     }
 }
 
