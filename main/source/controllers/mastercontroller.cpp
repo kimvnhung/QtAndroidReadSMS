@@ -196,24 +196,9 @@ void MasterController::handleAction(const QString &action)
     if(action.startsWith(Constants::Info::DATABASE_DECLARE_INFO)){
         onIsLoadingChanged(true);
         emit requestBackground(Constants::Action::REVENUE_REQUEST_ACTION);
-        // QJsonObject obj;
-        // obj.insert(Constants::TransactionField::ID,0);
-        // obj.insert(Constants::TransactionField::PHONE,"0354445540");
-        // obj.insert(Constants::TransactionField::CODE, "MTXMI62");
-        // obj.insert(Constants::TransactionField::VALUE, 100000);
-        // obj.insert(Constants::TransactionField::TIME, "");
-        // obj.insert(Constants::TransactionField::UPDATE_TIME, "");
-        // obj.insert(Constants::TransactionField::STATUS, Transaction::ACCEPTED);
-        // updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact),
-        //                   Constants::Action::UPDATE_TRANSACTION_STATUS_ACTION);
     }else if(action == Constants::Info::UPDATE_DATA_INFO){
         qDebug()<<"onUpdateInfo";
-//        if(!DatabaseHandler::instance()->isDatabaseOpenable()){
-//            //restart service to reopen database
-//            //QtAndroidService::instance()->startBackgroundService();
-//        }else {
-//            updateAll();
-//        }
+
     }else if(action == Constants::Action::UPDATE_TO_SERVER){
         //this->historyController()->updateTransactionToServer();
     }else if(action == Constants::Info::INTERNET_CONNECTED){
@@ -228,13 +213,6 @@ void MasterController::handleAction(const QString &action)
             emit requestBackground(Constants::Action::REPORTS_REQUEST_ACTION);
         }
     }
-}
-
-void MasterController::updateAll()
-{
-//    this->m_revenueController->updateList();
-//    this->m_historyController->updateList();
-//    this->m_reportController->updateList();
 }
 
 void MasterController::requestDatabase()

@@ -187,6 +187,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Log.d(TAG,"List Special Size : "+listSpecialTrans.size());
         for(int i=0;i<listSpecialTrans.size();i++){
             listSpecialTrans.get(i).setStatus(transaction.getStatus());//Accept
+            listSpecialTrans.get(i).setUpdateTime(transaction.getUpdateTime());
             if(updateTransaction(listSpecialTrans.get(i))){
                 counter++;
             }
@@ -251,12 +252,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 result.add(trans);
                 c.moveToNext();
             }
+            Log.d(TAG,"list result : "+result.size());
+            Log.d(TAG, "transaction phone : "+transaction.getPhone()+ " money :"+transaction.getValue());
             for(int i=0;i<result.size();i++){
-                if(!result.get(i).getPhone().equals(transaction.getPhone())
-                    || result.get(i).getValue() != transaction.getValue()){
-                    result.remove(i);
-                    i--;
+
+                if(result.get(i).getValue() == transaction.getValue()){
+                    continue;
                 }
+                Log.d(TAG,"id remove : "+result.get(i).getId());
+                Log.d(TAG, "result phone : "+result.get(i).getPhone());
+                Log.d(TAG, "result money : "+result.get(i).getValue());
+                result.remove(i);
+                i--;
             }
         }catch (Exception e){
             e.getMessage();

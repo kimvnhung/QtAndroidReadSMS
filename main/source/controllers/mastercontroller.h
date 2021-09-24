@@ -102,8 +102,6 @@ private:
     TabAction* mOffersTab;
     TabAction* mSettingTab;
 
-    void updateAll();
-
     bool m_isLoading = true;
 
     void handleAction(const QString &action);

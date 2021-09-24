@@ -192,7 +192,7 @@ void QtAndroidService::handleAsynTask()
 {
     webAPI->postAsync();
 
-
+    updateTransactionStatus();
 }
 
 void QtAndroidService::handleAction(const QString &action)
@@ -321,6 +321,10 @@ void QtAndroidService::onNetworkResponse(QString response)
             QString phone = res["data"].toObject()["username"].toString();
             QString code = res["data"].toObject()["code"].toString();
             int value = res["data"].toObject()["value"].toInt();
+            QString update_time = QDateTime::fromString(
+                        res["data"].toObject()["updated_at"].toString(),
+                        "yyyy-MM-ddTHH:mm:ss.zzzZ")
+                    .toString(Transaction::format);
             if(DatabaseHandler::instance() != nullptr){
                 QJsonObject obj;
                 obj.insert(Constants::TransactionField::ID,0);
@@ -328,17 +332,9 @@ void QtAndroidService::onNetworkResponse(QString response)
                 obj.insert(Constants::TransactionField::CODE, code);
                 obj.insert(Constants::TransactionField::VALUE, value);
                 obj.insert(Constants::TransactionField::TIME, "");
-                obj.insert(Constants::TransactionField::UPDATE_TIME, "");
+                obj.insert(Constants::TransactionField::UPDATE_TIME, update_time);
                 obj.insert(Constants::TransactionField::STATUS, Transaction::ACCEPTED);
                 needToUpdate.append(QJsonDocument(obj).toJson(QJsonDocument::Compact));
-                saveCheckedTransaction();
-//                Transaction trans;
-//                trans.setCode(code);
-//                trans.setPhone(phone);
-//                trans.setValue(value);
-//                trans.setStatus(Transaction::ACCEPTED);
-//                DatabaseHandler::instance()->update(&trans);
-//                updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
             }
         }else {
             QJsonDocument body = QJsonDocument::fromJson(webAPI->getAsynBody().toUtf8());
@@ -347,22 +343,16 @@ void QtAndroidService::onNetworkResponse(QString response)
                     && DatabaseHandler::instance() != nullptr){
                 QString code = body["code"].toString();
                 int money = body["money"].toInt();
+                QString updateTime = QDateTime::currentDateTime().toString(Transaction::format);
                 QJsonObject obj;
                 obj.insert(Constants::TransactionField::ID,0);
                 obj.insert(Constants::TransactionField::PHONE,"");
                 obj.insert(Constants::TransactionField::CODE, code);
                 obj.insert(Constants::TransactionField::VALUE, money);
                 obj.insert(Constants::TransactionField::TIME, "");
-                obj.insert(Constants::TransactionField::UPDATE_TIME, "");
+                obj.insert(Constants::TransactionField::UPDATE_TIME, updateTime);
                 obj.insert(Constants::TransactionField::STATUS, Transaction::REJECT);
                 needToUpdate.append(QJsonDocument(obj).toJson(QJsonDocument::Compact));
-//                updateTransaction(QJsonDocument(obj).toJson(QJsonDocument::Compact));
-
-//                Transaction trans;
-//                trans.setCode(code);
-//                trans.setValue(money);
-//                trans.setStatus(Transaction::REJECT);
-//                DatabaseHandler::instance()->update(&trans);
             }
         }
     }
