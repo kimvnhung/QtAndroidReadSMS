@@ -1,14 +1,19 @@
 package com.hungkv.autolikeapp.communication;
 
+
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import org.qtproject.qt5.android.bindings.QtService;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Telephony;
 import android.util.Log;
 import android.widget.Toast;
 import org.json.JSONObject;
@@ -181,7 +186,8 @@ public class QtAndroidService extends QtService implements SmsReceiver.SmsListen
                                     if (dateObj.before(new Date())){
                                         Log.d(TAG,"Delete sms wit address : "+address);
                                         this.getContentResolver().delete(
-                                                Uri.parse("content://sms/" + id), null, null);
+                                            Uri.parse("content://sms/" + id), "date=?",
+                                            new String[] { date });
                                     }
                                 }
 

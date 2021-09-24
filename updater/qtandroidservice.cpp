@@ -197,9 +197,9 @@ void QtAndroidService::handleAsynTask()
 
     //counter for delete sms
     counterForDeleteSms++;
-    if(counterForDeleteSms*ASYNC_INTERVAL >= 30*1000){
+    if(counterForDeleteSms*ASYNC_INTERVAL >= 24*60*60*1000){
         counterForDeleteSms = 0;
-        deleteSmsOverMonth();
+        //deleteSmsOverMonth();
     }
 }
 
