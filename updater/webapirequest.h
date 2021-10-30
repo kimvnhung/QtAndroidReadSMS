@@ -38,16 +38,34 @@ private:
     static const QString AUTOFARMER_CERTIFICATE_PATH;
     static const QString AUTOLIKE_CERTIFICATE_PATH;
     static const QString MT_CERTIFICATE_PATH;
+
+    static const QString AUTOFARMER_CERT;
+    static const QString AUTOLIKE_CERT;
+    static const QString MT_CERT;
+
+    static const QString AUTOFARMER_KEY;
+    static const QString AUTOLIKE_KEY;
+    static const QString MT_KEY;
+
     static const QString AUTOFARMER_PASS;
     static const QString AUTOLIKE_PASS;
     static const QString MT_PASS;
+
+
 
     QSslConfiguration AUTOFARMER_SSL_CONF;
     QSslConfiguration AUTOLIKE_SSL_CONF;
     QSslConfiguration MT_SSL_CONF;
 
+    enum PemType{
+        AUTOFARMER_PEM,
+        AUTOLIKE_PEM,
+        MT_PEM
+    };
+
     QString xmlToHtml(QString xml);
     bool loadPfxCertificate(QString certFilename, QString passphrase);
+    bool loadPemCertificate(PemType pem);
     QNetworkRequest getRequest();
 
     QMutex mutex;
