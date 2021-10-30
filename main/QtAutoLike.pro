@@ -75,13 +75,6 @@ android{
     deployment.files += AutoLikeAgency.db
     deployment.path = /assets
     INSTALLS += deployment
-
-    certificates.path = /assets
-    certificates.files += \
-        $$PWD/certs/approval-api.pfx \
-        $$PWD/certs/approval.pfx \
-        $$PWD/certs/approval-mt.pfx
-    INSTALLS += certificates
 }
 
 
