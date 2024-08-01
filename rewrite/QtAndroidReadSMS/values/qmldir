@@ -1,0 +1,5 @@
+module values
+singleton Draw 1.0 Draw.qml
+singleton String 1.0 String.qml
+singleton Color 1.0 Color.qml
+singleton Dimen 1.0 Dimen.qml

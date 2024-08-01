@@ -1,0 +1,40 @@
+<RCC>
+    <qresource prefix="/values">
+        <file alias="qmldir">values/qmldir</file>
+        <file alias="Draw.qml">values/Draw.qml</file>
+        <file alias="fontawesome.ttf">values/fontawesome-webfont.ttf</file>
+        <file alias="String.qml">values/String.qml</file>
+        <file alias="Color.qml">values/Color.qml</file>
+        <file alias="Dimen.qml">values/Dimen.qml</file>
+        <file alias="Roboto-Bold.ttf">values/Roboto-Bold.ttf</file>
+        <file alias="Roboto-BoldItalic.ttf">values/Roboto-BoldItalic.ttf</file>
+        <file alias="Roboto-Italic.ttf">values/Roboto-Italic.ttf</file>
+        <file alias="Roboto-Regular.ttf">values/Roboto-Regular.ttf</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="revenue_tab_ic.png">images/revenue_tab_ic.png</file>
+        <file alias="revenue_untab_ic.png">images/revenue_untab_ic.png</file>
+        <file alias="history_tab_ic.png">images/history_tab_ic.png</file>
+        <file alias="history_untab_ic.png">images/history_untab_ic.png</file>
+        <file alias="offers_tab_ic.png">images/offers_tab_ic.png</file>
+        <file alias="offers_untab_ic.png">images/offers_untab_ic.png</file>
+        <file alias="reports_tab_ic.png">images/reports_tab_ic.png</file>
+        <file alias="reports_untab_ic.png">images/reports_untab_ic.png</file>
+        <file alias="setting_tab_ic.png">images/setting_tab_ic.png</file>
+        <file alias="setting_untab_ic.png">images/setting_untab_ic.png</file>
+        <file alias="revenue_panel.png">images/revenue_panel.png</file>
+        <file alias="avatar.png">images/avatar.png</file>
+        <file alias="pending_status_ic.svg">images/pending_status_ic.svg</file>
+        <file alias="accepted_status_ic.svg">images/accepted_status_ic.svg</file>
+        <file alias="reject_status_ic.svg">images/reject_status_ic.svg</file>
+        <file alias="right_arrow.svg">images/right_arrow.svg</file>
+        <file alias="log_out.svg">images/log_out.svg</file>
+        <file alias="right_arrow.png">images/right_arrow.png</file>
+        <file alias="gift_icon.png">images/gift_icon.png</file>
+        <file alias="percent_rectangle.png">images/percent_rectangle.png</file>
+        <file alias="calendar.png">images/calendar.png</file>
+        <file alias="down_arrow.png">images/down_arrow.png</file>
+        <file alias="report_background.png">images/report_background.png</file>
+        <file alias="diagonal_line.png">images/diagonal_line.png</file>
+    </qresource>
+</RCC>
