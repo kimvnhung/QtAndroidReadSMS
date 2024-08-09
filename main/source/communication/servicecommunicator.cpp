@@ -1,7 +1,5 @@
 #include "servicecommunicator.h"
-
-#include <QAndroidIntent>
-#include <QtAndroid>
+#include <private/qandroidextras_p.h>
 
 ServiceCommunicator::ServiceCommunicator(QObject *parent) :
     QObject(parent),
@@ -54,9 +52,10 @@ void ServiceCommunicator::requestBackground(const QString &action, const QString
 
 void ServiceCommunicator::startService()
 {
-    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
+    auto activity = QJniObject(QNativeInterface::QAndroidApplication::context());
+    QAndroidIntent serviceIntent(activity.object(),
                                         "com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+    QJniObject result = activity.callObjectMethod(
         "startService",
         "(Landroid/content/Intent;)Landroid/content/ComponentName;",
         serviceIntent.handle().object());

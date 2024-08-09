@@ -2,10 +2,10 @@
 #define QTANDROIDSERVICE_H
 
 #include <QObject>
-#include <QtAndroid>
-#include <QAndroidIntent>
+#include <QtCore/private/qandroidextras_p.h>
 #include <QTimer>
 #include <QThread>
+#include <QJniObject>
 
 #include "constants.h"
 #include "rep_qtandroidservice_source.h"
@@ -30,8 +30,8 @@ public:
                                        QString action = Constants::Action::UPDATE_TRANSACTION_STATUS_ACTION);
     void registerNative();
 
-    void passingObject(QAndroidJniObject javaObject);
-    QAndroidJniObject* jniObject(){return m_javaServiceInstance;}
+    void passingObject(QJniObject javaObject);
+    QJniObject* jniObject(){return m_javaServiceInstance;}
 
 signals:
     void requestUI(const QString &action,const QString &data = "");
@@ -51,7 +51,7 @@ private:
     QTimer *delayForUpdate = nullptr;
     WebAPIRequest *webAPI = nullptr;
 
-    QAndroidJniObject *m_javaServiceInstance = nullptr;
+    QJniObject *m_javaServiceInstance = nullptr;
 
     QList<QString> needToUpdate;
 

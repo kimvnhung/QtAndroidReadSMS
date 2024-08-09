@@ -1,8 +1,8 @@
 #include "mastercontroller.h"
 
-#include <QAndroidIntent>
-#include <QAndroidJniEnvironment>
 #include "utility.h"
+
+#include <private/qandroidextras_p.h>
 
 MasterController* MasterController::mInstance = nullptr;
 
@@ -219,16 +219,17 @@ void MasterController::requestDatabase()
 {
     QAndroidIntent serviceIntent(Constants::Action::START_BACKGROUND_SERVICE_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniEnvironment env;
+    QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    auto activity = QJniObject(QNativeInterface::QAndroidApplication::context());
     serviceIntent.handle().callObjectMethod(
                 "setClass",
                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
-                QtAndroid::androidActivity().object(),
+                activity.object(),
                 objectClass);
 
-    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+    QJniObject result = activity.callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
@@ -239,8 +240,8 @@ void MasterController::requestDatabase()
 // {
 //     QAndroidIntent serviceIntent(action);
 
-//     QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
-//     QAndroidJniEnvironment env;
+//     QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+//     QJniEnvironment env;
 //     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
 //     serviceIntent.handle().callObjectMethod(
 //                 "setClass",
@@ -249,7 +250,7 @@ void MasterController::requestDatabase()
 //                 objectClass);
 //     serviceIntent.putExtra("Transaction", jsonTrans.toUtf8());
 
-//     QAndroidJniObject result = QtAndroid::androidContext().callObjectMethod(
+//     QJniObject result = QtAndroid::androidContext().callObjectMethod(
 //                 "startService",
 //                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
 //                 serviceIntent.handle().object());
@@ -258,9 +259,10 @@ void MasterController::requestDatabase()
 
 void MasterController::startService()
 {
-    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
+    auto activity = QJniObject(QNativeInterface::QAndroidApplication::context());
+    QAndroidIntent serviceIntent(activity.object(),
                                         "com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+    QJniObject result = activity.callObjectMethod(
         "startService",
         "(Landroid/content/Intent;)Landroid/content/ComponentName;",
         serviceIntent.handle().object());

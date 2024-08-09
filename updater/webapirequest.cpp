@@ -442,15 +442,15 @@ QString WebAPIRequest::xmlToHtml(QString xml)
     while(!xmlItem.isNull())
     {
         //read xml
-        int itemId = xmlItem.attribute("id", "0").toInt();
+        // int itemId = xmlItem.attribute("id", "0").toInt();
         QString itemName = xmlItem.attribute("Name", "");
 
         QDomElement xmlImg = xmlItem.firstChild().toElement();
         QString imgSrc;
-        int imgId = 0;
+        // int imgId = 0;
         if (!xmlImg.isNull()) {
             imgSrc = xmlImg.attribute("src", "");
-            imgId = xmlImg.attribute("id", "0").toInt();
+            // imgId = xmlImg.attribute("id", "0").toInt();
         }
 
         //create html

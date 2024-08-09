@@ -1,7 +1,6 @@
 #include "historycontroller.h"
 
 #include <QDir>
-#include <QNetworkConfigurationManager>
 
 HistoryController::HistoryController(QObject *parent) : QObject(parent)
 {

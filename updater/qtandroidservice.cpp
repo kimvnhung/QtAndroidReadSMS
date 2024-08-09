@@ -1,7 +1,6 @@
 #include "qtandroidservice.h"
 
-#include <QAndroidJniEnvironment>
-#include <QAndroidIntent>
+#include <QJniEnvironment>
 #include <QDebug>
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -76,9 +75,9 @@ void QtAndroidService::registerNative()
         {"emitToBackground", "(Ljava/lang/String;)V", reinterpret_cast<void *>(receivedAction)},
         {"emitToBackground", "(Ljava/lang/String;Ljava/lang/String;)V", reinterpret_cast<void *>(receivedActionAndData)}
     };
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
 
-    QAndroidJniEnvironment env;
+    QJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     env->RegisterNatives(objectClass,
                          methods,
@@ -90,16 +89,18 @@ void QtAndroidService::startBackgroundService()
 {
     QAndroidIntent serviceIntent(Constants::Action::START_BACKGROUND_SERVICE_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniEnvironment env;
+    QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     serviceIntent.handle().callObjectMethod(
                 "setClass",
                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
-                QtAndroid::androidActivity().object(),
+                QNativeInterface::QAndroidApplication::context().object(),
                 objectClass);
 
-    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+    auto activity = QJniObject(QNativeInterface::QAndroidApplication::context());
+
+    QJniObject result = activity.callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
@@ -109,16 +110,18 @@ void QtAndroidService::startForegroundService()
 {
     QAndroidIntent serviceIntent(Constants::Action::START_FOREGROUND_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniEnvironment env;
+    QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    auto activity = QJniObject(QNativeInterface::QAndroidApplication::context());
+
     serviceIntent.handle().callObjectMethod(
                 "setClass",
                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
-                QtAndroid::androidActivity().object(),
+                activity.object(),
                 objectClass);
 
-    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+    QJniObject result = activity.callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
@@ -139,17 +142,17 @@ void QtAndroidService::updateTransaction(QString jsonTrans, QString action)
 {
     QAndroidIntent serviceIntent(action);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniEnvironment env;
+    QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     serviceIntent.handle().callObjectMethod(
                 "setClass",
                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
-                QtAndroid::androidContext().object(),
+                QNativeInterface::QAndroidApplication::context().object(),
                 objectClass);
     serviceIntent.putExtra("Transaction", jsonTrans.toUtf8());
 
-    QAndroidJniObject result = QtAndroid::androidContext().callObjectMethod(
+    QJniObject result = QJniObject(QNativeInterface::QAndroidApplication::context()).callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
@@ -173,17 +176,18 @@ void QtAndroidService::log(const QString &message)
 {
     QAndroidIntent serviceIntent(Constants::Action::LOG_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniEnvironment env;
+    QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    auto activity = QJniObject(QNativeInterface::QAndroidApplication::context());
     serviceIntent.handle().callObjectMethod(
                 "setClass",
                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
-                QtAndroid::androidActivity().object(),
+                activity.object(),
                 objectClass);
     serviceIntent.putExtra("message", message.toUtf8());
 
-    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+    QJniObject result = activity.callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
@@ -221,7 +225,7 @@ void QtAndroidService::handleAction(const QString &action)
                     i--;
                 }
             }
-            LOGD("listTrans size : %d",listTrans.size());
+            LOGD("listTrans size : %d",(int)listTrans.size());
             if(listTrans.size() == 0){
                 return;
             }
@@ -233,14 +237,14 @@ void QtAndroidService::handleAction(const QString &action)
     }else if(action == Constants::Action::REVENUE_REQUEST_ACTION){
         if(DatabaseHandler::instance() != nullptr){
             QList<Transaction*> todayList = DatabaseHandler::instance()->getTransactionListByDate(QDate::currentDate());
-            LOGD("todayList size : %d",todayList.size());
+            LOGD("todayList size : %d",(int)todayList.size());
             emit requestUI(Constants::Action::REVENUE_REQUEST_ACTION,Utility::toJsonArray(todayList));
         }
     }else if(action == Constants::Action::HISTORY_REQUEST_ACTION){
         if(DatabaseHandler::instance() != nullptr){
             updateTransactionStatus();
             QList<Transaction*> dataList = DatabaseHandler::instance()->getTransactionList();
-            LOGD("dataList size : %d",dataList.size());
+            LOGD("dataList size : %d",(int)dataList.size());
             emit requestUI(Constants::Action::HISTORY_REQUEST_ACTION,Utility::toJsonArray(dataList));
         }
     }else if(action == Constants::Action::SERVICE_CLOCK_ACTION){
@@ -267,7 +271,7 @@ void QtAndroidService::handleActionWithData(const QString &action, const QString
     }else if(action == Constants::Action::REPORTS_REQUEST_ACTION){
         if(DatabaseHandler::instance() != nullptr){
             QList<Transaction*> dataList = DatabaseHandler::instance()->getTransactionListByDate(QDate::fromString(data,"dd/MM/yy"));
-            LOGD("dataList size : %d",dataList.size());
+            LOGD("dataList size : %d",(int)dataList.size());
             emit requestUI(Constants::Action::REPORTS_REQUEST_ACTION,Utility::toJsonArray(dataList));
         }
     }
@@ -280,7 +284,7 @@ void QtAndroidService::onInternetConnectionChanged(bool isConnected)
     }
 }
 
-void QtAndroidService::passingObject(QAndroidJniObject javaObject)
+void QtAndroidService::passingObject(QJniObject javaObject)
 {
     {
         LOGD("");
@@ -289,7 +293,7 @@ void QtAndroidService::passingObject(QAndroidJniObject javaObject)
             m_javaServiceInstance = nullptr;
         } else {
             if(m_javaServiceInstance == nullptr) {
-                m_javaServiceInstance = new QAndroidJniObject(javaObject);
+                m_javaServiceInstance = new QJniObject(javaObject);
                 if(m_javaServiceInstance->isValid()) {
                     LOGD("Valid jni");
                 } else {
@@ -365,16 +369,18 @@ void QtAndroidService::updateInfo()
 {
     QAndroidIntent serviceIntent(Constants::Info::UPDATE_DATA_INFO);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniEnvironment env;
+    QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    auto context = QJniObject(QNativeInterface::QAndroidApplication::context());
+
     serviceIntent.handle().callObjectMethod(
                 "setClass",
                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
-                QtAndroid::androidContext().object(),
+                context.object(),
                 objectClass);
 
-    QAndroidJniObject result = QtAndroid::androidContext().callObjectMethod(
+    QJniObject result = context.callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());
@@ -384,13 +390,14 @@ void QtAndroidService::deleteSmsOverMonth()
 {
     QAndroidIntent serviceIntent(Constants::Action::DELETE_SMS_ACTION);
 
-    QAndroidJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
-    QAndroidJniEnvironment env;
+    QJniObject javaClass("com/hungkv/autolikeapp/communication/QtAndroidService");
+    QJniEnvironment env;
     jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    auto context = QJniObject(QNativeInterface::QAndroidApplication::context());
     serviceIntent.handle().callObjectMethod(
                 "setClass",
                 "(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;",
-                QtAndroid::androidContext().object(),
+                context.object(),
                 objectClass);
 
     QString phoneList = "";
@@ -402,7 +409,7 @@ void QtAndroidService::deleteSmsOverMonth()
 
     serviceIntent.putExtra("Keys", phoneList.toUtf8());
 
-    QAndroidJniObject result = QtAndroid::androidContext().callObjectMethod(
+    QJniObject result = context.callObjectMethod(
                 "startService",
                 "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                 serviceIntent.handle().object());

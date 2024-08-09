@@ -1,8 +1,6 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <errno.h>
-
 //#ifdef ANDROID
 
 #ifndef LOG_TAG

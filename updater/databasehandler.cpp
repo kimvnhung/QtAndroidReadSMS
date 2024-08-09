@@ -101,7 +101,8 @@ QList<Transaction*> DatabaseHandler::getTransactionListByDate(QDate date)
         //
 
 
-        QSqlQuery query = db.exec(QString("select * from "+TABLE_NAME_AGENCY));
+        QSqlQuery query(QString("select * from "+TABLE_NAME_AGENCY));
+        query.exec();
         while (query.next()) {
             int id = query.value(COLUMN_ID).toInt();
             QString phone  = query.value(COLUMN_PHONE).toString();
@@ -136,7 +137,8 @@ void DatabaseHandler::update(Transaction *transaction)
                             " WHERE "+COLUMN_PHONE +" = \""+transaction->getPhone()+"\" AND "+
                             COLUMN_TRANSACTION_CODE +" = \""+transaction->getCode()+"\" AND "+
                             COLUMN_VALUE +" = "+QString::number(transaction->getValue());
-        QSqlQuery query = db.exec(qry);
+        QSqlQuery query(qry);
+        query.exec();
         if(!query.isValid()){
             LOGD("Not valid");
         }
@@ -146,5 +148,6 @@ void DatabaseHandler::update(Transaction *transaction)
 //private
 void DatabaseHandler::log(QString content)
 {
+    Q_UNUSED(content);
 //    QtAndroidService::instance()->log(content);
 }

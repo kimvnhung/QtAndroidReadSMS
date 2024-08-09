@@ -1,6 +1,5 @@
 
 #include <QDebug>
-#include <QAndroidService>
 #include "log.h"
 #include "qtandroidservice.h"
 #include <QUrl>

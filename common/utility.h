@@ -2,7 +2,6 @@
 #define UTILITY_H
 
 #include "constants.h"
-#include "QtAndroid"
 #include "transaction.h"
 
 class Utility

@@ -4,15 +4,17 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QProcess>
+#include <QJniObject>
 #include "log.h"
+#include <QtCore/private/qandroidextras_p.h>
 
 void Utility::showToast(const QString &message, int duration){
     // all the magic must happen on Android UI thread
-    QtAndroid::runOnAndroidThread([message, duration] {
-        QAndroidJniObject javaString = QAndroidJniObject::fromString(message);
-        QAndroidJniObject toast = QAndroidJniObject::callStaticObjectMethod("android/widget/Toast", "makeText",
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([message, duration] {
+        QJniObject javaString = QJniObject::fromString(message);
+        QJniObject toast = QJniObject::callStaticObjectMethod("android/widget/Toast", "makeText",
                                                                             "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-                                                                            QtAndroid::androidActivity().object(),
+                                                                            QNativeInterface::QAndroidApplication::context().object(),
                                                                             javaString.object(),
                                                                             jint(duration));
         toast.callMethod<void>("show");

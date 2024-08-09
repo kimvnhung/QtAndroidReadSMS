@@ -1,9 +1,9 @@
 TEMPLATE = lib
 TARGET = updater
 CONFIG += dll
-QT += core androidextras sql svg xml network remoteobjects
+QT += core core-private sql svg xml network remoteobjects
 
-CONFIG += c++11
+CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

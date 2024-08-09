@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <manifest package="com.hungkv.autolikeapp" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="5" android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28"/>
+    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="28"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
@@ -21,8 +21,7 @@
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
     <application android:usesCleartextTraffic="true" android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Approval" android:extractNativeLibs="true" android:icon="@drawable/icon">
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
-        android:name="com.hungkv.autolikeapp.MainActivity" android:label="Approval" android:screenOrientation="unspecified" android:launchMode="singleTop">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.hungkv.autolikeapp.MainActivity" android:label="Approval" android:screenOrientation="unspecified" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -81,23 +80,17 @@
             <meta-data android:name="android.app.extract_android_style" android:value="minimal"/>
             <!-- extract android style -->
         </activity>
-        <receiver android:name=".listener.SmsReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:process=":approval_service">
+        <receiver android:name=".listener.SmsReceiver" android:enabled="true" android:exported="true" android:process=":approval_service">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".communication.NetworkChangeReceiver"
-            android:enabled="true">
+        <receiver android:name=".communication.NetworkChangeReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
-        <service
-            android:name=".communication.QtAndroidService"
-            android:process=":approval_service">
+        <service android:name=".communication.QtAndroidService" android:process=":approval_service">
             <!-- Background running -->
             <meta-data android:name="android.app.lib_name" android:value="updater"/>
 

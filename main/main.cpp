@@ -1,6 +1,4 @@
-#include <QAndroidService>
 
-#include <QAndroidIntent>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
@@ -18,8 +16,7 @@
 #include "controllers/settingcontroller.h"
 
 #if defined (Q_OS_ANDROID)
-#include <QAndroidJniEnvironment>
-#include <QtAndroid>
+#include <QJniEnvironment>
 #include <QtSvg>
 const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
                                     "android.permission.READ_SMS",
@@ -32,19 +29,18 @@ const QVector<QString> permissions({"android.permission.RECEIVE_SMS",
 int main(int argc, char *argv[])
 {
     qDebug()<<"argc :"<<argc;
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
 #if defined (Q_OS_ANDROID)
     //Request requiered permissions at runtime
-    for(const QString &permission : permissions){
-        auto result = QtAndroid::checkPermission(permission);
-        if(result == QtAndroid::PermissionResult::Denied){
-            auto resultHash = QtAndroid::requestPermissionsSync(QStringList({permission}));
-            if(resultHash[permission] == QtAndroid::PermissionResult::Denied)
-                return 0;
-        }
-    }
+    // for(const QString &permission : permissions){
+    //     auto result = qApp->checkPermission( checkPermission(permission);
+    //     if(result == QtAndroid::PermissionResult::Denied){
+    //         auto resultHash = QtAndroid::requestPermissionsSync(QStringList({permission}));
+    //         if(resultHash[permission] == QtAndroid::PermissionResult::Denied)
+    //             return 0;
+    //     }
+    // }
 #endif
 
     //Register
